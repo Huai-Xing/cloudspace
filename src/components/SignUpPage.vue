@@ -2,6 +2,8 @@
   <div id="app">
     <pgHeader></pgHeader>
 
+    <!-- SignUpPage Content -->
+
     <pgFooter></pgFooter>
   </div>
 </template>

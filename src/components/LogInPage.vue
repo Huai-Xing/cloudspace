@@ -2,6 +2,8 @@
   <div id="app">
     <pgHeader></pgHeader>
 
+    <!-- LoginPage Content -->
+
     <pgFooter></pgFooter>
   </div>
 </template>
