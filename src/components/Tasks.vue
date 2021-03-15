@@ -2,29 +2,16 @@
 <div>
   <pgHeader></pgHeader>
 
-  <!-- LoginPage Content -->
+  <!-- TaskPage Content -->
 
   <pgFooter></pgFooter>
+
 </div>
 </template>
 
 
 <script>
-
 export default {
-  data() {
-    return {
-
-    }
-  },
-  // mtds
-  methods: {
-
-  },
-  //Register Locally
-  components: {
-
-  }
 }
 </script>
 

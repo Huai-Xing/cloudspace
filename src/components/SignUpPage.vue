@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
-    <pgHeader></pgHeader>
+<div>
+  <pgHeader></pgHeader>
 
-    <!-- SignUpPage Content -->
+  <!-- SignUpPage Content -->
 
-    <pgFooter></pgFooter>
-  </div>
+  <pgFooter></pgFooter>
+</div>
 </template>
 
 
@@ -29,6 +29,6 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 
 </style>

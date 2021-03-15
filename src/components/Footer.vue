@@ -1,8 +1,7 @@
 <template>
 <div>
   <div class="footer">
-    <footer>
-    </footer>
+    <footer></footer>
   </div>
 
 </div>
@@ -25,9 +24,9 @@ footer {
   background: url("../assets/footerImg.png");
   background-size: 100% 100%;
   position: absolute;
-  width: 1146px;
+  width: 100%;
   height: 550px;
-  left: 397px;
+  left: 55px;
   top: 881px;
 }
 </style>
