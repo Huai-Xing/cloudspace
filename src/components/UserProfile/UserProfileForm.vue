@@ -112,5 +112,6 @@ input {
 span {
   text-decoration: underline;
   margin-left: 15px;
+  cursor: pointer;
 }
 </style>

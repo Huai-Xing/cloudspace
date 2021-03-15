@@ -8,7 +8,7 @@
 
 
 <script>
-import up from './components/UserProfile/UserProfileForm.vue';
+import up from './components/UserProfilePage.vue';
 
 export default {
   data() {
