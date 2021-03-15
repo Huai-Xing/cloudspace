@@ -95,6 +95,11 @@ export default {
 
 
 <style scoped>
+div {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
 label {
   text-align: right;
   font-weight: 700;
@@ -103,7 +108,7 @@ label {
   margin-right: 20px;
 }
 input {
-  width: 300px;
+  width: 250px;
   height: 30px;
   background-color: #ddecd5;
   border: none;
@@ -113,5 +118,6 @@ span {
   text-decoration: underline;
   margin-left: 15px;
   cursor: pointer;
+  margin-right: 50px;
 }
 </style>
