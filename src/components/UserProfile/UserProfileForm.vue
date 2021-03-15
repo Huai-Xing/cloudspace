@@ -18,7 +18,12 @@
       <input type="text" id="Email" v-model.trim="Email" disabled="true" />
       <br /><br />
       <label for="DOB">Date Of Birth</label>
-      <input type="date" id="DOB" v-model.trim="DOB" disabled="DOBDisable" />
+      <input
+        type="date"
+        id="DOB"
+        v-model.trim="DOB"
+        disabled="DOBDisable"
+      />
       <span id="DOBChange" v-on:click="toggle(3)">Change</span>
     </form>
   </div>
@@ -27,12 +32,15 @@
 
 <script>
 export default {
+  props: {
+    Data: Object,
+  },
   data() {
     return {
-      Name: "ASd",
-      Password: "1234",
-      Email: "A@A",
-      DOB: "",
+      Name: this.Data.Name,
+      Password: this.Data.Password,
+      Email: this.Data.Email,
+      DOB: this.Data.DOB,
     };
   },
   methods: {
@@ -66,29 +74,19 @@ export default {
         }
       }
     },
-    /*
-    fetchData: function () {
-      database
-        .collection("user")
-        .doc("UID")
-        .get()
-        .then((doc) => {
-          this.Name = doc.data().Name;
-          this.Password = doc.data().Password;
-          this.DOB = doc.data().DOB;
-        });
-    },
+
     updateData: function () {
+      console.log(
+        this.Name + " " + this.Password + " " + this.DOB
+      );
+      /*
       database.collection("user").doc("UID").update({
         Name: this.Name,
         Password: this.Password,
         DOB: this.DOB,
       }).then(() => {location.reload()});
+      */
     },
-    */
-  },
-  created: function () {
-    //this.fetchData();
   },
 };
 </script>
@@ -96,9 +94,9 @@ export default {
 
 <style scoped>
 div {
-    align-items: center;
-    display: flex;
-    justify-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 label {
   text-align: right;
