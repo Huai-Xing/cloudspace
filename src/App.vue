@@ -9,6 +9,7 @@
 
 
 <script>
+//Register Locally
 
 export default {
   data() {
@@ -22,6 +23,7 @@ export default {
   },
   //Register Locally
   components: {
+    
 
   }
 }

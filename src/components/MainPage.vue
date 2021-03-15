@@ -1,11 +1,10 @@
 <template>
 <div>
 
-  <ul>
-    <li><router-link to="/" exact></router-link></li>
-    <li><router-link to="/login" exact> Log In </router-link></li>
-    <li><router-link to="/signup" exact> Sign Up </router-link></li>
-  </ul>
+  <div class="content">
+    <br><br><br><br><br><br><br><br><br>
+    <img alt="background1_main" src="../assets/background1_main.png">
+  </div>
 
 </div>
 </template>
