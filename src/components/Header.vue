@@ -1,10 +1,11 @@
 <template>
 <div>
   <header>
-    <img alt="Cloudspace logo" src="../assets/CloudspaceLogo.png">
+    <!-- <img alt="Cloudspace logo" src="../assets/CloudspaceLogo.png"> -->
+    <router-link to="/" exact><img alt="Cloudspace logo" src="../assets/CloudspaceLogo.png"/></router-link>
 
-    <ul class="nav-list">
-      <li><router-link to="/" exact></router-link></li>
+
+    <ul class="top-nav-list">
       <li><router-link to="/login" exact> Log In </router-link></li>
       <li><router-link to="/signup" exact> Sign Up </router-link></li>
     </ul>

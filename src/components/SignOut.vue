@@ -2,9 +2,7 @@
 <div>
   <pgHeader></pgHeader>
 
-
-
-  <!-- UserProfile Content -->
+  <!-- SignOut Content -->
 
   <pgFooter></pgFooter>
 </div>
