@@ -5,14 +5,14 @@ import MainPage from './components/MainPage.vue';
 import LogInPage from './components/LogInPage.vue';
 import SignUpPage from './components/SignUpPage.vue';
 
-import UserProfile from './components/UserProfile.vue';
+import UserProfilePage from './components/UserProfilePage.vue';
 import SignOut from './components/SignOut.vue';
 
-import Calendar from './components/Calendar.vue';
-import Productivity from './components/Productivity.vue';
-import Tasks from './components/Tasks.vue';
+import CalendarPage from './components/CalendarPage.vue';
+import ProductivityPage from './components/ProductivityPage.vue';
+import TasksPage from './components/TasksPage.vue';
 import TaskTimer from './components/TaskTimer.vue';
-import PlantATree from './components/PlantATree.vue';
+import PlantATreePage from './components/PlantATreePage.vue';
 
 export default [
   // When at the main/home landing page
@@ -22,14 +22,14 @@ export default [
 
   // When the user log in
   /*
-  { path: '/login/profile', component: UserProfile },
+  { path: '/login/profile', component: UserProfilePage },
   { path: '/login/signout', component: SignOut },
 
-  { path: '/login/calendar', component: Calendar },
-  { path: '/login/productivity', component: Productivity },
-  { path: '/login/tasks', component: Tasks },
+  { path: '/login/calendar', component: CalendarPage },
+  { path: '/login/productivity', component: ProductivityPage },
+  { path: '/login/tasks', component: TasksPage },
   { path: '/login/tasks/timer/:id', component: TaskTimer, props: true },
-  { path: '/login/plant-tree', component: PlantATree },
+  { path: '/login/plant-tree', component: PlantATreePage },
   */
 
 
@@ -39,14 +39,14 @@ export default [
     component: LogInPage,
 
     children: [
-      { path: '/login/profile', component: UserProfile },
+      { path: '/login/profile', component: UserProfilePage },
       { path: '/login/signout', component: SignOut },
 
-      { path: '/login/calendar', component: Calendar, },
-      { path: '/login/productivity', component: Productivity, },
-      { path: '/login/tasks', component: Tasks, },
+      { path: '/login/calendar', component: CalendarPage, },
+      { path: '/login/productivity', component: ProductivityPage, },
+      { path: '/login/tasks', component: TasksPage, },
       { path: '/login/tasks/timer/:id', component: TaskTimer, props: true, },
-      { path: '/login/plant-tree', component: PlantATree },
+      { path: '/login/plant-tree', component: PlantATreePage },
     ],
   },
 

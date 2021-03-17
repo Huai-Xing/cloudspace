@@ -24,12 +24,11 @@ export default {
   //Register Locally
   components: {
 
-
   }
 }
 </script>
 
 
-<style>
+<style scoped>
 
 </style>
