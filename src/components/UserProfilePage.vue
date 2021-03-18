@@ -1,5 +1,6 @@
 <template>
   <div>
+    <appNav></appNav>
     <UserAvatar v-bind:ImageIdx="Data.ImageIdx"></UserAvatar>
     <br /><br />
     <UserForm v-bind:Data="Data"></UserForm>
@@ -10,6 +11,7 @@
 <script>
 import UserForm from "./UserProfile/UserProfileForm.vue";
 import UserAvatar from "./UserProfile/UserAvatar.vue";
+import MainNavigation from './MainNavigation.vue';
 
 export default {
   data() {
@@ -26,6 +28,7 @@ export default {
   components: {
     UserForm: UserForm,
     UserAvatar: UserAvatar,
+    appNav: MainNavigation,
   },
   methods: {
     /*
