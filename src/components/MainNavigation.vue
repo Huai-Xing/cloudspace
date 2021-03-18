@@ -2,7 +2,7 @@
   <div>
     <ul class="top-nav-list">
       <li class="top-nav"><router-link to="/login/signout" exact> Sign Out </router-link></li>
-      <li class="top-nav"><router-link to="/login/profile" exact> Profile </router-link></li>
+      <li class="top-nav-left"><router-link to="/login/profile" exact> Profile </router-link></li>
     </ul>
     <div class="left-nav-section">
       <ul class="left-nav-list">
@@ -54,9 +54,18 @@ div {
 .top-nav {
   display: inline;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 5px;
   margin-right: 10px;
   float: right;
+}
+.top-nav-left {
+  display: inline;
+  font-size: 14px;
+  margin-left: 10px;
+  margin-right: 5px;
+  padding-right: 10px;
+  float: right;
+  border-right: 2px solid black;
 }
 .left-nav-section {
   margin-top: 30px;
