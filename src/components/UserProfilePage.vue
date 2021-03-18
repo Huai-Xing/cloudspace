@@ -2,7 +2,6 @@
   <div>
     <appNav></appNav>
     <UserAvatar v-bind:ImageIdx="Data.ImageIdx"></UserAvatar>
-    <br /><br />
     <UserForm v-bind:Data="Data"></UserForm>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content">
     <div id="avatar">
       <i class="arrow left" v-show="avatarChange" v-on:click="change(0)"></i>
       <img
@@ -49,7 +49,6 @@
       />
       <i class="arrow right" v-show="avatarChange" v-on:click="change(1)"></i>
     </div>
-    <br />
     <span id="avatarChange" v-on:click="toggle()">Change avatar</span>
   </div>
 </template>
@@ -106,12 +105,16 @@ export default {
 
 
 <style scoped>
+.content {
+  margin-bottom: 20px;
+}
 #avatar {
   align-items: center;
   display: flex;
   justify-content: center;
 }
 span {
+  margin-top: 10px;
   align-items: center;
   display: flex;
   justify-content: center;

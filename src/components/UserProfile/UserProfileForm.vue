@@ -4,7 +4,7 @@
       <label for="Name">Name</label>
       <input type="text" id="Name" v-model.trim="Name" disabled="true" />
       <span id="NameChange" v-on:click="toggle(1)">Change</span>
-      <br /><br />
+      <br />
       <label for="Password">Password</label>
       <input
         type="password"
@@ -13,10 +13,10 @@
         disabled="PwdDisable"
       />
       <span id="PwdChange" v-on:click="toggle(2)">Change</span>
-      <br /><br />
+      <br />
       <label for="Email">Email</label>
       <input type="text" id="Email" v-model.trim="Email" disabled="true" />
-      <br /><br />
+      <br />
       <label for="DOB">Date Of Birth</label>
       <input
         type="date"
@@ -97,6 +97,7 @@ div {
   align-items: center;
   display: flex;
   justify-content: center;
+  margin-bottom: 100px;
 }
 label {
   text-align: right;
@@ -111,6 +112,7 @@ input {
   background-color: #ddecd5;
   border: none;
   border-radius: 5px;
+  margin-bottom: 10px;
 }
 span {
   text-decoration: underline;
