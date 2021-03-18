@@ -1,14 +1,14 @@
 <template>
   <div id="app">
     <pgHeader></pgHeader>
-        <up></up>
+    <router-view></router-view>
     <pgFooter></pgFooter>
   </div>
 </template>
 
 
 <script>
-import up from './components/UserProfilePage.vue';
+//Register Locally
 
 export default {
   data() {
@@ -21,12 +21,11 @@ export default {
   },
   //Register Locally
   components: {
-    'up': up,
   }
 }
 </script>
 
 
-<style>
+<style scoped>
 
 </style>
