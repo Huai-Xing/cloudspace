@@ -18,10 +18,9 @@ export default [
   // When at the main/home landing page
   { path: '/', component: MainPage },
   { path: '/signup', component: SignUpPage },
-  //{ path: '/login', component: LogInPage },
+  { path: '/login', component: LogInPage },
 
   // When the user log in
-  /*
   { path: '/login/profile', component: UserProfilePage },
   { path: '/login/signout', component: SignOut },
 
@@ -30,10 +29,9 @@ export default [
   { path: '/login/tasks', component: TasksPage },
   { path: '/login/tasks/timer/:id', component: TaskTimer, props: true },
   { path: '/login/plant-tree', component: PlantATreePage },
-  */
-
 
   // When the user log in
+  /*
   {
     path: '/login',
     component: LogInPage,
@@ -49,5 +47,5 @@ export default [
       { path: '/login/plant-tree', component: PlantATreePage },
     ],
   },
-
+  */
 ];
