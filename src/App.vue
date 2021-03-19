@@ -31,7 +31,6 @@ export default {
 
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Lora');
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Lora|Roboto');
 
 </style>
