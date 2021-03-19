@@ -46,21 +46,24 @@
 
 
 <script>
-
 export default {
   data() {
     return {
-      newUser: true
-
+      newUser: this.$route.params.newUser
     }
   },
   // mtds
   methods: {
-
+    newUsery: function() {
+      console.log(this.$route.params.newUser);
+      return this.$route.params.newUser;
+    }
   },
   //Register Locally
   components: {
-
+  },
+  created() {
+    this.newUsery();
   }
 }
 </script>

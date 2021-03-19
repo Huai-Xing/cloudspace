@@ -16,7 +16,7 @@ export default [
   // When at the main/home landing page
   { path: '/', component: MainPage },
   { path: '/login', component: LogInPage },
-  { path: '/signup', component: SignUpPage },
+  { path: '/signup/:newUser', name: 'signup', component: SignUpPage, props: true },
 
   // When the user log in
   { path: '/login/profile', component: UserProfile },
