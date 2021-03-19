@@ -14,9 +14,10 @@
         <p id="sign" v-show="newUser"> Sign Up </p>
         <p id="sign" v-show="!newUser"> Log In </p>
         <form>
-          <label for="name" v-show="newUser">Name:</label><br>
-          <input type="text" id="name" name="name" placeholder="E.g. John Doe" v-show="newUser" required><br>
-
+          <div v-show="newUser">
+            <label for="name" >Name:</label><br>
+            <input type="text" id="name" name="name" placeholder="E.g. John Doe"  required><br>
+          </div> 
           <label for="email">Email:</label><br>
           <input type="text" id="email" name="email" placeholder="user@domain.com" required><br>
 
@@ -54,16 +55,9 @@ export default {
   },
   // mtds
   methods: {
-    newUsery: function() {
-      console.log(this.$route.params.newUser);
-      return this.$route.params.newUser;
-    }
   },
   //Register Locally
   components: {
-  },
-  created() {
-    this.newUsery();
   }
 }
 </script>
