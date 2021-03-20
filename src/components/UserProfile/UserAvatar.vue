@@ -58,13 +58,11 @@
 import firebase from "../../firebase.js";
 
 export default {
-  props: {
-    ImageIdx: Number,
-  },
+  props: ['ImageIdx'],
   data() {
     return {
       avatarChange: false,
-      idx: this.ImageIdx,
+      idx: 0,
     };
   },
   methods: {
@@ -94,24 +92,17 @@ export default {
         }
       }
     },
-    fetchData: async function() {
-      await firebase.firestore()
-        .collection("users")
-        .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
-        .get()
-        .then((doc) => {
-          this.idx = doc.data().ImageIdx;
-        });
-    },
     updateData: function () {
       firebase.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
         ImageIdx: this.idx,
-      }).then(() => {location.reload()});
+      });
     },
   },
-  created: async function() {
-    await this.fetchData();
-  },
+  mounted() {
+    if (this.ImageIdx) {
+      this.idx = this.ImageIdx;
+    }
+  }
 };
 </script>
 

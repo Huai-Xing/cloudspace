@@ -1,11 +1,22 @@
 <template>
   <div>
     <ul class="top-nav-list">
-      <li class="top-nav"><router-link to="/login/signout" exact> Sign Out </router-link></li>
-      <li class="top-nav-left"><router-link to="/login/profile" exact> Profile </router-link></li>
+      <li class="top-nav">
+        <router-link to="/login/signout" exact> Sign Out </router-link>
+      </li>
+      <li class="top-nav-left">
+        <router-link :to="{ name: 'Profile', params: { Data } }">
+          Profile
+        </router-link>
+      </li>
     </ul>
     <div class="left-nav-section">
       <ul class="left-nav-list">
+        <li class="left-nav">
+          <router-link to="/login/home" exact>
+            <img src="../assets/nav/nav_home.png" />Home</router-link
+          >
+        </li>
         <li class="left-nav">
           <router-link to="/login/calendar" exact>
             <img src="../assets/nav/nav_calendar.png" />Calendar</router-link
@@ -35,7 +46,9 @@
 
 
 <script>
-export default {};
+export default {
+  props: ['Data'],
+};
 </script>
 
 

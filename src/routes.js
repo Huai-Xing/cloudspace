@@ -7,7 +7,7 @@ import SignUpPage from './components/SignUpPage.vue';
 
 import UserProfilePage from './components/UserProfilePage.vue';
 import SignOut from './components/SignOut.vue';
-
+import HomePage from './components/HomePage.vue';
 import CalendarPage from './components/CalendarPage.vue';
 import ProductivityPage from './components/ProductivityPage.vue';
 import TasksPage from './components/TasksPage.vue';
@@ -15,13 +15,14 @@ import TaskTimer from './components/TaskTimer.vue';
 import PlantATreePage from './components/PlantATreePage.vue';
 
 export default [
-  // When at the main/home landing page
+  // When at the main landing page
   { path: '/', component: MainPage },
   { path: '/signup', component: SignUpPage },
   { path: '/login', component: LogInPage },
 
   // When the user log in
-  { path: '/login/profile', component: UserProfilePage },
+  { path: '/login/home', component: HomePage },
+  { path: '/login/profile', name: 'Profile', component: UserProfilePage, props: true },
   { path: '/login/signout', component: SignOut },
 
   { path: '/login/calendar', component: CalendarPage },

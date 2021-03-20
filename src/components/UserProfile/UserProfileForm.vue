@@ -34,15 +34,14 @@
 import firebase from "../../firebase.js";
 
 export default {
-  props: {
-    Data: Object,
-  },
+  props: ['Data'],
   data() {
     return {
       Name: "",
       Password: "",
       Email: "",
       DOB: "",
+      UID: "",
     };
   },
   methods: {
@@ -76,6 +75,7 @@ export default {
         }
       }
     },
+    /*
     fetchData: async function() {
       await firebase.firestore()
         .collection("users")
@@ -89,16 +89,27 @@ export default {
           //this.Data.ImageIdx = doc.data().ImageIdx;
         });
     },
+    */
     updateData: function () {
       firebase.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
         name: this.Name,
         password: this.Password,
         DOB: this.DOB,
-      }).then(() => {location.reload()});
+      })
     },
   },
+  /*
   created: async function() {
     await this.fetchData();
+  },*/
+  mounted() {
+    if (this.Data) {
+      this.Name = this.Data.Name;
+      this.Password = this.Data.Password;
+      this.Email = this.Data.Email;
+      this.DOB = this.Data.DOB;
+      this.UID = this.Data.UID;
+    }
   },
 };
 </script>

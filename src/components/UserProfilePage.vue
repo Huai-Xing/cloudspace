@@ -1,8 +1,9 @@
 <template>
   <div>
+    {{this.ProfileData.Name}}
     <appNav></appNav>
-    <UserAvatar v-bind:ImageIdx="ImageIdx"></UserAvatar>
-    <UserForm v-bind:UID="UID"></UserForm>
+    <UserAvatar v-bind:ImageIdx="Data.ImageIdx"></UserAvatar>
+    <UserForm v-bind:Data="Data"></UserForm>
   </div>
 </template>
 
@@ -10,13 +11,20 @@
 <script>
 import UserForm from "./UserProfile/UserProfileForm.vue";
 import UserAvatar from "./UserProfile/UserAvatar.vue";
-import MainNavigation from './MainNavigation.vue';
+import MainNavigation from "./MainNavigation.vue";
 
 export default {
+  props: ["Data"],
   data() {
     return {
-      ImageIdx: 0,
-      UID: "",
+      ProfileData: {
+        ImageIdx: 0,
+        UID: "",
+        Name: "",
+        Password: "",
+        Email: "",
+        DOB: "",
+      },
     };
   },
   components: {
@@ -24,7 +32,16 @@ export default {
     UserAvatar: UserAvatar,
     appNav: MainNavigation,
   },
-  methods: {
+  methods: {},
+  mounted() {
+    if (this.Data) {
+      this.ProfileData.Name = this.Data.Name;
+      this.ProfileData.Password = this.Data.Password;
+      this.ProfileData.Email = this.Data.Email;
+      this.ProfileData.DOB = this.Data.DOB;
+      this.ProfileData.ImageIdx = this.Data.ImageIdx;
+      this.ProfileData.UID = this.Data.UID;
+    }
   },
 };
 </script>
