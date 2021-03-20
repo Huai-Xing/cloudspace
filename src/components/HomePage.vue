@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       Data: {
-        Name: "ASD",
+        Name: "",
         UID: "",
       },
     };

@@ -51,11 +51,7 @@ export default {
   data() {
     return {
       ProfileData: {
-        Name: "ASD",
-        Password: "",
-        Email: "",
-        DOB: "",
-        ImageIdx: 0,
+        Name: "",
         UID: "",
       },
     };
@@ -63,10 +59,6 @@ export default {
   mounted() {
     if (this.Data) {
       this.ProfileData.Name = this.Data.Name;
-      this.ProfileData.Password = this.Data.Password;
-      this.ProfileData.Email = this.Data.Email;
-      this.ProfileData.DOB = this.Data.DOB;
-      this.ProfileData.ImageIdx = this.Data.ImageIdx;
       this.ProfileData.UID = this.Data.UID;
     }
   }

@@ -26,10 +26,10 @@ export default [
   { path: '/login/signout', component: SignOut },
 
   { path: '/login/calendar', name: 'Calendar', component: CalendarPage, props: true },
-  { path: '/login/productivity', component: ProductivityPage },
-  { path: '/login/tasks', component: TasksPage },
-  { path: '/login/tasks/timer/:id', component: TaskTimer, props: true },
-  { path: '/login/plant-tree', component: PlantATreePage },
+  { path: '/login/productivity', name: 'Productivity', component: ProductivityPage, props: true },
+  { path: '/login/tasks', name: 'Tasks', component: TasksPage, props: true },
+  { path: '/login/tasks/timer/:id', name: 'Timer', component: TaskTimer, props: true },
+  { path: '/login/plant-tree', name: 'PlantTree', component: PlantATreePage, props: true },
 
   // When the user log in
   /*

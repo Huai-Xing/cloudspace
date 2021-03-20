@@ -58,7 +58,6 @@
 import firebase from "../../firebase.js";
 
 export default {
-  props: ['ImageIdx'],
   data() {
     return {
       avatarChange: false,
