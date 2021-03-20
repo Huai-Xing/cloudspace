@@ -55,6 +55,8 @@
 
 
 <script>
+import firebase from "../../firebase.js";
+
 export default {
   props: {
     ImageIdx: Number,
@@ -77,13 +79,6 @@ export default {
         this.updateData();
       }
     },
-    /*
-    updateData: function () {
-      database.collection("user").doc("UID").update({
-        ImageIdx: this.idx;
-      }).then(() => {location.reload()});
-    },
-    */
     change: function (x) {
       if (x == 0) {
         if (this.idx == 0) {
@@ -99,6 +94,23 @@ export default {
         }
       }
     },
+    fetchData: async function() {
+      await firebase.firestore()
+        .collection("users")
+        .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+        .get()
+        .then((doc) => {
+          this.idx = doc.data().ImageIdx;
+        });
+    },
+    updateData: function () {
+      firebase.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
+        ImageIdx: this.idx,
+      }).then(() => {location.reload()});
+    },
+  },
+  created: async function() {
+    await this.fetchData();
   },
 };
 </script>

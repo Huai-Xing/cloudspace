@@ -1,8 +1,8 @@
 <template>
   <div>
     <appNav></appNav>
-    <UserAvatar v-bind:ImageIdx="Data.ImageIdx"></UserAvatar>
-    <UserForm v-bind:Data="Data"></UserForm>
+    <UserAvatar v-bind:ImageIdx="ImageIdx"></UserAvatar>
+    <UserForm v-bind:UID="UID"></UserForm>
   </div>
 </template>
 
@@ -15,13 +15,8 @@ import MainNavigation from './MainNavigation.vue';
 export default {
   data() {
     return {
-      Data: {
-        Name: "",
-        Password: "",
-        DOB: "",
-        Email: "",
-        ImageIdx: 0,
-      },
+      ImageIdx: 0,
+      UID: "",
     };
   },
   components: {
@@ -30,24 +25,6 @@ export default {
     appNav: MainNavigation,
   },
   methods: {
-    /*
-      fetchData: function () {
-      database
-        .collection("user")
-        .doc("UID")
-        .get()
-        .then((doc) => {
-          this.Name = doc.data().Name;
-          this.Password = doc.data().Password;
-          this.DOB = doc.data().DOB;
-          this.Email = doc.data().Email;
-          this.ImageIdx = doc.data().ImageIdx;
-        });
-    },
-    */
-  },
-  created: function () {
-    //this.fetchData();
   },
 };
 </script>

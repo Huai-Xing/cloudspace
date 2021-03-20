@@ -2,7 +2,7 @@
   <div>
     <form action="/action_page.php">
       <label for="Name">Name</label>
-      <input type="text" id="Name" v-model.trim="Name" disabled="true" />
+      <input type="text" id="Name" v-model="Name" disabled=true/>
       <span id="NameChange" v-on:click="toggle(1)">Change</span>
       <br />
       <label for="Password">Password</label>
@@ -10,19 +10,19 @@
         type="password"
         id="Pwd"
         v-model.trim="Password"
-        disabled="PwdDisable"
+        disabled=true
       />
       <span id="PwdChange" v-on:click="toggle(2)">Change</span>
       <br />
       <label for="Email">Email</label>
-      <input type="text" id="Email" v-model.trim="Email" disabled="true" />
+      <input type="text" id="Email" v-model="Email" disabled=true />
       <br />
       <label for="DOB">Date Of Birth</label>
       <input
         type="date"
         id="DOB"
         v-model.trim="DOB"
-        disabled="DOBDisable"
+        disabled=true
       />
       <span id="DOBChange" v-on:click="toggle(3)">Change</span>
     </form>
@@ -31,16 +31,18 @@
 
 
 <script>
+import firebase from "../../firebase.js";
+
 export default {
   props: {
     Data: Object,
   },
   data() {
     return {
-      Name: this.Data.Name,
-      Password: this.Data.Password,
-      Email: this.Data.Email,
-      DOB: this.Data.DOB,
+      Name: "",
+      Password: "",
+      Email: "",
+      DOB: "",
     };
   },
   methods: {
@@ -74,19 +76,29 @@ export default {
         }
       }
     },
-
+    fetchData: async function() {
+      await firebase.firestore()
+        .collection("users")
+        .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+        .get()
+        .then((doc) => {
+          this.Name = doc.data().name;
+          this.Password = doc.data().password;
+          //this.Data.DOB = doc.data().DOB;
+          this.Email = doc.data().email;
+          //this.Data.ImageIdx = doc.data().ImageIdx;
+        });
+    },
     updateData: function () {
-      console.log(
-        this.Name + " " + this.Password + " " + this.DOB
-      );
-      /*
-      database.collection("user").doc("UID").update({
-        Name: this.Name,
-        Password: this.Password,
+      firebase.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
+        name: this.Name,
+        password: this.Password,
         DOB: this.DOB,
       }).then(() => {location.reload()});
-      */
     },
+  },
+  created: async function() {
+    await this.fetchData();
   },
 };
 </script>
