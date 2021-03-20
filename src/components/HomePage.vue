@@ -20,10 +20,6 @@ export default {
     return {
       Data: {
         Name: "ASD",
-        Password: "",
-        Email: "",
-        DOB: "",
-        ImageIdx: 0,
         UID: "",
       },
     };
@@ -41,10 +37,6 @@ export default {
         .get()
         .then((doc) => {
           this.Data.Name = doc.data().name;
-          this.Data.Password = doc.data().password;
-          this.Data.DOB = doc.data().DOB;
-          this.Data.Email = doc.data().email;
-          this.Data.ImageIdx = doc.data().ImageIdx;
         });
     },
   },

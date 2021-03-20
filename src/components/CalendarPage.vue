@@ -1,7 +1,7 @@
 <template>
 <div>
   <!-- Side MainNavigation after log in -->
-  <appNav></appNav>
+  <appNav v-bind:Data="Data"></appNav>
 </div>
 </template>
 
@@ -11,6 +11,7 @@
 import MainNavigation from './MainNavigation.vue';
 
 export default {
+  props: ['Data'],
   //Register Locally
   components: {
     'appNav': MainNavigation,

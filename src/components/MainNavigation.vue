@@ -5,7 +5,7 @@
         <router-link to="/login/signout" exact> Sign Out </router-link>
       </li>
       <li class="top-nav-left">
-        <router-link :to="{ name: 'Profile', params: { Data } }">
+        <router-link :to="{ name: 'Profile', params: { Data } }" exact> 
           Profile
         </router-link>
       </li>
@@ -18,7 +18,7 @@
           >
         </li>
         <li class="left-nav">
-          <router-link to="/login/calendar" exact>
+          <router-link :to="{ name: 'Calendar', params: { Data } }" exact>
             <img src="../assets/nav/nav_calendar.png" />Calendar</router-link
           >
         </li>
@@ -48,6 +48,28 @@
 <script>
 export default {
   props: ['Data'],
+  data() {
+    return {
+      ProfileData: {
+        Name: "ASD",
+        Password: "",
+        Email: "",
+        DOB: "",
+        ImageIdx: 0,
+        UID: "",
+      },
+    };
+  },
+  mounted() {
+    if (this.Data) {
+      this.ProfileData.Name = this.Data.Name;
+      this.ProfileData.Password = this.Data.Password;
+      this.ProfileData.Email = this.Data.Email;
+      this.ProfileData.DOB = this.Data.DOB;
+      this.ProfileData.ImageIdx = this.Data.ImageIdx;
+      this.ProfileData.UID = this.Data.UID;
+    }
+  }
 };
 </script>
 

@@ -25,7 +25,7 @@ export default [
   { path: '/login/profile', name: 'Profile', component: UserProfilePage, props: true },
   { path: '/login/signout', component: SignOut },
 
-  { path: '/login/calendar', component: CalendarPage },
+  { path: '/login/calendar', name: 'Calendar', component: CalendarPage, props: true },
   { path: '/login/productivity', component: ProductivityPage },
   { path: '/login/tasks', component: TasksPage },
   { path: '/login/tasks/timer/:id', component: TaskTimer, props: true },

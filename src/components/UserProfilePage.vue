@@ -1,8 +1,7 @@
 <template>
   <div>
-    {{this.ProfileData.Name}}
-    <appNav></appNav>
-    <UserAvatar v-bind:ImageIdx="Data.ImageIdx"></UserAvatar>
+    <appNav v-bind:Data="Data"></appNav>
+    <UserAvatar></UserAvatar>
     <UserForm v-bind:Data="Data"></UserForm>
   </div>
 </template>
@@ -18,12 +17,8 @@ export default {
   data() {
     return {
       ProfileData: {
-        ImageIdx: 0,
         UID: "",
         Name: "",
-        Password: "",
-        Email: "",
-        DOB: "",
       },
     };
   },
@@ -36,10 +31,6 @@ export default {
   mounted() {
     if (this.Data) {
       this.ProfileData.Name = this.Data.Name;
-      this.ProfileData.Password = this.Data.Password;
-      this.ProfileData.Email = this.Data.Email;
-      this.ProfileData.DOB = this.Data.DOB;
-      this.ProfileData.ImageIdx = this.Data.ImageIdx;
       this.ProfileData.UID = this.Data.UID;
     }
   },

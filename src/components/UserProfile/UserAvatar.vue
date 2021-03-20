@@ -97,12 +97,23 @@ export default {
         ImageIdx: this.idx,
       });
     },
+    fetchData: async function() {
+      await firebase.firestore()
+        .collection("users")
+        .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+        .get()
+        .then((doc) => {
+          //this.Name = doc.data().name;
+          //this.Password = doc.data().password;
+          //this.Data.DOB = doc.data().DOB;
+          //this.Email = doc.data().email;
+          this.idx = doc.data().ImageIdx;
+        });
+    },
   },
-  mounted() {
-    if (this.ImageIdx) {
-      this.idx = this.ImageIdx;
-    }
-  }
+  created: async function() {
+    await this.fetchData();
+  },
 };
 </script>
 
