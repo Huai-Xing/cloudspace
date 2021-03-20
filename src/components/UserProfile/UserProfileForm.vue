@@ -83,9 +83,8 @@ export default {
         .then((doc) => {
           this.Name = doc.data().name;
           this.Password = doc.data().password;
-          //this.Data.DOB = doc.data().DOB;
+          this.DOB = doc.data().DOB;
           this.Email = doc.data().email;
-          //this.Data.ImageIdx = doc.data().ImageIdx;
         });
     },
     updateData: function () {
