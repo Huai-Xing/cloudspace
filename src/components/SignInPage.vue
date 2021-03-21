@@ -6,6 +6,7 @@
           Log In
         </router-link>
       </li>
+      <li> | </li>
       <li>
         <router-link :to="{ name: 'signin', params: { newUser: true } }">
           Sign Up
@@ -13,15 +14,9 @@
       </li>
     </ul>
 
-    <div class="row">
-      <!-- Left Column -->
-      <div class="column">
-        <img id="leftphoto" src="../assets/background5_signin.png" />
-      </div>
+    <img id="leftphoto" src="../assets/background5_signin.png" />
 
-      <!-- Middle Column -->
-      <div class="column">
-        <div id="chunk">
+    <div id="chunk">
           <p id="sign" v-show="newUser">Sign Up</p>
           <p id="sign" v-show="!newUser">Log In</p>
           <form @submit.prevent="letsgo">
@@ -64,13 +59,9 @@
             </button>
           </form>
         </div>
-      </div>
 
-      <!-- Right Column -->
-      <div class="column">
-        <img id="rightphoto" src="../assets/background4_signin.png" />
-      </div>
-    </div>
+    <img id="rightphoto" src="../assets/background4_signin.png" />
+
     <!-- SignUpPage Content -->
 
     <pgFooter></pgFooter>
@@ -149,122 +140,124 @@
       //   // Other logic (retriving details from firebase for the specific user?) here
       // },
     },
+    beforeRouteUpdate(to, from, next) {
+      this.newUser = to.params.newUser;
+      next();
+    },
     //Register Locally
     components: {},
   };
 </script>
 
 <style scoped>
-  * {
-    font-family: Roboto;
-    font-weight: lighter;
-    font-size: 13px;
-  }
-  img {
-    width: 300px;
-    height: 300px;
-  }
-  ul {
-    position: absolute;
-    right: 10%;
-    top: 2%;
-    list-style-type: None;
-    margin: 0;
-    padding: 0;
-  }
-  li {
-    display: inline;
-    font-size: 14px;
-    margin-left: 10px;
-    margin-right: 10px;
-    float: right;
-  }
+* {
+  font-weight: lighter;
+  font-size: 13px;
+}
+body {
+  min-width: 100%;
+  width: 100%;
+}
+img {
+  width: 300px;
+  height: 300px;
+}
+ul {
+  position: absolute;
+  right: 10%;
+  top: 2%;
+  list-style-type: None;
+  margin: 0;
+  padding: 0;
+}
 
-  .column {
-    float: left;
-    width: 33.33%;
-    height: 100%;
-  }
+li {
+  font-family: "Lora";
+  display: inline;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-right: 5px;
+  float: right;
+}
 
-  .row {
-    content: "";
-    display: table;
-    clear: both;
-    width: 100%;
-    height: 100%;
-  }
+a {
+  color: black;
+}
 
-  #leftphoto {
-    position: relative;
-    top: 90%;
-    left: 10%;
-    width: 340px;
-  }
+#leftphoto {
+  position: absolute;
+  left: 3%;
+  bottom: 5%;
+  width: 22%;
+  height: auto;
+}
 
-  #rightphoto {
-    position: relative;
-    top: 30%;
-    width: 360px;
-  }
+#rightphoto {
+  position: absolute;
+  top: 12%;
+  right: 3%;
+  width: 26%;
+  height: auto;
+}
 
-  #chunk {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-40%, -40%);
-  }
+#chunk {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
-  #sign {
-    font-family: Lora;
-    font-size: 30px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
+#sign {
+  font-family: Lora;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
 
-  input {
-    font-family: Roboto;
-    width: 250px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-top: 3px;
-    margin-bottom: 15px;
-    border-radius: 3px;
-    border-width: thin;
-    border-color: #cccccc;
-    border-style: solid;
-  }
+input {
+  font-family: Roboto;
+  width: 250px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 3px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  border-width: thin;
+  border-color: #cccccc;
+  border-style: solid;
+}
 
-  ::placeholder {
-    color: #cccccc;
-    opacity: 1;
-    font-family: Roboto;
-    font-style: italic;
-  }
+::placeholder {
+  color: #cccccc;
+  opacity: 1;
+  font-family: Roboto;
+  font-style: italic;
+}
 
-  #checkbox {
-    vertical-align: middle;
-    padding: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 20px;
-    border-color: #cccccc;
-  }
+#checkbox {
+  vertical-align: middle;
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 20px;
+  border-color: #cccccc;
+}
 
-  #cblabel {
-    font-style: italic;
-    font-size: 10px;
-    vertical-align: middle;
-    color: #cccccc;
-  }
+#cblabel {
+  font-style: italic;
+  font-size: 10px;
+  vertical-align: middle;
+  color: #cccccc;
+}
 
-  #submit {
-    width: 270px;
-    padding: 6px;
-    margin-top: 12px;
-    font-family: Lora;
-    border: none;
-    background-color: #bedaae;
-  }
+#submit {
+  width: 270px;
+  padding: 6px;
+  margin-top: 12px;
+  font-family: Lora;
+  border: none;
+  background-color: #bedaae;
+}
 </style>

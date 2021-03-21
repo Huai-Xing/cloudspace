@@ -2,6 +2,7 @@
   <div>
     <ul class="top-nav-list">
       <li><router-link :to="{ name: 'signin', params: { newUser: false }}"> Log In </router-link></li>
+      <li> | </li>
       <li><router-link :to="{ name: 'signin', params: { newUser: true }}"> Sign Up </router-link></li>
     </ul>
     <img alt="background1_main" src="../assets/background1_main.png" />
@@ -16,10 +17,19 @@ export default {
 
 
 <style scoped>
+* {
+  font-weight: lighter;
+  font-size: 13px;
+}
 img {
   width: 300px;
   height: 300px;
 }
+
+a {
+  color: black;
+}
+
 ul {
   position: absolute;
   right: 10%;
@@ -28,11 +38,13 @@ ul {
   margin: 0;
   padding: 0;
 }
+
 li {
+  font-family: "Lora";
   display: inline;
   font-size: 14px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
   float: right;
 }
 </style>
