@@ -18,7 +18,6 @@
       <button type="button" v-on:click="logIn()"> Let's go </button>
     </form>
   </div>
-
   <pgFooter></pgFooter>
 </div>
 </template>
