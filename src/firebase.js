@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import firebase from 'firebase';
+import firebase from "firebase";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -14,5 +14,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-var database = firebase.firestore();
-export default database;
+var fb = firebase;
+export default fb;
