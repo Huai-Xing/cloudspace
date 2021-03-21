@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Side MainNavigation after log in -->
-    <appNav v-bind:Data="Data"></appNav>
+    <appNav></appNav>
   </div>
 </template>
 
@@ -10,15 +10,10 @@
   import fb from "../firebase.js";
 
   export default {
-    props: {
-      UID: Number,
-      Name: String,
-    },
     data() {
       return {
         Data: {
           Name: "",
-          UID: "",
         },
       };
     },
@@ -39,9 +34,6 @@
             this.Data.Name = doc.data().name;
           });
       },
-    },
-    mounted() {
-      this.Data.UID = this.UID;
     },
     created: async function() {
       await this.fetchData();

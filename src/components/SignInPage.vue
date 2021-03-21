@@ -110,7 +110,7 @@
               alert(error.message);
             })
             .then(() => {
-              this.$router.push({ name: "Calendar" });
+              this.$router.push({ name: "Home" });
             });
           event.target.reset();
         } else {
@@ -124,7 +124,7 @@
               alert(error.message);
             })
             .then(() => {
-              this.$router.push({ name: "Calendar" });
+              this.$router.push({ name: "Home" });
             });
           this.user.email = "";
           this.user.password = "";

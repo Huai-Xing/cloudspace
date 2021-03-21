@@ -7,7 +7,7 @@
         </span>
       </li>
       <li class="top-nav-left">
-        <router-link :to="{ name: 'Profile', params: { Data } }" exact>
+        <router-link :to="{ name: 'Profile' }" exact>
           Profile
         </router-link>
       </li>
@@ -15,29 +15,29 @@
     <div class="left-nav-section">
       <ul class="left-nav-list">
         <li class="left-nav">
-          <router-link to="/signin/home" exact>
+          <router-link :to="{ name: 'Home' }" exact>
             <img src="../assets/nav/nav_home.png" />Home</router-link
           >
         </li>
         <li class="left-nav">
-          <router-link :to="{ name: 'Calendar', params: { Data } }" exact>
+          <router-link :to="{ name: 'Calendar' }" exact>
             <img src="../assets/nav/nav_calendar.png" />Calendar</router-link
           >
         </li>
         <li class="left-nav">
-          <router-link to="/signin/productivity" exact
+          <router-link :to="{ name: 'Productivity' }" exact
             ><img
               src="../assets/nav/nav_productivity.png"
             />Productivity</router-link
           >
         </li>
         <li class="left-nav">
-          <router-link to="/signin/tasks" exact
+          <router-link :to="{ name: 'Tasks' }" exact
             ><img src="../assets/nav/nav_task.png" />Tasks</router-link
           >
         </li>
         <li class="left-nav">
-          <router-link to="/signin/plant-tree" exact
+          <router-link :to="{ name: 'PlantTree' }" exact
             ><img src="../assets/nav/nav_plant.png" />Plant A Tree</router-link
           >
         </li>
@@ -49,21 +49,18 @@
 <script>
   import fb from "../firebase";
   export default {
-    props: ["Data"],
+    //props: ["Data"],
     data() {
       return {
-        ProfileData: {
-          Name: "",
-          UID: "",
-        },
       };
     },
+    /*
     mounted() {
       if (this.Data) {
         this.ProfileData.Name = this.Data.Name;
         this.ProfileData.UID = this.Data.UID;
       }
-    },
+    },*/
     methods: {
       signout: function() {
         fb.auth()
@@ -87,6 +84,12 @@
 <style scoped>
   div {
     float: left;
+  }
+  span {
+    font-size: 14px;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
   }
   .top-nav-list {
     position: absolute;
