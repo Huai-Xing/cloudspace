@@ -31,7 +31,7 @@
 
 
 <script>
-import firebase from "../../firebase.js";
+import fb from "../../firebase.js";
 
 export default {
   props: ['Data'],
@@ -76,7 +76,7 @@ export default {
       }
     },
     fetchData: async function() {
-      await firebase.firestore()
+      await fb.firestore()
         .collection("users")
         .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
         .get()
@@ -88,7 +88,7 @@ export default {
         });
     },
     updateData: function () {
-      firebase.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
+      fb.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
         name: this.Name,
         password: this.Password,
         DOB: this.DOB,

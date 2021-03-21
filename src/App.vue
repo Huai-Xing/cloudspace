@@ -2,27 +2,29 @@
   <div id="app">
     <pgHeader></pgHeader>
     <router-view></router-view>
+    <!-- Track Authentication Status -->
+    <auth-status></auth-status>
+
     <pgFooter></pgFooter>
   </div>
 </template>
 
 
 <script>
-//Register Locally
-
-export default {
-  data() {
-    return {
-    }
-  },
-  // mtds
-  methods: {
-
-  },
+  import AuthStatus from "./components/AuthStatus.vue";
   //Register Locally
-  components: {
-  }
-}
+
+  export default {
+    data() {
+      return {};
+    },
+    // mtds
+    methods: {},
+    //Register Locally
+    components: {
+      AuthStatus,
+    },
+  };
 </script>
 
 

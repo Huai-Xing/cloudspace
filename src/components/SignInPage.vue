@@ -1,4 +1,5 @@
 <template>
+
 <div>
     <ul class="top-nav-list">
       <li><router-link :to="{ name: 'signin', params: { newUser: false }}"> Log In </router-link></li>
@@ -18,7 +19,7 @@
         <p id="sign" v-show="newUser"> Sign Up </p>
         <p id="sign" v-show="!newUser"> Log In </p>
         <form>
-          <div v-show="newUser">
+          <div v-if="newUser">
             <label for="name" >Name:</label><br>
             <input type="text" id="name" name="name" placeholder="E.g. John Doe"  required><br>
           </div> 
@@ -51,14 +52,63 @@
 
 
 <script>
+import fb from '../firebase'
 export default {
   data() {
     return {
-      newUser: this.$route.params.newUser
+      newUser: this.$route.params.newUser,
+      user: {
+          name: "",
+          email: "",
+          password: "",
+          DOB: "",
+          imageIdx: 0,
+          coins: 0,
+        },
     }
   },
   // mtds
   methods: {
+    
+      letsgo: function() {
+        var email = this.user.email;
+        var password = this.user.password;
+        var user = this.user;
+        //Signing up
+        if (this.newUser) {
+          fb.auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then((cred) => {
+              alert("Successfully registered");
+
+              console.log("Registered user: " + cred.user.uid);
+              fb.firestore()
+                .collection("users")
+                .doc(cred.user.uid)
+                .set({
+                  user,
+                });
+            })
+            .catch((error) => {
+              alert(error.message);
+            });
+          event.target.reset();
+        } else {
+          fb.auth()
+            .signInWithEmailAndPassword(email, password)
+            .then((cred) => {
+              alert("Successfully logged into " + cred.user.email);
+              // console.log(cred.user.uid);
+            })
+            .catch((error) => {
+              alert(error.message);
+            });
+          this.user.email = "";
+          this.user.password = "";
+          event.target.reset();
+        }
+      },
+    
     // Fn to push the user to '/login/calendar' once the Let's go button is clicked
     logIn: function() {
       // to push user to '/login/calendar'
@@ -187,5 +237,6 @@ input {
   border: none;
   background-color: #BEDAAE;
 }
+
 
 </style>

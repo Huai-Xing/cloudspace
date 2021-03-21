@@ -55,7 +55,7 @@
 
 
 <script>
-import firebase from "../../firebase.js";
+import fb from "../../firebase.js";
 
 export default {
   data() {
@@ -92,12 +92,12 @@ export default {
       }
     },
     updateData: function () {
-      firebase.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
+      fb.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
         ImageIdx: this.idx,
       });
     },
     fetchData: async function() {
-      await firebase.firestore()
+      await fb.firestore()
         .collection("users")
         .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
         .get()

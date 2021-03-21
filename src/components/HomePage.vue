@@ -9,7 +9,7 @@
 
 <script>
 import MainNavigation from "./MainNavigation.vue";
-import firebase from "../firebase.js";
+import fb from "../firebase.js";
 
 export default {
   props: {
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     fetchData: async function () {
-      await firebase
+      await fb
         .firestore()
         .collection("users")
         .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
