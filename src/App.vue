@@ -2,7 +2,6 @@
   <div id="app">
     <pgHeader></pgHeader>
     <router-view></router-view>
-
     <pgFooter></pgFooter>
   </div>
 </template>
@@ -14,7 +13,6 @@
 export default {
   data() {
     return {
-
     }
   },
   // mtds
@@ -23,13 +21,11 @@ export default {
   },
   //Register Locally
   components: {
-    
-
   }
 }
 </script>
 
 
-<style>
+<style scoped>
 
 </style>

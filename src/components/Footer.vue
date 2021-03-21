@@ -1,9 +1,8 @@
 <template>
 <div>
-  <div class="footer">
-    <footer></footer>
-  </div>
-
+  <footer>
+    <img src="../assets/footer.png"/>
+  </footer>
 </div>
 </template>
 
@@ -21,12 +20,9 @@ export default {
 
 <style scoped>
 footer {
-  background: url("../assets/footerImg.png");
-  background-size: 100% 100%;
-  position: absolute;
-  width: 100%;
-  height: 550px;
-  left: 55px;
-  top: 881px;
+  position: fixed;
+  right:0;
+  bottom:0;
+  height: 100px;
 }
 </style>
