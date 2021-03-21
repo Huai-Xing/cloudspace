@@ -129,9 +129,9 @@ li {
 
 #chunk {
   position: relative;
-  top: 70%;
-  left: 60%;
-  transform: translate(-40%, -30%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -40%);
 }
 
 #sign {
