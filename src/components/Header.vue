@@ -45,5 +45,6 @@ export default {
   display: flex;
   width: 100px;
   height: 100px;
+  cursor: pointer;
 }
 </style>

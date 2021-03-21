@@ -15,7 +15,7 @@
     <div class="left-nav-section">
       <ul class="left-nav-list">
         <li class="left-nav">
-          <router-link to="/signin/home" exact>
+          <router-link :to="{ name: 'Home' }" exact>
             <img src="../assets/nav/nav_home.png" />Home</router-link
           >
         </li>
