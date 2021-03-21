@@ -23,7 +23,6 @@
   import fb from "../../firebase.js";
 
   export default {
-    props: ["Data"],
     data() {
       return {
         Name: "",
@@ -90,12 +89,6 @@
     },
     created: async function() {
       await this.fetchData();
-    },
-    mounted() {
-      if (this.Data) {
-        this.Name = this.Data.Name;
-        this.UID = this.Data.UID;
-      }
     },
   };
 </script>

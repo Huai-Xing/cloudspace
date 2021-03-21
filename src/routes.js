@@ -5,7 +5,6 @@ import MainPage from './components/MainPage.vue';
 import SignInPage from './components/SignInPage.vue';
 
 import UserProfilePage from './components/UserProfilePage.vue';
-import SignOut from './components/SignOut.vue';
 import HomePage from './components/HomePage.vue';
 import CalendarPage from './components/CalendarPage.vue';
 import ProductivityPage from './components/ProductivityPage.vue';
@@ -21,7 +20,6 @@ export default [
   // When the user log in
   { path: '/signin/home', component: HomePage },
   { path: '/signin/profile', name: 'Profile', component: UserProfilePage, props: true },
-  { path: '/signin/signout', component: SignOut },
 
   { path: '/signin/calendar', name: 'Calendar', component: CalendarPage, props: true },
   { path: '/signin/productivity', name: 'Productivity', component: ProductivityPage, props: true },
