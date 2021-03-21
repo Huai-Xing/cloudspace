@@ -9,7 +9,6 @@
   </div>
 </template>
 
-
 <script>
   import AuthStatus from "./components/AuthStatus.vue";
   //Register Locally
@@ -27,9 +26,6 @@
   };
 </script>
 
-
 <style>
-@import url('https://fonts.googleapis.com/css?family=Lora|Roboto');
-
-
+  @import url("https://fonts.googleapis.com/css?family=Lora|Roboto");
 </style>
