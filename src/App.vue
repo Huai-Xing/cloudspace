@@ -2,7 +2,6 @@
   <div id="app">
     <pgHeader></pgHeader>
     <router-view></router-view>
-
     <pgFooter></pgFooter>
   </div>
 </template>
@@ -14,7 +13,6 @@
 export default {
   data() {
     return {
-
     }
   },
   // mtds
@@ -23,8 +21,6 @@ export default {
   },
   //Register Locally
   components: {
-    
-
   }
 }
 </script>
@@ -32,5 +28,6 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Lora|Roboto');
+
 
 </style>

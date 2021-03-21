@@ -1,5 +1,9 @@
 <template>
 <div>
+    <ul class="top-nav-list">
+      <li><router-link :to="{ name: 'signin', params: { newUser: false }}"> Log In </router-link></li>
+      <li><router-link :to="{ name: 'signin', params: { newUser: true }}"> Sign Up </router-link></li>
+    </ul>
 
   <div class="row">
 
@@ -27,7 +31,7 @@
           <input type="checkbox" id="checkbox">
           <label for="checkbox" id="cblabel">Keep me logged in</label><br>
 
-          <button type="submit" value="Submit" id="submit"> Let's go! </button>
+          <button type="submit" value="Submit" id="submit" v-on:click="logIn()" > Let's go! </button>
     
         </form>
       </div>
@@ -55,6 +59,13 @@ export default {
   },
   // mtds
   methods: {
+    // Fn to push the user to '/login/calendar' once the Let's go button is clicked
+    logIn: function() {
+      // to push user to '/login/calendar'
+      this.$router.push({name: "Calendar"});
+
+      // Other logic (retriving details from firebase for the specific user?) here
+    }
   },
   //Register Locally
   components: {
@@ -68,6 +79,25 @@ export default {
   font-family: Roboto;
   font-weight: lighter;
   font-size: 13px
+}
+img {
+  width: 300px;
+  height: 300px;
+}
+ul {
+  position: absolute;
+  right: 10%;
+  top: 2%;
+  list-style-type: None;
+  margin: 0;
+  padding: 0;
+}
+li {
+  display: inline;
+  font-size: 14px;
+  margin-left: 10px;
+  margin-right: 10px;
+  float: right;
 }
 
 .column {
