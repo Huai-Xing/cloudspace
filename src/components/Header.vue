@@ -3,7 +3,7 @@
   <header>
     <!-- <img alt="Cloudspace logo" src="../assets/CloudspaceLogo.png"> -->
     <img id="head" src="../assets/header.png"/>
-    <router-link to="/" exact><img id="logo" alt="Cloudspace logo" src="../assets/CloudspaceLogo.png"/></router-link>
+    <img id="logo" v-on:click="changeRoute" alt="Cloudspace logo" src="../assets/CloudspaceLogo.png"/>
 
   </header>
 </div>
@@ -17,6 +17,15 @@ export default {
     }
   },
   methods: {
+    changeRoute: function() {
+      if (this.$route.name == "signin") {
+        this.$router.push({ name: "Main" });
+      } else if (this.$route.name == "Main") {
+        location.reload();
+      } else {
+        this.$router.push({ name: "Home" });
+      }
+    }
   }
 }
 </script>

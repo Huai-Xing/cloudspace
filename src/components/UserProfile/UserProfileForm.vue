@@ -50,6 +50,7 @@
             document.getElementById("PwdChange").textContent = "Change";
             document.getElementById("Pwd").disabled = true;
             this.updateData();
+            this.updatePwd();
           }
         } else {
           if (document.getElementById("DOB").disabled) {
@@ -88,6 +89,17 @@
             password: this.Password,
             DOB: this.DOB,
           });
+      },
+      updatePwd: function() {
+        var user = fb.auth().currentUser;
+        var newPassword = this.Password;
+
+        user.updatePassword(newPassword).then(function() {
+          alert("Password Changed");
+        }).catch(function(error) {
+          alert("Password reset fail, please try again with a stronger password");
+          console.log(error);
+        });
       },
     },
     created: async function() {

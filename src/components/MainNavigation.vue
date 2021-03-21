@@ -25,19 +25,19 @@
           >
         </li>
         <li class="left-nav">
-          <router-link to="/signin/productivity" exact
+          <router-link :to="{ name: 'Productivity' }" exact
             ><img
               src="../assets/nav/nav_productivity.png"
             />Productivity</router-link
           >
         </li>
         <li class="left-nav">
-          <router-link to="/signin/tasks" exact
+          <router-link :to="{ name: 'Tasks' }" exact
             ><img src="../assets/nav/nav_task.png" />Tasks</router-link
           >
         </li>
         <li class="left-nav">
-          <router-link to="/signin/plant-tree" exact
+          <router-link :to="{ name: 'PlantTree' }" exact
             ><img src="../assets/nav/nav_plant.png" />Plant A Tree</router-link
           >
         </li>

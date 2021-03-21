@@ -14,11 +14,11 @@ import PlantATreePage from './components/PlantATreePage.vue';
 
 export default [
   // When at the main landing page
-  { path: '/', component: MainPage },
+  { path: '/', name: 'Main', component: MainPage },
   { path: '/signin/:newUser', name: 'signin', component: SignInPage, props: true },
 
   // When the user log in
-  { path: '/signin/home', component: HomePage },
+  { path: '/signin/home', name: 'Home', component: HomePage },
   { path: '/signin/profile', name: 'Profile', component: UserProfilePage, props: true },
 
   { path: '/signin/calendar', name: 'Calendar', component: CalendarPage, props: true },
