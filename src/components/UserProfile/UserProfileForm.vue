@@ -29,7 +29,6 @@
         Password: "",
         Email: "",
         DOB: "",
-        UID: "",
       };
     },
     methods: {
@@ -64,10 +63,12 @@
         }
       },
       fetchData: async function() {
+        var currentUser = fb.auth().currentUser;
+        var uid = currentUser.uid;
         await fb
           .firestore()
           .collection("users")
-          .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+          .doc(uid)
           .get()
           .then((doc) => {
             this.Name = doc.data().name;
@@ -77,9 +78,11 @@
           });
       },
       updateData: function() {
+        var currentUser = fb.auth().currentUser;
+        var uid = currentUser.uid;     
         fb.firestore()
           .collection("users")
-          .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+          .doc(uid)
           .update({
             name: this.Name,
             password: this.Password,
