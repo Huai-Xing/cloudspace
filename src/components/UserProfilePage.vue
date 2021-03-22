@@ -1,8 +1,8 @@
 <template>
   <div>
-    <appNav v-bind:Data="Data"></appNav>
+    <appNav></appNav>
     <UserAvatar></UserAvatar>
-    <UserForm v-bind:Data="Data"></UserForm>
+    <UserForm></UserForm>
   </div>
 </template>
 
@@ -13,13 +13,8 @@ import UserAvatar from "./UserProfile/UserAvatar.vue";
 import MainNavigation from "./MainNavigation.vue";
 
 export default {
-  props: ["Data"],
   data() {
     return {
-      ProfileData: {
-        UID: "",
-        Name: "",
-      },
     };
   },
   components: {
@@ -28,12 +23,6 @@ export default {
     appNav: MainNavigation,
   },
   methods: {},
-  mounted() {
-    if (this.Data) {
-      this.ProfileData.Name = this.Data.Name;
-      this.ProfileData.UID = this.Data.UID;
-    }
-  },
 };
 </script>
 

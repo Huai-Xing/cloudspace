@@ -91,24 +91,24 @@
         }
       },
       updateData: function() {
+        var currentUser = fb.auth().currentUser;
+        var uid = currentUser.uid;
         fb.firestore()
           .collection("users")
-          .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+          .doc(uid)
           .update({
             ImageIdx: this.idx,
           });
       },
       fetchData: async function() {
+        var currentUser = fb.auth().currentUser;
+        var uid = currentUser.uid;
         await fb
           .firestore()
           .collection("users")
-          .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+          .doc(uid)
           .get()
           .then((doc) => {
-            //this.Name = doc.data().name;
-            //this.Password = doc.data().password;
-            //this.Data.DOB = doc.data().DOB;
-            //this.Email = doc.data().email;
             this.idx = doc.data().ImageIdx;
           });
       },

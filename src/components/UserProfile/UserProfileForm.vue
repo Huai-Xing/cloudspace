@@ -23,14 +23,12 @@
   import fb from "../../firebase.js";
 
   export default {
-    props: ["Data"],
     data() {
       return {
         Name: "",
         Password: "",
         Email: "",
         DOB: "",
-        UID: "",
       };
     },
     methods: {
@@ -52,6 +50,7 @@
             document.getElementById("PwdChange").textContent = "Change";
             document.getElementById("Pwd").disabled = true;
             this.updateData();
+            this.updatePwd();
           }
         } else {
           if (document.getElementById("DOB").disabled) {
@@ -65,10 +64,12 @@
         }
       },
       fetchData: async function() {
+        var currentUser = fb.auth().currentUser;
+        var uid = currentUser.uid;
         await fb
           .firestore()
           .collection("users")
-          .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+          .doc(uid)
           .get()
           .then((doc) => {
             this.Name = doc.data().name;
@@ -78,24 +79,31 @@
           });
       },
       updateData: function() {
+        var currentUser = fb.auth().currentUser;
+        var uid = currentUser.uid;     
         fb.firestore()
           .collection("users")
-          .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
+          .doc(uid)
           .update({
             name: this.Name,
             password: this.Password,
             DOB: this.DOB,
           });
       },
+      updatePwd: function() {
+        var user = fb.auth().currentUser;
+        var newPassword = this.Password;
+
+        user.updatePassword(newPassword).then(function() {
+          alert("Password Changed");
+        }).catch(function(error) {
+          alert("Password reset fail, please try again with a stronger password");
+          console.log(error);
+        });
+      },
     },
     created: async function() {
       await this.fetchData();
-    },
-    mounted() {
-      if (this.Data) {
-        this.Name = this.Data.Name;
-        this.UID = this.Data.UID;
-      }
     },
   };
 </script>
