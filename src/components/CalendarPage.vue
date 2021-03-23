@@ -9,6 +9,8 @@
 
 <script>
 import MainNavigation from './MainNavigation.vue';
+import CalHeader from './Calendar/CalendarHeader.vue';
+import CalCell from './Calendar/CalendarCell.vue';
 
 export default {
   //Register Locally
