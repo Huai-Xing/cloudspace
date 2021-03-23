@@ -4,7 +4,7 @@
   <appNav></appNav>
 
   <div class="timer-content">
-    <timer-Comp></timer-Comp>
+    <countdown-timer></countdown-timer>
   </div>
 
 </div>
@@ -13,13 +13,13 @@
 
 <script>
 import MainNavigation from './MainNavigation.vue';
-import TimerComponent from './TimerComponent.vue';
+import CountDownTimerComponent from './CountDownTimerComponent.vue';
 
 export default {
   //Register Locally
   components: {
     'appNav': MainNavigation,
-    'timer-Comp': TimerComponent,
+    'countdown-timer': CountDownTimerComponent,
   },
 
   data() {
