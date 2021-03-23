@@ -75,14 +75,14 @@ export default {
 <style scoped>
 .cal {
   margin-left: 200px;
+  margin-bottom: 120px;
 }
 ul {
-  display: flex;
   flex-wrap: wrap;
   list-style-type: none;
   padding: 0;
   margin: 0;
-  border: 1px solid blue;
-  width: 98%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 </style>

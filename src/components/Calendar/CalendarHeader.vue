@@ -85,16 +85,17 @@ span {
 ul {
   margin: 0px;
   padding-left: 0px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 li {
   list-style-type: None;
-  display: inline-block;
   background-color: lightyellow;
   margin: 0px;
   padding-left: 0px;
-  width: 14%;
   text-align: center;
   font-size: 20px;
   font-weight: 700;
+  min-width: 120px;
 }
 </style>

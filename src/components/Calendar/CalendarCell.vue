@@ -37,7 +37,7 @@ export default {
       isNotCurrentMonth: this.selectedDate.get('month') != this.date.get('month'),
       isToday: dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
       todayDate: dayjs(),
-      data: ["BT3103 Assignment 2", "Meeting with Group"],
+      data: ["BT3103 Assignment 2", "Meeting with Group", "Meeting with Group", "Very very very very very very very very very very very long task"],
     };
   },
 };
@@ -48,11 +48,10 @@ export default {
 .cell {
   list-style-type: None;
   display: inline-block;
-  border: 1px solid rgb(100, 100, 100);
-  height: 150px;
-  margin: 0;
-  padding: 0;
-  width: 188px;
+  border: 1px solid rgb(173, 169, 169);
+  position: relative;
+  min-height: 100px;
+  padding: 5px;
 }
 .dayCurrentMonth {
   background-color: rgb(224, 222, 222);
@@ -87,6 +86,7 @@ export default {
   background-color: lightyellow;
   margin: 5px;
   padding-left: 5px;
+  min-width: 93px;
 }
 .items:nth-child(odd) {
   background-color: lightgreen;
