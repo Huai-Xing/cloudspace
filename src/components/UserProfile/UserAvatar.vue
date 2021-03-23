@@ -53,110 +53,112 @@
   </div>
 </template>
 
-
 <script>
-import firebase from "../../firebase.js";
+  import fb from "../../firebase.js";
 
-export default {
-  data() {
-    return {
-      avatarChange: false,
-      idx: 0,
-    };
-  },
-  methods: {
-    toggle: function () {
-      if (!this.avatarChange) {
-        document.getElementById("avatarChange").textContent =
-          "Save as new avatar";
-        this.avatarChange = true;
-      } else {
-        document.getElementById("avatarChange").textContent = "Change avatar";
-        this.avatarChange = false;
-        this.updateData();
-      }
+  export default {
+    data() {
+      return {
+        avatarChange: false,
+        idx: 0,
+      };
     },
-    change: function (x) {
-      if (x == 0) {
-        if (this.idx == 0) {
-          this.idx = 8;
+    methods: {
+      toggle: function() {
+        if (!this.avatarChange) {
+          document.getElementById("avatarChange").textContent =
+            "Save as new avatar";
+          this.avatarChange = true;
         } else {
-          this.idx = this.idx - 1;
+          document.getElementById("avatarChange").textContent = "Change avatar";
+          this.avatarChange = false;
+          this.updateData();
         }
-      } else {
-        if (this.idx == 8) {
-          this.idx = 0;
+      },
+      change: function(x) {
+        if (x == 0) {
+          if (this.idx == 0) {
+            this.idx = 8;
+          } else {
+            this.idx = this.idx - 1;
+          }
         } else {
-          this.idx = this.idx + 1;
+          if (this.idx == 8) {
+            this.idx = 0;
+          } else {
+            this.idx = this.idx + 1;
+          }
         }
-      }
+      },
+      updateData: function() {
+        var currentUser = fb.auth().currentUser;
+        var uid = currentUser.uid;
+        fb.firestore()
+          .collection("users")
+          .doc(uid)
+          .update({
+            ImageIdx: this.idx,
+          });
+      },
+      fetchData: async function() {
+        var currentUser = fb.auth().currentUser;
+        var uid = currentUser.uid;
+        await fb
+          .firestore()
+          .collection("users")
+          .doc(uid)
+          .get()
+          .then((doc) => {
+            this.idx = doc.data().ImageIdx;
+          });
+      },
     },
-    updateData: function () {
-      firebase.firestore().collection("users").doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2").update({
-        ImageIdx: this.idx,
-      });
+    created: async function() {
+      await this.fetchData();
     },
-    fetchData: async function() {
-      await firebase.firestore()
-        .collection("users")
-        .doc("MXJkiPOhxkMRofWdFxIMJUcSCTb2")
-        .get()
-        .then((doc) => {
-          //this.Name = doc.data().name;
-          //this.Password = doc.data().password;
-          //this.Data.DOB = doc.data().DOB;
-          //this.Email = doc.data().email;
-          this.idx = doc.data().ImageIdx;
-        });
-    },
-  },
-  created: async function() {
-    await this.fetchData();
-  },
-};
+  };
 </script>
 
-
 <style scoped>
-.content {
-  margin-bottom: 20px;
-}
-#avatar {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-span {
-  margin-top: 10px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  text-decoration: underline;
-  cursor: pointer;
-}
-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  display: inline;
-}
-.arrow {
-  border: solid black;
-  border-width: 0 4px 4px 0;
-  display: inline-block;
-  padding: 3px;
-  cursor: pointer;
-}
-.right {
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-  width: 10px;
-  height: 10px;
-}
-.left {
-  transform: rotate(135deg);
-  -webkit-transform: rotate(135deg);
-  width: 10px;
-  height: 10px;
-}
+  .content {
+    margin-bottom: 20px;
+  }
+  #avatar {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+  span {
+    margin-top: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: inline;
+  }
+  .arrow {
+    border: solid black;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 3px;
+    cursor: pointer;
+  }
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    width: 10px;
+    height: 10px;
+  }
+  .left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    width: 10px;
+    height: 10px;
+  }
 </style>
