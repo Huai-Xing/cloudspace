@@ -2,47 +2,41 @@
 <div>
   <!-- Side MainNavigation after log in -->
   <appNav></appNav>
+
+  <div class="timer-content">
+    <timer-Comp></timer-Comp>
+  </div>
+
 </div>
 </template>
 
+
 <script>
 import MainNavigation from './MainNavigation.vue';
+import TimerComponent from './TimerComponent.vue';
 
 export default {
   //Register Locally
   components: {
     'appNav': MainNavigation,
-
+    'timer-Comp': TimerComponent,
   },
+
+  data() {
+    return {
+
+    };
+  },
+
 }
 </script>
 
+
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-
-/* Create two unequal columns that floats next to each other */
-.column {
-  float: left;
-  padding: 10px;
-  height: 1220px; /* for demostration the division works */
-}
-
-.left {
-  width: 15%;
-  background-color: #e6ffff; /* for demostration the division works */
-}
-
-.right {
-  width: 85%;
-  background-color: #ccffff; /* for demostration the division works */
-}
-
-/* Clear floats after the columns */
-.content:after {
-  content: "";
-  display: table;
-  clear: both;
+.timer-content {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 100px;
 }
 </style>

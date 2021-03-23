@@ -24,7 +24,8 @@ export default [
   { path: '/signin/calendar', name: 'Calendar', component: CalendarPage, props: true },
   { path: '/signin/productivity', name: 'Productivity', component: ProductivityPage, props: true },
   { path: '/signin/tasks', name: 'Tasks', component: TasksPage, props: true },
-  { path: '/signin/tasks/timer/:id', name: 'Timer', component: TaskTimer, props: true },
+  //{ path: '/signin/tasks/timer/:id', name: 'Timer', component: TaskTimer, props: true }, // uncomment this at the moment to test out timer first
+  { path: '/signin/tasks/timer/', name: 'Timer', component: TaskTimer, props: true },
   { path: '/signin/plant-tree', name: 'PlantTree', component: PlantATreePage, props: true },
 
   // When the user log in
