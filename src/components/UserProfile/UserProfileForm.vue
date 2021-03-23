@@ -2,18 +2,18 @@
   <div>
     <form action="/action_page.php">
       <label for="Name">Name</label>
-      <input type="text" id="Name" v-model="Name" disabled="true" />
+      <input type="text" id="Name" v-model="user.name" disabled="true" />
       <span id="NameChange" v-on:click="toggle(1)">Change</span>
       <br />
       <label for="Password">Password</label>
-      <input type="password" id="Pwd" v-model.trim="Password" disabled="true" />
+      <input type="password" id="Pwd" v-model.trim="user.password" disabled="true" />
       <span id="PwdChange" v-on:click="toggle(2)">Change</span>
       <br />
       <label for="Email">Email</label>
-      <input type="text" id="Email" v-model="Email" disabled="true" />
+      <input type="text" id="Email" v-model="user.email" disabled="true" />
       <br />
       <label for="DOB">Date Of Birth</label>
-      <input type="date" id="DOB" v-model.trim="DOB" disabled="true" />
+      <input type="date" id="DOB" v-model.trim="user.DOB" disabled="true" />
       <span id="DOBChange" v-on:click="toggle(3)">Change</span>
     </form>
   </div>
@@ -25,10 +25,14 @@
   export default {
     data() {
       return {
-        Name: "",
-        Password: "",
-        Email: "",
-        DOB: "",
+        user: {
+          name: "",
+          email: "",
+          password: "",
+          DOB: "",
+          imageIdx: 0,
+          coins: 0,
+        },
       };
     },
     methods: {
@@ -72,10 +76,12 @@
           .doc(uid)
           .get()
           .then((doc) => {
-            this.Name = doc.data().name;
-            this.Password = doc.data().password;
-            this.DOB = doc.data().DOB;
-            this.Email = doc.data().email;
+            this.user.name = doc.data().user.name;
+            this.user.password = doc.data().user.password;
+            this.user.DOB = doc.data().user.DOB;
+            this.user.email = doc.data().user.email;
+            this.user.coins = doc.data().user.coins;
+            this.user.imageIdx = doc.data().user.imageIdx;
           });
       },
       updateData: function() {
@@ -85,14 +91,12 @@
           .collection("users")
           .doc(uid)
           .update({
-            name: this.Name,
-            password: this.Password,
-            DOB: this.DOB,
+            user: this.user,
           });
       },
       updatePwd: function() {
         var user = fb.auth().currentUser;
-        var newPassword = this.Password;
+        var newPassword = this.user.password;
 
         user.updatePassword(newPassword).then(function() {
           alert("Password Changed");
