@@ -38,7 +38,7 @@ export default {
       isNotCurrentMonth: this.selectedDate.get('month') != this.date.get('month'),
       isToday: dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
       todayDate: dayjs(),
-      data: ["BT3103 Assignment 2", "Meeting with Groups", "Meeting with Group", "Very very very very very very very very very very very long task"],
+      data: ["BT3103 Assignment 2", "Meeting with Group", "Take a short break :)", "Very very very very very very very very very very very long task"],
     };
   },
 };
@@ -59,7 +59,6 @@ export default {
 }
 .dayTodayCell {
   border: 1px solid rgb(192, 2, 2);
-
 }
 .cellItems {
   display: inline;
@@ -76,7 +75,7 @@ export default {
   color: black;
   position: relative;
   bottom: 15px;
-  left: 80%;
+  left: 85%;
 }
 .dayToday {
   background-color: rgb(0, 255, 106);

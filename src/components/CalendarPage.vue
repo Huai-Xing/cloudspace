@@ -75,7 +75,7 @@ export default {
 <style scoped>
 .cal {
   margin-left: 200px;
-  margin-bottom: 120px;
+  margin-bottom: 140px;
 }
 ul {
   flex-wrap: wrap;
