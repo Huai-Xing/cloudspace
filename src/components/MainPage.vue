@@ -5,7 +5,11 @@
       <li> | </li>
       <li><router-link :to="{ name: 'signin', params: { newUser: true }}"> Sign Up </router-link></li>
     </ul>
-    <img alt="background1_main" src="../assets/background1_main.png" />
+    <div class="img_stack">
+      <img id="img_top" alt="background1_main" src="../assets/background1_main.png" />
+      <img id="img_bottom" alt="box" src="../assets/lines_box.png" />
+    </div>
+
   </div>
 </template>
 
@@ -20,10 +24,31 @@ export default {
 * {
   font-weight: lighter;
   font-size: 13px;
+  box-sizing: border-box;
 }
+
 img {
-  width: 300px;
-  height: 300px;
+  width: 350px;
+  height: auto;
+}
+
+#img_top {
+  grid-row: 1;
+  grid-column: 1 / span 8;
+  z-index: 1;
+}
+
+#img_bottom {
+  grid-column: 2 / 4;
+  grid-row: 2 / 3;
+}
+
+.img_stack {
+  display: grid;
+  grid-template-columns: 250px;
+  grid-template-rows: 100px;
+  position: relative;
+  grid-auto-rows: 5;
 }
 
 a {
