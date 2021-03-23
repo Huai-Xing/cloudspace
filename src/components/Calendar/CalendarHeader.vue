@@ -22,7 +22,7 @@ export default {
     return {
         SelectedDate: dayjs(),
         isToday: false,
-        Days: ["MON","TUE","WED","THUR","FRI","SAT","SUN"]
+        Days: ["SUN", "MON","TUE","WED","THUR","FRI","SAT"]
     }
   },
   methods: {

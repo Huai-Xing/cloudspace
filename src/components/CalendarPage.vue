@@ -33,7 +33,7 @@ export default {
     },
     generateDays: function(x = dayjs()) {
       var firstDay = x.startOf('month').get('day');
-      var counter = 1 - firstDay;
+      var counter = 0 - firstDay;
       var days = []
       for (let i = 0; i < 35; i++) {
         var dayAdd = x.startOf('month').add(counter,'days');

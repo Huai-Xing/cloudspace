@@ -4,6 +4,7 @@
       class="cell"
       :class="{
         dayCurrentMonth: isNotCurrentMonth,
+        dayTodayCell: isToday,
       }"
     >
       <ul class="cellItems">
@@ -37,7 +38,7 @@ export default {
       isNotCurrentMonth: this.selectedDate.get('month') != this.date.get('month'),
       isToday: dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
       todayDate: dayjs(),
-      data: ["BT3103 Assignment 2", "Meeting with Group", "Meeting with Group", "Very very very very very very very very very very very long task"],
+      data: ["BT3103 Assignment 2", "Meeting with Groups", "Meeting with Group", "Very very very very very very very very very very very long task"],
     };
   },
 };
@@ -48,13 +49,17 @@ export default {
 .cell {
   list-style-type: None;
   display: inline-block;
-  border: 1px solid rgb(173, 169, 169);
+  border: 1px solid rgb(230, 230, 230);
   position: relative;
   min-height: 100px;
   padding: 5px;
 }
 .dayCurrentMonth {
-  background-color: rgb(224, 222, 222);
+  background-color: rgb(240, 240, 240);
+}
+.dayTodayCell {
+  border: 1px solid rgb(192, 2, 2);
+
 }
 .cellItems {
   display: inline;
@@ -87,6 +92,7 @@ export default {
   margin: 5px;
   padding-left: 5px;
   min-width: 93px;
+  font-size: 14px;
 }
 .items:nth-child(odd) {
   background-color: lightgreen;
