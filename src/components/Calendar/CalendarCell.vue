@@ -47,11 +47,12 @@ export default {
 <style scoped>
 .cell {
   list-style-type: None;
-  display: block;
+  display: inline-block;
   border: 1px solid rgb(100, 100, 100);
-  margin: None;
-  width:200px;
   height: 150px;
+  margin: 0;
+  padding: 0;
+  width: 188px;
 }
 .dayCurrentMonth {
   background-color: rgb(224, 222, 222);
@@ -71,7 +72,7 @@ export default {
   color: black;
   position: relative;
   bottom: 15px;
-  left: 175px;
+  left: 80%;
 }
 .dayToday {
   background-color: rgb(0, 255, 106);

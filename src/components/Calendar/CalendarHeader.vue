@@ -92,7 +92,7 @@ li {
   background-color: lightyellow;
   margin: 0px;
   padding-left: 0px;
-  width: 202px;
+  width: 14%;
   text-align: center;
   font-size: 20px;
   font-weight: 700;
