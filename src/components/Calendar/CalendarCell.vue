@@ -49,7 +49,7 @@ export default {
 .cell {
   list-style-type: None;
   display: inline-block;
-  border: 1px solid rgb(230, 230, 230);
+  border: 3px solid rgb(230, 230, 230);
   position: relative;
   min-height: 100px;
   padding: 5px;
@@ -58,7 +58,7 @@ export default {
   background-color: rgb(240, 240, 240);
 }
 .dayTodayCell {
-  border: 1px solid rgb(192, 2, 2);
+  border: 3px solid rgb(192, 2, 2);
 }
 .cellItems {
   display: inline;
