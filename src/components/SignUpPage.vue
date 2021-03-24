@@ -6,7 +6,7 @@
           Log In
         </router-link>
       </li>
-
+      <li>|</li>
       <li>
         <router-link :to="{ path: '/signup' }">
           Sign Up
