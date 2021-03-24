@@ -87,7 +87,10 @@
             // console.log(cred.user.uid);
           })
           .then(() => {
-            this.$router.push({ name: "Home" });
+            this.$router.push({
+              name: "Home",
+              params: { name: this.user.email },
+            });
           })
           .catch((error) => {
             alert(error.message);

@@ -22,30 +22,28 @@ const myRouter = new VueRouter({
   mode: "history",
 });
 
-var currentUser = fb.auth().currentUser;
-// var email = currentUser.email;
-// var password = currentUser.password;
 // Router guards
 myRouter.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (currentUser == null) {
-      next({
-        name: "Main",
-      });
-    } else {
-      next();
-    }
+    fb.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        next();
+      } else {
+        next("/");
+      }
+    });
+  } else {
+    next();
   }
-  next();
 });
 
-fb.auth().onAuthStateChanged((user) => {
-  if (user) {
-    console.log("Current user: " + user.uid);
-  } else {
-    console.log("Current user: " + null);
-  }
-});
+// fb.auth().onAuthStateChanged((user) => {
+//   if (user) {
+//     console.log("Current user: " + user.uid);
+//   } else {
+//     console.log("Current user: " + null);
+//   }
+// });
 
 new Vue({
   render: (h) => h(App),
