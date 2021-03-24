@@ -13,9 +13,25 @@ import TasksPage from "./components/TasksPage.vue";
 import TaskTimer from "./components/TaskTimer.vue";
 import PlantATreePage from "./components/PlantATreePage.vue";
 
+//firebase
+import fb from "./firebase";
+
 export default [
   // When at the main landing page
-  { path: "/", name: "Main", component: MainPage },
+  {
+    path: "/",
+    name: "Main",
+    component: MainPage,
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next("/signin/home");
+        } else {
+          next();
+        }
+      });
+    },
+  },
 
   // When the user log in
   {
@@ -23,6 +39,15 @@ export default [
     name: "Home",
     component: HomePage,
     meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next();
+        } else {
+          next("/signin");
+        }
+      });
+    },
   },
   {
     path: "/signin/profile",
@@ -30,6 +55,15 @@ export default [
     component: UserProfilePage,
     props: true,
     meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next();
+        } else {
+          next("/signin");
+        }
+      });
+    },
   },
 
   {
@@ -38,6 +72,15 @@ export default [
     component: CalendarPage,
     props: true,
     meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next();
+        } else {
+          next("/signin");
+        }
+      });
+    },
   },
   {
     path: "/signin/productivity",
@@ -45,6 +88,15 @@ export default [
     component: ProductivityPage,
     props: true,
     meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next();
+        } else {
+          next("/signin");
+        }
+      });
+    },
   },
   {
     path: "/signin/tasks",
@@ -52,6 +104,15 @@ export default [
     component: TasksPage,
     props: true,
     meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next();
+        } else {
+          next("/signin");
+        }
+      });
+    },
   },
   {
     path: "/signin/tasks/timer/:id",
@@ -59,6 +120,15 @@ export default [
     component: TaskTimer,
     props: true,
     meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next();
+        } else {
+          next("/signin");
+        }
+      });
+    },
   },
   {
     path: "/signin/plant-tree",
@@ -66,18 +136,45 @@ export default [
     component: PlantATreePage,
     props: true,
     meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next();
+        } else {
+          next("/signin");
+        }
+      });
+    },
   },
   {
     path: "/signup",
     name: "signup",
     component: SignUpPage,
     props: true,
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next("/signin/home");
+        } else {
+          next();
+        }
+      });
+    },
   },
   {
     path: "/signin",
     name: "signin",
     component: LogInPage,
     props: true,
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next("/signin/home");
+        } else {
+          next();
+        }
+      });
+    },
   },
 
   // When the user log in

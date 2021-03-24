@@ -2,7 +2,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import Routes from "./routes.js"; // Register routes
-import fb from "./firebase";
+// import fb from "./firebase";
 
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
@@ -23,19 +23,19 @@ const myRouter = new VueRouter({
 });
 
 // Router guards
-myRouter.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    fb.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        next();
-      } else {
-        next("/");
-      }
-    });
-  } else {
-    next();
-  }
-});
+// myRouter.beforeEach((to, from, next) => {
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     fb.auth().onAuthStateChanged(function(user) {
+//       if (user) {
+//         next();
+//       } else {
+//         next("/signin");
+//       }
+//     });
+//   } else {
+//     next();
+//   }
+// });
 
 // fb.auth().onAuthStateChanged((user) => {
 //   if (user) {

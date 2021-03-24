@@ -11,12 +11,17 @@
 
       <template v-slot:body>
         <form>
-          Category
-          <select v-model="newtask.category" :disabled="disabled">
-            <option disabled value="">Please select a catergory</option>
+          <label for="title">Title</label>
+          <input type="text" id="title" placeholder="Give your task a name" />
+          <br />
+          <label for="category">Category</label>
+          <select v-model="newtask.category" :disabled="disabled" id="category">
+            <option disabled value=""
+              >Please select a catergory for your task</option
+            >
             <option
-              v-for="option in options"
-              v-bind:value="option.value"
+              v-for="option in categoryList"
+              v-bind:value="option"
               v-bind:key="option"
             >
               {{ option.name }}
@@ -29,8 +34,6 @@
             v-model="newcategory"
             placeholder="Enter a new category"
           />
-          <br />
-          Task title <input type="text" />
           <br />
           Duration
           <vue-timepicker
@@ -49,7 +52,9 @@
       </template>
 
       <template v-slot:footer>
-        <button>Submit</button>
+        <button @click.prevent="sendTask">
+          Submit
+        </button>
       </template>
     </Modal>
   </div>
@@ -59,6 +64,7 @@
   import Modal from "./Modal";
   import VueTimepicker from "vue2-timepicker";
   import "vue2-timepicker/dist/VueTimepicker.css";
+  import fb from "../firebase";
 
   export default {
     name: "App",
@@ -83,6 +89,8 @@
         },
         newcategory: "",
         disabled: false,
+        user: fb.auth().currentUser.uid,
+        categoryList: [],
       };
     },
     methods: {
@@ -91,6 +99,32 @@
       },
       closeModal() {
         this.isModalVisible = false;
+      },
+      sendTask() {
+        if (this.newcategory != "") {
+          this.categoryList.push(this.newcategory);
+          this.newtask.category = this.newcategory;
+        } else;
+
+        //adding task to tasksList
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .add(this.newtask);
+
+        //updating categoryList
+        if (this.newcategory != "") {
+          fb.firestore()
+            .collection("tasks")
+            .doc(this.user)
+            .update({
+              categoryList: this.categoryList,
+            });
+        } else;
+
+        this.isModalVisible = false;
+        console.log("this method works");
       },
     },
     watch: {
