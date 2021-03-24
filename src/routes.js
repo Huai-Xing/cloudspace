@@ -1,31 +1,84 @@
 /* jshint esversion: 6 */
 
 // Import the components to define routes for.
-import MainPage from './components/MainPage.vue';
-import SignInPage from './components/SignInPage.vue';
+import MainPage from "./components/MainPage.vue";
+import SignUpPage from "./components/SignUpPage.vue";
+import LogInPage from "./components/LogInPage.vue";
 
-import UserProfilePage from './components/UserProfilePage.vue';
-import HomePage from './components/HomePage.vue';
-import CalendarPage from './components/CalendarPage.vue';
-import ProductivityPage from './components/ProductivityPage.vue';
-import TasksPage from './components/TasksPage.vue';
-import TaskTimer from './components/TaskTimer.vue';
-import PlantATreePage from './components/PlantATreePage.vue';
+import UserProfilePage from "./components/UserProfilePage.vue";
+import HomePage from "./components/HomePage.vue";
+import CalendarPage from "./components/CalendarPage.vue";
+import ProductivityPage from "./components/ProductivityPage.vue";
+import TasksPage from "./components/TasksPage.vue";
+import TaskTimer from "./components/TaskTimer.vue";
+import PlantATreePage from "./components/PlantATreePage.vue";
 
 export default [
   // When at the main landing page
-  { path: '/', name: 'Main', component: MainPage },
-  { path: '/signin/:newUser', name: 'signin', component: SignInPage, props: true },
+  { path: "/", name: "Main", component: MainPage },
 
   // When the user log in
-  { path: '/signin/home', name: 'Home', component: HomePage },
-  { path: '/signin/profile', name: 'Profile', component: UserProfilePage, props: true },
+  {
+    path: "/signin/home",
+    name: "Home",
+    component: HomePage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/signin/profile",
+    name: "Profile",
+    component: UserProfilePage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
 
-  { path: '/signin/calendar', name: 'Calendar', component: CalendarPage, props: true },
-  { path: '/signin/productivity', name: 'Productivity', component: ProductivityPage, props: true },
-  { path: '/signin/tasks', name: 'Tasks', component: TasksPage, props: true },
-  { path: '/signin/tasks/timer/:id', name: 'Timer', component: TaskTimer, props: true },
-  { path: '/signin/plant-tree', name: 'PlantTree', component: PlantATreePage, props: true },
+  {
+    path: "/signin/calendar",
+    name: "Calendar",
+    component: CalendarPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/signin/productivity",
+    name: "Productivity",
+    component: ProductivityPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/signin/tasks",
+    name: "Tasks",
+    component: TasksPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/signin/tasks/timer/:id",
+    name: "Timer",
+    component: TaskTimer,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/signin/plant-tree",
+    name: "PlantTree",
+    component: PlantATreePage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: SignUpPage,
+    props: true,
+  },
+  {
+    path: "/signin",
+    name: "signin",
+    component: LogInPage,
+    props: true,
+  },
 
   // When the user log in
   /*

@@ -2,13 +2,13 @@
   <div>
     <ul class="top-nav-list">
       <li>
-        <router-link :to="{ name: 'signin', params: { newUser: false } }">
+        <router-link :to="{ path: '/signin' }">
           Log In
         </router-link>
       </li>
-      <li>|</li>
+
       <li>
-        <router-link :to="{ name: 'signin', params: { newUser: true } }">
+        <router-link :to="{ path: '/signup' }">
           Sign Up
         </router-link>
       </li>
@@ -17,10 +17,10 @@
     <img id="leftphoto" src="../assets/background5_signin.png" />
 
     <div id="chunk">
-      <p id="sign" v-show="newUser">Sign Up</p>
-      <p id="sign" v-show="!newUser">Log In</p>
+      <p id="sign">Sign Up</p>
+
       <form @submit.prevent="letsgo">
-        <div v-if="newUser">
+        <div>
           <label for="name">Name:</label><br />
           <input
             type="text"
@@ -73,7 +73,6 @@
   export default {
     data() {
       return {
-        newUser: this.$route.params.newUser,
         user: {
           name: "",
           email: "",
@@ -91,48 +90,29 @@
         var password = this.user.password;
         var user = this.user;
         //Signing up
-        if (this.newUser) {
-          fb.auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then((cred) => {
-              alert("Successfully registered");
 
-              console.log("Registered user: " + cred.user.uid);
-              fb.firestore()
-                .collection("users")
-                .doc(cred.user.uid)
-                .set({
-                  user,
-                });
-            })
-            .then(() => {
-              this.$router.push({ name: "Home" });
-            })
+        fb.auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then((cred) => {
+            alert("Successfully registered");
 
-            .catch((error) => {
-              alert(error.message);
-            });
+            console.log("Registered user: " + cred.user.uid);
+            fb.firestore()
+              .collection("users")
+              .doc(cred.user.uid)
+              .set({
+                user,
+              });
+          })
+          .then(() => {
+            this.$router.push({ name: "Home" });
+          })
 
-          event.target.reset();
-        } else {
-          //Singing in
-          fb.auth()
-            .signInWithEmailAndPassword(email, password)
-            .then((cred) => {
-              alert("Successfully logged into " + cred.user.email);
-              // console.log(cred.user.uid);
-            })
-            .then(() => {
-              this.$router.push({ name: "Home" });
-            })
-            .catch((error) => {
-              alert(error.message);
-            });
+          .catch((error) => {
+            alert(error.message);
+          });
 
-          this.user.email = "";
-          this.user.password = "";
-          event.target.reset();
-        }
+        event.target.reset();
       },
 
       // Fn to push the user to '/login/calendar' once the Let's go button is clicked
@@ -143,10 +123,10 @@
       //   // Other logic (retriving details from firebase for the specific user?) here
       // },
     },
-    beforeRouteUpdate(to, from, next) {
-      this.newUser = to.params.newUser;
-      next();
-    },
+    // beforeRouteUpdate(to, from, next) {
+    //   this.newUser = to.params.newUser;
+    //   next();
+    // },
     //Register Locally
     components: {},
   };
