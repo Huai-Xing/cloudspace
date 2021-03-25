@@ -22,7 +22,7 @@
     </svg>
 
     <!-- to show the remaining time in the timer -->
-    <span class="timer__label"> {{ formattedTimeLeft }} <br> left </span>
+    <span class="timer__label"> {{ formattedTimeLeft }}<br>{{leftWord}}</span>
   </div>
 
   <h4 class="coins-to-earn"> Coins to earn: {{coinsToEarn}} </h4>
@@ -72,14 +72,13 @@ const COLOR_CODES = {
 };
 
 // To change here to bind to the actual data
-const TIME_IN_SEC= 20; // dummy timing value (e.g 3913sec => 1hr5min13sec) for testing at the moment
+const TIME_IN_SEC= 10; // dummy timing value (e.g 3913sec => 1hr5min13sec) for testing at the moment
 
 export default {
   data() {
     return {
       timePassed: 0, /* To store the amount of time (in sec) that has passed */
       timerInterval: null,
-
       title: "Selected Task Category + Task Name Here",
       coinsToEarn: 0,
     };
@@ -113,7 +112,14 @@ export default {
         return 'Times Up!';
       }
     },
-
+    leftWord() {
+      const timeLeft = this.timeLeft;
+      if (timeLeft != 0) {
+        return 'Left';
+      } else {
+        return '';
+      }
+    },
     timeLeft() {
       return TIME_IN_SEC - this.timePassed;
     },
