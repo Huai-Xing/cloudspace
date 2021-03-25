@@ -4,7 +4,7 @@
   <appNav></appNav>
 
   <div class="timer-content">
-    <countdown-timer v-if="showTimer" v-on:switch="switchTimer" v-bind:currentTimer="currentTimer" :timerTimePassed="timerTimePassed" :taskTitle="taskTitle"></countdown-timer>
+    <countdown-timer v-if="showTimer" v-on:switch="switchTimer" v-on:end="endTimer" v-on:cancel="cancelTimer" v-bind:currentTimer="currentTimer" :timerTimePassed="timerTimePassed" :taskTitle="taskTitle"></countdown-timer>
     <countup-timer v-else-if="showBreak" v-on:switch="switchTimer" v-bind:breakTime="currentBreak" :breakTimePassed="breakTimePassed"></countup-timer>
   </div>
 
@@ -47,6 +47,18 @@ export default {
         this.currentBreak = y;
         this.breakTimePassed = z;
       }
+    },
+    endTimer: function() {
+      console.log("complete");
+      this.$router.push({
+        name: 'Tasks',
+      });
+    },
+    cancelTimer: function() {
+      console.log("cancel");
+      this.$router.push({
+        name: 'Tasks',
+      });
     },
   }
 

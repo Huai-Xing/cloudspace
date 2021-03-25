@@ -203,6 +203,7 @@ export default {
 
     doneTimer: function () {
       // logic to compute the coins here?
+      this.$emit('end');
     },
 
     pauseTimer: function () {
@@ -210,9 +211,7 @@ export default {
       this.$emit('switch', true, timeLeft, this.timePassed);
     },
     cancelTimer: function () {
-      this.$router.push({
-        name: 'Tasks',
-      });
+      this.$emit('cancel');
     },
   },
 };
