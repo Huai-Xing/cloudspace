@@ -1,7 +1,7 @@
 <template>
 <div>
   <br>
-  <h2 class="timer-title"> {{title}} </h2>
+  <h2 id="timer-title"> {{title}} </h2>
 
   <div class="timer-container">
     <svg class="timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -28,24 +28,10 @@
 
   <br><br>
 
-  <div id="buttons">
+  <div class="buttons">
     <!-- Timer completes -->
     <button id="done" class="timerControlledBtns" @click="doneTimer()">
-        <img src="../assets/timer/done_icon.png" alt="timerDone" height = "18px" width="18px"/>
-    </button>
-
-    &nbsp; <!-- for extra spacing between the buttons -->
-
-    <!-- Pause Timer -->
-    <button id="pause" class="timerControlledBtns" @click="contdPlayTimer()">
-        <img src="../assets/timer/contdPlay_icon.png" alt="timerPause" height = "18px" width="18px"/>
-    </button>
-
-    &nbsp; <!-- for extra spacing between the buttons -->
-
-    <!-- Cancel Timer -->
-    <button id="cancel" class="timerControlledBtns" @click="cancelTimer()">
-        <img src="../assets/timer/cancel_icon.png" alt="timerCancel" height = "18px" width="18px"/>
+        End Break
     </button>
   </div>
 
@@ -179,11 +165,33 @@ export default {
 
 
 <style scoped>
+.buttons {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+button {
+  width: auto;
+  height: 40px;
+  margin: 8px;
+  font-size: 20px;
+}
+#timer-title {
+  display: block;
+  border: 1px solid black;
+  text-align: center;
+  width: 400px;
+  word-wrap: break-word;
+}
 /* Sets the containers height and width; i.e. setting the timer's size */
 .timer-container {
   position: relative;
   width: 300px;
   height: 300px;
+  border: 1px solid black;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Removes SVG styling that would hide the time label */

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h2 class="timer-title"> {{title}} </h2>
+  <h2 id="timer-title"> {{title}} </h2>
 
   <div class="timer-container">
     <svg class="timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -25,26 +25,22 @@
     <span class="timer__label"> {{ formattedTimeLeft }}<br>{{leftWord}}</span>
   </div>
 
-  <h4 class="coins-to-earn"> Coins to earn: {{coinsToEarn}} </h4>
-
-  <div id="buttons">
+  <div class="buttons">
+     <p id="coins-to-earn"> Coins to earn: {{coinsToEarn}} </p>
     <!-- Timer completes -->
     <button id="done" class="timerControlledBtns" @click="doneTimer()">
-        <img src="../assets/timer/done_icon.png" alt="timerDone" height = "18px" width="18px"/>
+        <span class="tooltiptext">Complete task</span>
+        <img src="../../assets/timer/done_icon.png" alt="timerDone" height = "18px" width="18px"/>
     </button>
-
-    &nbsp; <!-- for extra spacing between the buttons -->
-
     <!-- Pause Timer -->
     <button id="pause" class="timerControlledBtns" @click="pauseTimer()">
-        <img src="../assets/timer/pause_icon.png" alt="timerPause" height = "18px" width="18px"/>
+        <span class="tooltiptext">Pause for a break</span>
+        <img src="../../assets/timer/pause_icon.png" alt="timerPause" height = "18px" width="18px"/>
     </button>
-
-    &nbsp; <!-- for extra spacing between the buttons -->
-
     <!-- Cancel Timer -->
     <button id="cancel" class="timerControlledBtns" @click="cancelTimer()">
-        <img src="../assets/timer/cancel_icon.png" alt="timerCancel" height = "18px" width="18px"/>
+        <span class="tooltiptext">Cancel task</span>
+        <img src="../../assets/timer/cancel_icon.png" alt="timerCancel" height = "18px" width="18px"/>
     </button>
   </div>
 
@@ -79,7 +75,7 @@ export default {
     return {
       timePassed: 0, /* To store the amount of time (in sec) that has passed */
       timerInterval: null,
-      title: "Selected Task Category + Task Name Here",
+      title: "I have a very veryveryveryveryveryvery veryveryvery veryvery veryveryveryveryvery veryvery very very veryveryveryveryvery",
       coinsToEarn: 0,
     };
   },
@@ -190,11 +186,93 @@ export default {
 
 
 <style scoped>
+.tooltiptext {
+  visibility: hidden;
+  width: auto;
+  background-color: rgb(235, 235, 235);
+  color: rgb(0, 0, 0);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 0%;
+  margin-left: 0px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 10px;
+}
+
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color:transparent transparent rgb(235, 235, 235) transparent ;
+}
+
+button:hover > .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.buttons {
+  display: block;
+  border: 1px solid black;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+button {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin: 8px;
+}
+img {
+  position: relative;
+  right: 10%;
+  top: 6%;
+  width: 30px;
+  height: 30px;
+}
+#timer-title {
+  display: block;
+  border: 1px solid black;
+  text-align: center;
+  width: 400px;
+  word-wrap: break-word;
+}
 /* Sets the containers height and width; i.e. setting the timer's size */
 .timer-container {
   position: relative;
   width: 300px;
   height: 300px;
+  border: 1px solid black;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Styling to show the timing value inside the circle */
+.timer__label {
+  position: absolute;
+  top: 10px; /* Keep the label placed 10px down from the top edge to make it more like in the middle */
+
+  /* Size should match the parent container, i.e. timer-container */
+  width: 300px;
+  height: 300px;
+
+  /* Create a flexible box that centers content vertically and horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 48px;
+  text-align: center;
 }
 
 /* Removes SVG styling that would hide the time label */
@@ -239,23 +317,5 @@ export default {
 
 .timer__path-remaining.red {
   color: red;
-}
-
-/* Styling to show the timing value inside the circle */
-.timer__label {
-  position: absolute;
-  top: 10px; /* Keep the label placed 10px down from the top edge to make it more like in the middle */
-
-  /* Size should match the parent container, i.e. timer-container */
-  width: 300px;
-  height: 300px;
-
-  /* Create a flexible box that centers content vertically and horizontally */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 48px;
-  text-align: center;
 }
 </style>

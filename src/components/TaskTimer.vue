@@ -4,8 +4,8 @@
   <appNav></appNav>
 
   <div class="timer-content">
-    <countdown-timer></countdown-timer>
-    <countup-timer></countup-timer>
+    <countdown-timer v-show="showTimer"></countdown-timer>
+    <countup-timer v-show="showBreak"></countup-timer>
   </div>
 
 </div>
@@ -14,8 +14,8 @@
 
 <script>
 import MainNavigation from './MainNavigation.vue';
-import CountDownTimerComponent from './CountDownTimerComponent.vue';
-import CountUpTimerComponent from './CountUpTimerComponent.vue';
+import CountDownTimerComponent from './Timer/CountDownTimerComponent.vue';
+import CountUpTimerComponent from './Timer/CountUpTimerComponent.vue';
 
 export default {
   //Register Locally
@@ -27,7 +27,8 @@ export default {
 
   data() {
     return {
-
+      showTimer: false,
+      showBreak: true,
     };
   },
 
@@ -40,6 +41,6 @@ export default {
   align-items: center;
   display: flex;
   justify-content: center;
-  margin-bottom: 100px;
+  margin-bottom: 150px;
 }
 </style>
