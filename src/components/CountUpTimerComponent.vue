@@ -8,15 +8,15 @@
       <g class="timer__circle">
         <circle class="timer__path-elapsed" cx="50" cy="50" r="45"></circle>
         <circle class="timer__inner-circle" cx="50" cy="50" r="35.5"></circle>
-        <path
+        <path id="test"
           :stroke-dasharray="circleDasharray"
           class="timer__path-remaining"
           :class="remainingPathColor"
           d="
             M 50, 50
             m -45, 0
-            a 45,45 0 1,0 90,0
-            a 45,45 0 1,0 -90,0
+            a 45,45 0 1,1 90,0
+            a 45,45 0 1,1 -90,0
           ">
         </path>
       </g>
@@ -63,14 +63,14 @@ const COLOR_CODES = {
 };
 
 // To change here to bind to the actual data
-const TIME_IN_SEC= 0; // dummy timing value start from 0 for testing at the moment
+const TIME_IN_SEC= 10; // dummy timing value start from 0 for testing at the moment
 
 export default {
   data() {
     return {
       timePassed: 0, /* To store the amount of time (in sec) that has passed */
       timerInterval: null,
-
+      totalTimePassed: 0,
       title: "Break time!",
       coinsToEarn: 0,
     };
@@ -78,7 +78,8 @@ export default {
 
   computed: {
     formattedTimeUsed() {
-      const timeUsed= this.timeUsed; // time is originally stored in totalSecs
+      const currentTimeUsed = TIME_IN_SEC - this.timeUsed; // time is originally stored in totalSecs
+      const timeUsed = currentTimeUsed + this.totalTimePassed;
 
       let hours = Math.floor(timeUsed / 3600);
       let minutes = Math.floor((timeUsed % 3600) / 60); // remaining mins
@@ -102,18 +103,23 @@ export default {
     },
 
     timeUsed() {
-      return TIME_IN_SEC + this.timePassed;
+      if (this.timePassed == TIME_IN_SEC) {
+        this.resetTIMEPASSED();
+        return TIME_IN_SEC;
+      } else {
+        return TIME_IN_SEC - this.timePassed;
+      }
     },
 
     // Update the dasharray value as time passes, starting with 283
     circleDasharray() { // To animate the ring arc length of the remaining time line with the 'stroke-dasharray' in <path>
-      return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;
+      //return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;
+      return `${((1- this.timeFraction) * FULL_DASH_ARRAY).toFixed(0)} 283`;
     },
 
     timeFraction() {
       // Divides time used by the defined time limit
       const rawTimeFraction = this.timeUsed / TIME_IN_SEC;
-
       // reducing the length of the ring gradually during the countdown
       return rawTimeFraction - (1 / TIME_IN_SEC) * (1 - rawTimeFraction);
     },
@@ -138,6 +144,10 @@ export default {
   },
 
   methods: {
+    resetTIMEPASSED: function() {
+      this.timePassed = 0;
+      this.totalTimePassed = TIME_IN_SEC + this.totalTimePassed;
+    },
     onTimesUp: function() {
       clearInterval(this.timerInterval);
     },

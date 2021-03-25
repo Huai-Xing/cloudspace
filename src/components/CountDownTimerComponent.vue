@@ -72,7 +72,7 @@ const COLOR_CODES = {
 };
 
 // To change here to bind to the actual data
-const TIME_IN_SEC= 3913; // dummy timing value (e.g 3913sec => 1hr5min13sec) for testing at the moment
+const TIME_IN_SEC= 20; // dummy timing value (e.g 3913sec => 1hr5min13sec) for testing at the moment
 
 export default {
   data() {
@@ -107,7 +107,11 @@ export default {
       }
 
       // Output the time in HH:MM:SS format
-      return `${hours}:${minutes}:${seconds}`;
+      if (timeLeft != 0) {
+        return `${hours}:${minutes}:${seconds}`;
+      } else {
+        return 'Times Up!';
+      }
     },
 
     timeLeft() {
