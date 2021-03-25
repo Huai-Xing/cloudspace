@@ -1,24 +1,24 @@
 <template>
   <div>
     <ul class="top-nav-list">
-      <li><router-link :to="{ name: 'signin', params: { newUser: false }}"> Log In </router-link></li>
-      <li> | </li>
-      <li><router-link :to="{ name: 'signin', params: { newUser: true }}"> Sign Up </router-link></li>
+      <li><router-link :to="{ name: 'signin' }"> Log In </router-link></li>
+      <li>|</li>
+      <li><router-link :to="{ name: 'signup' }"> Sign Up </router-link></li>
     </ul>
     <div class="img_stack">
-      <img id="img_top" alt="background1_main" src="../assets/background1_main.png" />
+      <img
+        id="img_top"
+        alt="background1_main"
+        src="../assets/background1_main.png"
+      />
       <img id="img_bottom" alt="box" src="../assets/lines_box.png" />
     </div>
-
   </div>
 </template>
 
-
 <script>
-export default {
-};
+export default {};
 </script>
-
 
 <style scoped>
 * {
