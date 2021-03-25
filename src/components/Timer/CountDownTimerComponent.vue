@@ -1,57 +1,77 @@
 <template>
-<div>
-  <h2 id="timer-title"> {{title}} </h2>
+  <div>
+    <h2 id="timer-title">{{ title }}</h2>
 
-  <div class="timer-container">
-    <svg class="timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <g class="timer__circle">
-        <circle class="timer__path-elapsed" cx="50" cy="50" r="45"></circle>
-        <circle class="timer__inner-circle" cx="50" cy="50" r="35.5"></circle>
-        <path
-          :stroke-dasharray="circleDasharray"
-          class="timer__path-remaining"
-          :class="remainingPathColor"
-          d="
+    <div class="timer-container">
+      <svg
+        class="timer__svg"
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g class="timer__circle">
+          <circle class="timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+          <circle class="timer__inner-circle" cx="50" cy="50" r="35.5"></circle>
+          <path
+            :stroke-dasharray="circleDasharray"
+            class="timer__path-remaining"
+            :class="remainingPathColor"
+            d="
             M 50, 50
             m -45, 0
             a 45,45 0 1,0 90,0
             a 45,45 0 1,0 -90,0
-          ">
-        </path>
-      </g>
-    </svg>
+          "
+          ></path>
+        </g>
+      </svg>
 
-    <!-- to show the remaining time in the timer -->
-    <span class="timer__label"> {{ formattedTimeLeft }}<br>{{leftWord}}</span>
-  </div>
+      <!-- to show the remaining time in the timer -->
+      <span class="timer__label">
+        {{ formattedTimeLeft }}<br />{{ leftWord }}</span
+      >
+    </div>
 
-  <div class="buttons">
-     <p id="coins-to-earn"> Coins to earn: {{coinsToEarn}} </p>
-    <!-- Timer completes -->
-    <button id="done" class="timerControlledBtns" @click="doneTimer()">
+    <div class="buttons">
+      <p id="coins-to-earn">Coins to earn: {{ coinsToEarn }}</p>
+      <!-- Timer completes -->
+      <button id="done" class="timerControlledBtns" @click="doneTimer()">
         <span class="tooltiptext">Complete task</span>
-        <img src="../../assets/timer/done_icon.png" alt="timerDone" height = "18px" width="18px"/>
-    </button>
-    <!-- Pause Timer -->
-    <button id="pause" class="timerControlledBtns" @click="pauseTimer()">
+        <img
+          src="../../assets/timer/done_icon.png"
+          alt="timerDone"
+          height="18px"
+          width="18px"
+        />
+      </button>
+      <!-- Pause Timer -->
+      <button id="pause" class="timerControlledBtns" @click="pauseTimer()">
         <span class="tooltiptext">Pause for a break</span>
-        <img src="../../assets/timer/pause_icon.png" alt="timerPause" height = "18px" width="18px"/>
-    </button>
-    <!-- Cancel Timer -->
-    <button id="cancel" class="timerControlledBtns" @click="cancelTimer()">
+        <img
+          src="../../assets/timer/pause_icon.png"
+          alt="timerPause"
+          height="18px"
+          width="18px"
+        />
+      </button>
+      <!-- Cancel Timer -->
+      <button id="cancel" class="timerControlledBtns" @click="cancelTimer()">
         <span class="tooltiptext">Cancel task</span>
-        <img src="../../assets/timer/cancel_icon.png" alt="timerCancel" height = "18px" width="18px"/>
-    </button>
+        <img
+          src="../../assets/timer/cancel_icon.png"
+          alt="timerCancel"
+          height="18px"
+          width="18px"
+        />
+      </button>
+    </div>
   </div>
-
-</div>
 </template>
 
 
 <script>
 const FULL_DASH_ARRAY = 283;
-const WARNING_THRESHOLD = 15;
-const ALERT_THRESHOLD = 10;
+const WARNING_THRESHOLD = 0.25;
+const ALERT_THRESHOLD = 0.1;
 
 const COLOR_CODES = {
   info: {
@@ -59,24 +79,30 @@ const COLOR_CODES = {
   },
   warning: {
     color: "orange",
-    threshold: WARNING_THRESHOLD
+    threshold: WARNING_THRESHOLD,
   },
   alert: {
     color: "red",
-    threshold: ALERT_THRESHOLD
-  }
+    threshold: ALERT_THRESHOLD,
+  },
 };
 
 // To change here to bind to the actual data
-const TIME_IN_SEC= 10; // dummy timing value (e.g 3913sec => 1hr5min13sec) for testing at the moment
+//const this.totalTime= 10; // dummy timing value (e.g 3913sec => 1hr5min13sec) for testing at the moment
 
 export default {
+    props:{
+      currentTimer: Number,
+      timerTimePassed: Number,
+      taskTitle: String,
+    },
   data() {
     return {
-      timePassed: 0, /* To store the amount of time (in sec) that has passed */
+      timePassed: 0 /* To store the amount of time (in sec) that has passed */,
       timerInterval: null,
-      title: "I have a very veryveryveryveryveryvery veryveryvery veryvery veryveryveryveryvery veryvery very very veryveryveryveryvery",
+      title:"Task",
       coinsToEarn: 0,
+      totalTime: 3600,
     };
   },
 
@@ -105,45 +131,47 @@ export default {
       if (timeLeft != 0) {
         return `${hours}:${minutes}:${seconds}`;
       } else {
-        return 'Times Up!';
+        return "Times Up!";
       }
     },
     leftWord() {
       const timeLeft = this.timeLeft;
       if (timeLeft != 0) {
-        return 'Left';
+        return "Left";
       } else {
-        return '';
+        return "";
       }
     },
     timeLeft() {
-      return TIME_IN_SEC - this.timePassed;
+      return this.totalTime - this.timePassed;
     },
 
     // Update the dasharray value as time passes, starting with 283
-    circleDasharray() { // To animate the ring arc length of the remaining time line with the 'stroke-dasharray' in <path>
+    circleDasharray() {
+      // To animate the ring arc length of the remaining time line with the 'stroke-dasharray' in <path>
       return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;
     },
 
     timeFraction() {
       // Divides time left by the defined time limit
-      const rawTimeFraction = this.timeLeft / TIME_IN_SEC;
+      const rawTimeFraction = this.timeLeft / this.totalTime;
 
       // reducing the length of the ring gradually during the countdown
-      return rawTimeFraction - (1 / TIME_IN_SEC) * (1 - rawTimeFraction);
+      return rawTimeFraction - (1 / this.totalTime) * (1 - rawTimeFraction);
     },
 
     remainingPathColor() {
       const { alert, warning, info } = COLOR_CODES;
-
-      if (this.timeLeft <= alert.threshold) {
+      var alertTime = this.totalTime * alert.threshold;
+      var warningTime = this.totalTime * warning.threshold;
+      if (this.timeLeft <= alertTime) {
         return alert.color;
-      } else if (this.timeLeft <= warning.threshold) {
+      } else if (this.timeLeft <= warningTime) {
         return warning.color;
       } else {
         return info.color;
       }
-    }
+    },
   },
 
   watch: {
@@ -151,36 +179,42 @@ export default {
       if (newValue === 0) {
         this.onTimesUp();
       }
-    }
+    },
   },
 
-  mounted() { // to start the timer immediately when the component gets mounted
+  mounted() {
+    this.title = this.taskTitle;
+    this.totalTime = this.currentTimer + this.timerTimePassed;
+    this.timePassed = this.timerTimePassed;
+    // to start the timer immediately when the component gets mounted
     this.startTimer();
   },
 
   methods: {
-    onTimesUp: function() {
+    onTimesUp: function () {
       clearInterval(this.timerInterval);
     },
 
     // Fn that increase the value of timePassed by 1unit per sec and recompute the timeLeft value
-    startTimer: function() {
+    startTimer: function () {
       // increment the timePassed value every sec
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
     },
 
-    doneTimer: function() {
+    doneTimer: function () {
       // logic to compute the coins here?
     },
 
-    pauseTimer: function() {
-      this.title = "Break time!"
+    pauseTimer: function () {
+      var timeLeft = this.totalTime - this.timePassed;
+      this.$emit('switch', true, timeLeft, this.timePassed);
     },
-
-    cancelTimer: function() {
-
+    cancelTimer: function () {
+      this.$router.push({
+        name: 'Tasks',
+      });
     },
-  }
+  },
 };
 </script>
 
@@ -212,7 +246,7 @@ export default {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color:transparent transparent rgb(235, 235, 235) transparent ;
+  border-color: transparent transparent rgb(235, 235, 235) transparent;
 }
 
 button:hover > .tooltiptext {
@@ -221,7 +255,6 @@ button:hover > .tooltiptext {
 }
 .buttons {
   display: block;
-  border: 1px solid black;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -242,17 +275,16 @@ img {
 }
 #timer-title {
   display: block;
-  border: 1px solid black;
   text-align: center;
   width: 400px;
   word-wrap: break-word;
+  text-decoration: underline;
 }
 /* Sets the containers height and width; i.e. setting the timer's size */
 .timer-container {
   position: relative;
   width: 300px;
   height: 300px;
-  border: 1px solid black;
   margin-left: auto;
   margin-right: auto;
 }
@@ -303,7 +335,7 @@ img {
 
   transition: 1s linear all; /* One second aligns with the speed of the countdown timer */
   fill-rule: nonzero;
-  stroke: currentColor;  /* Allows the ring to change color when the color value updates */
+  stroke: currentColor; /* Allows the ring to change color when the color value updates */
   opacity: 1;
 }
 

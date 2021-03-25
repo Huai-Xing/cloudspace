@@ -49,9 +49,13 @@ const COLOR_CODES = {
 };
 
 // To change here to bind to the actual data
-const TIME_IN_SEC= 10; // dummy timing value start from 0 for testing at the moment
+const TIME_IN_SEC= 900; // dummy timing value start from 0 for testing at the moment
 
 export default {
+    props:{
+      breakTime: Number,
+      breakTimePassed: Number,
+    },
   data() {
     return {
       timePassed: 0, /* To store the amount of time (in sec) that has passed */
@@ -126,6 +130,8 @@ export default {
   },
 
   mounted() { // to start the timer immediately when the component gets mounted
+    this.totalTimePassed = this.breakTime - this.breakTimePassed;
+    this.timePassed = this.breakTimePassed;
     this.startTimer();
   },
 
@@ -145,19 +151,13 @@ export default {
     },
 
     doneTimer: function() {
-      // logic to compute the coins here?
-    },
-
-    pauseTimer: function() {
-      this.title = "Break time!"
-    },
-
-    contdPlayTimer: function() {
-
-    },
-
-    cancelTimer: function() {
-
+      var timeGain = 0;
+      if (this.totalTimePassed == 0) {
+        timeGain = this.timePassed;
+      } else {
+        timeGain = this.totalTimePassed + this.timePassed;
+      }
+      this.$emit('switch', false, timeGain, this.timePassed);
     },
   }
 };
@@ -179,7 +179,6 @@ button {
 }
 #timer-title {
   display: block;
-  border: 1px solid black;
   text-align: center;
   width: 400px;
   word-wrap: break-word;
@@ -189,7 +188,6 @@ button {
   position: relative;
   width: 300px;
   height: 300px;
-  border: 1px solid black;
   margin-left: auto;
   margin-right: auto;
 }
