@@ -49,12 +49,13 @@ const COLOR_CODES = {
 };
 
 // To change here to bind to the actual data
-const TIME_IN_SEC= 900; // dummy timing value start from 0 for testing at the moment
+//const this.allowedTime= 900; // dummy timing value start from 0 for testing at the moment
 
 export default {
     props:{
       breakTime: Number,
       breakTimePassed: Number,
+      breakTimeAllowed: Number,
     },
   data() {
     return {
@@ -63,12 +64,13 @@ export default {
       totalTimePassed: 0,
       title: "Break time!",
       coinsToEarn: 0,
+      allowedTime: 300,
     };
   },
 
   computed: {
     formattedTimeUsed() {
-      const currentTimeUsed = TIME_IN_SEC - this.timeUsed; // time is originally stored in totalSecs
+      const currentTimeUsed = this.allowedTime - this.timeUsed; // time is originally stored in totalSecs
       const timeUsed = currentTimeUsed + this.totalTimePassed;
 
       let hours = Math.floor(timeUsed / 3600);
@@ -93,11 +95,11 @@ export default {
     },
 
     timeUsed() {
-      if (this.timePassed == TIME_IN_SEC) {
+      if (this.timePassed == this.allowedTime) {
         this.resetTIMEPASSED();
-        return TIME_IN_SEC;
+        return this.allowedTime;
       } else {
-        return TIME_IN_SEC - this.timePassed;
+        return this.allowedTime - this.timePassed;
       }
     },
 
@@ -109,9 +111,9 @@ export default {
 
     timeFraction() {
       // Divides time used by the defined time limit
-      const rawTimeFraction = this.timeUsed / TIME_IN_SEC;
+      const rawTimeFraction = this.timeUsed / this.allowedTime;
       // reducing the length of the ring gradually during the countdown
-      return rawTimeFraction - (1 / TIME_IN_SEC) * (1 - rawTimeFraction);
+      return rawTimeFraction - (1 / this.allowedTime) * (1 - rawTimeFraction);
     },
 
     remainingPathColor() {
@@ -132,13 +134,14 @@ export default {
   mounted() { // to start the timer immediately when the component gets mounted
     this.totalTimePassed = this.breakTime - this.breakTimePassed;
     this.timePassed = this.breakTimePassed;
+    this.allowedTime = this.breakTimeAllowed;
     this.startTimer();
   },
 
   methods: {
     resetTIMEPASSED: function() {
       this.timePassed = 0;
-      this.totalTimePassed = TIME_IN_SEC + this.totalTimePassed;
+      this.totalTimePassed = this.allowedTime + this.totalTimePassed;
     },
     onTimesUp: function() {
       clearInterval(this.timerInterval);

@@ -5,7 +5,7 @@
 
   <div class="timer-content">
     <countdown-timer v-if="showTimer" v-on:switch="switchTimer" v-on:end="endTimer" v-on:cancel="cancelTimer" v-bind:currentTimer="currentTimer" :timerTimePassed="timerTimePassed" :taskTitle="taskTitle"></countdown-timer>
-    <countup-timer v-else-if="showBreak" v-on:switch="switchTimer" v-bind:breakTime="currentBreak" :breakTimePassed="breakTimePassed"></countup-timer>
+    <countup-timer v-else-if="showBreak" v-on:switch="switchTimer" v-bind:breakTime="currentBreak" :breakTimePassed="breakTimePassed" :breakTimeAllowed="breakTimeAllowed"></countup-timer>
   </div>
 
 </div>
@@ -18,6 +18,11 @@ import CountDownTimerComponent from './Timer/CountDownTimerComponent.vue';
 import CountUpTimerComponent from './Timer/CountUpTimerComponent.vue';
 
 export default {
+  /*
+  props: {
+    timeForTask: Number,
+    coinForTask: Number,
+  },*/
   //Register Locally
   components: {
     'appNav': MainNavigation,
@@ -30,10 +35,12 @@ export default {
       showTimer: true,
       showBreak: false,
       currentBreak: 0,
-      currentTimer: 3600,
+      currentTimer: 10,
       timerTimePassed: 0,
       breakTimePassed: 0,
-      taskTitle: "Task",
+      taskTitle: "Cloudspace Timer Task",
+      coin: 0,
+      breakTimeAllowed: 300,
     };
   },
   methods: {
@@ -60,7 +67,17 @@ export default {
         name: 'Tasks',
       });
     },
-  }
+    coinPenalty: function() {
+      var penalty = Math.floor(this.currentBreak / this.breakTimeAllowed);
+      return penalty;
+    },
+  },
+  /*
+  mounted() {
+    this.currentTimer = this.timeForTask;
+    this.coin = this.coinForTask;
+    this.breakTimeAllowed = (this.timeForTask / 1200) * 300
+  }*/
 
 }
 </script>

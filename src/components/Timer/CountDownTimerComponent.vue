@@ -63,6 +63,7 @@
           width="18px"
         />
       </button>
+      <p id="note">Note: Please click on the 'tick' to complete the task before the time is up.<br>Penalty will be imposed on coins earned for tasks that exceed time limit!</p>
     </div>
   </div>
 </template>
@@ -137,7 +138,7 @@ export default {
     leftWord() {
       const timeLeft = this.timeLeft;
       if (timeLeft != 0) {
-        return "Left";
+        return "left";
       } else {
         return "";
       }
@@ -271,6 +272,10 @@ img {
   top: 6%;
   width: 30px;
   height: 30px;
+}
+#note {
+  text-align: center;
+  font-size: 10px;
 }
 #timer-title {
   display: block;
