@@ -14,31 +14,31 @@
     <ul class="left-nav-list">
       <li class="left-nav">
         <router-link :to="{ name: 'Home' }" exact>
-          <img src="../assets/nav/nav_home.png"/> Home
+          <img src="../assets/nav/nav_home.png" /> Home
         </router-link>
       </li>
 
       <li class="left-nav">
         <router-link :to="{ name: 'Calendar' }" exact>
-          <img src="../assets/nav/nav_calendar.png"/> Calendar
+          <img src="../assets/nav/nav_calendar.png" /> Calendar
         </router-link>
       </li>
 
       <li class="left-nav">
         <router-link :to="{ name: 'Productivity' }" exact>
-          <img src="../assets/nav/nav_productivity.png"/> Productivity
+          <img src="../assets/nav/nav_productivity.png" /> Productivity
         </router-link>
       </li>
 
       <li class="left-nav">
         <router-link :to="{ name: 'Tasks' }" exact>
-          <img src="../assets/nav/nav_task.png"/> Tasks
+          <img src="../assets/nav/nav_task.png" /> Tasks
         </router-link>
       </li>
 
       <li class="left-nav">
         <router-link :to="{ name: 'PlantTree' }" exact>
-          <img src="../assets/nav/nav_plant.png"/> Plant A Tree
+          <img src="../assets/nav/nav_plant.png" /> Plant A Tree
         </router-link>
       </li>
     </ul>
