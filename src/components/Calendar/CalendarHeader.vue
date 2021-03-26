@@ -3,7 +3,7 @@
     <i class="arrow left" v-on:click="change(0)"></i>
     <h2>{{ displayDate }}</h2>
     <i class="arrow right" v-on:click="change(1)"></i>
-    <span v-show="isToday" v-on:click="change(2)">Jump to today</span>
+    <span class="backToToday" v-show="isToday" v-on:click="change(2)">Jump to today</span>
     <ul>
       <li v-for="day in Days" v-bind:key="day">
         {{ day }}
@@ -79,11 +79,18 @@ h2 {
   width: 2px;
   height: 2px;
 }
+.right:hover, .left:hover {
+  filter: opacity(0.6);
+}
 span {
   align-items: center;
   margin-left: 20px;
   text-decoration: underline;
   cursor: pointer;
+}
+.backToToday {
+  font-family: lora;
+  color: #4d4d4d;
 }
 ul {
   margin: 0px;

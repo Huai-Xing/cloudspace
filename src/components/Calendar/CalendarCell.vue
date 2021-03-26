@@ -176,6 +176,9 @@ export default {
 .itemsEmpty{
   visibility: hidden;
 }
+.items:hover {
+  filter: brightness(90%);
+}
 .items:nth-child(odd) {
   background-color: #d1e0f3;
 }
