@@ -195,7 +195,7 @@ button {
 }
 #note {
   text-align: center;
-  font-size: 10px;
+  font-size: 12px; /* originally 10px */
 }
 #timer-title {
   display: block;
