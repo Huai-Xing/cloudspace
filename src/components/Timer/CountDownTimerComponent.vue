@@ -96,6 +96,7 @@ export default {
       currentTimer: Number,
       timerTimePassed: Number,
       taskTitle: String,
+      coin: Number,
     },
   data() {
     return {
@@ -189,6 +190,7 @@ export default {
     this.title = this.taskTitle;
     this.totalTime = this.currentTimer + this.timerTimePassed;
     this.timePassed = this.timerTimePassed;
+    this.coinsToEarn = this.coin;
     // to start the timer immediately when the component gets mounted
     this.startTimer();
   },
@@ -207,8 +209,7 @@ export default {
 
     doneTimer: function () {
       // logic to compute the coins here?
-      var timeLeft = this.totalTime - this.timePassed;
-      this.$emit('end',timeLeft, this.timeStop);
+      this.$emit('end',this.timePassed, this.timeStop);
     },
 
     pauseTimer: function () {

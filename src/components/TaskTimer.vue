@@ -12,6 +12,7 @@
         v-bind:currentTimer="currentTimer"
         :timerTimePassed="timerTimePassed"
         :taskTitle="taskTitle"
+        :coin="coin"
       ></countdown-timer>
       <countup-timer
         v-else-if="showBreak"
@@ -54,7 +55,7 @@ export default {
       timerTimePassed: 0,
       breakTimePassed: 0,
       taskTitle: "Cloudspace Timer Task",
-      coin: 0,
+      coin: 1,
       breakTimeAllowed: 300,
     };
   },
@@ -75,6 +76,7 @@ export default {
       console.log("complete " + x);
       console.log("extra " + y);
       this.coinPenalty(y);
+      this.timerTimePassed = x + y;
       //this.updateData("completed");
       this.$router.push({
         name: "Tasks",
@@ -114,6 +116,9 @@ export default {
             name: "Tasks",
           });
         });
+    },
+    convertToSecond: function(x) {
+      return (x.hh * 3600) + (x.mm * 60);
     },
   },
   /*
