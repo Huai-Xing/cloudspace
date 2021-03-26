@@ -6,7 +6,6 @@
         dayCurrentMonth: isNotCurrentMonth,
         dayTodayCell: isToday,
       }"
-      v-on:click="goToTasks"
     >
       <div class="cellItems">
         <li
@@ -32,6 +31,7 @@
 
 <script>
 import dayjs from "dayjs";
+import firebase from '../../firebase'
 
 export default {
   props: {
@@ -43,9 +43,47 @@ export default {
       isNotCurrentMonth: this.selectedDate.get('month') != this.date.get('month'),
       isToday: dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
       todayDate: dayjs(),
-      data: ["BT3103 Assignment 2", "Meeting with Group", "Take a short break :)", "Very very very very very very very very very very very long task"],
+      data: [
+        //"BT3103 Assignment 2", 
+        //"Meeting with Group", 
+        //"Take a short break :)", 
+        //"Very very very very very very very very very very very long task"
+      ],
+      tasksToday: []
     };
   },
+  methods: {
+    fetchData: function () {
+      var uid = firebase.auth().currentUser.uid;
+      firebase.firestore()
+        .collection("users")
+        .doc(uid)
+        .collection("tasks")
+        .get()
+        .then((snap) =>
+          snap.forEach((doc) => {
+            //console.log(doc.data());
+            if (this.compareDate(doc.data().date.toDate(), this.date)) {
+              this.tasksToday.push(doc.data());
+              this.data.push(doc.data().title);
+            }
+          })
+        );
+    },
+    compareDate: function (curr, fixed) {
+      if (
+        curr.getDate() === fixed.date() &&
+        curr.getMonth() == fixed.month() &&
+        curr.getFullYear() == fixed.year()
+      ) {
+        return true;
+      }
+    },
+  },
+  created() {
+    this.fetchData();
+
+  }
 };
 </script>
 
@@ -56,7 +94,9 @@ export default {
   display: inline-block;
   border: 1px solid rgb(230, 230, 230);
   position: relative;
+  min-height: 94px;
   max-height: 94px;
+  min-width: 145px;
   padding: 3px;
   overflow: scroll;
 }
