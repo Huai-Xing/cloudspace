@@ -100,11 +100,11 @@ export default {
 .cell {
   list-style-type: None;
   display: inline-block;
-  border: 1px solid rgb(230, 230, 230);
+  border: 2px solid rgb(230, 230, 230);
   position: relative;
   min-height: 94px;
   max-height: 94px;
-  min-width: 145px;
+  min-width: 147px;
   padding: 3px;
   overflow: scroll;
 }

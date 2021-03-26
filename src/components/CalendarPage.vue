@@ -79,7 +79,7 @@ export default {
 
 <style scoped>
 .cal {
-  margin-left: 280px;
+  margin-left: 240px;
   margin-right: 80px;
   z-index: -1;
 }

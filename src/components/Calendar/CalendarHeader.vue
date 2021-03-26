@@ -104,7 +104,7 @@ li {
   font-weight: 700;
   letter-spacing: 1.2px;
   color: white;
-  background-color: rgb(52, 178, 197);
+  background-color: #34b2c5;
   list-style-type: None;
   padding: 3px;
   text-align: center;
