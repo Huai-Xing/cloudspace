@@ -13,13 +13,18 @@
           :class="{
             dayToday: isToday,
           }"
+          v-on:click="goToTaskPage"
         >
           {{ date.get('date') }}
         </li>
         <div>
-          <li class="items" v-for="item in data"  v-bind:key="item"
-          :class="{ itemsEmpty: isNotCurrentMonth }">
-            {{ item }}
+          <li class="items" 
+          v-for="item in tasksToday"  
+          v-bind:key="item.title"
+          :class="{ itemsEmpty: isNotCurrentMonth }" 
+          v-on:click="goToTaskPage"
+          >
+            {{ item.title }}
           </li>
         </div>
 
@@ -31,7 +36,7 @@
 
 <script>
 import dayjs from "dayjs";
-import firebase from '../../firebase'
+import firebase from '../../firebase';
 
 export default {
   props: {
@@ -79,6 +84,9 @@ export default {
         return true;
       }
     },
+    goToTaskPage: function() {
+      this.$router.push({ name: "Tasks", params: { date: this.date } }); // push with date
+    }
   },
   created() {
     this.fetchData();
@@ -152,7 +160,7 @@ export default {
   list-style-type: None;
   display: block;
   border-radius: 4px;
-  background-color: rgb(255, 225, 187);
+  background-color: #ffe1bb;
   padding-left: 9px;
   padding-right: 9px;
   padding-top: 5px;
@@ -169,14 +177,14 @@ export default {
   visibility: hidden;
 }
 .items:nth-child(odd) {
-  background-color: rgb(209, 224, 243);
+  background-color: #d1e0f3;
 }
 ::-webkit-scrollbar {
   width: 0px;
   height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgb(255, 255, 255); 
+  background: #ffffff; 
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #888; 
