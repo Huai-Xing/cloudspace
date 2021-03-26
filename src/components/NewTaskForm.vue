@@ -1,7 +1,7 @@
 <template>
 <div id="app">
   <button type="button" class="btn" @click="showModal">
-    <img src="..\assets\task\add1.png" />
+    <img src="../assets/task/add1.png" />
   </button>
 
   <Modal v-show="isModalVisible" @close="closeModal">
