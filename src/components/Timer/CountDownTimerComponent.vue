@@ -104,6 +104,8 @@ export default {
       title:"Task",
       coinsToEarn: 0,
       totalTime: 3600,
+      timeToStop: null,
+      timeStop: 0,
     };
   },
 
@@ -194,6 +196,7 @@ export default {
   methods: {
     onTimesUp: function () {
       clearInterval(this.timerInterval);
+      this.timeToStop = setInterval(() => (this.timeStop += 1), 1000);
     },
 
     // Fn that increase the value of timePassed by 1unit per sec and recompute the timeLeft value
@@ -204,7 +207,8 @@ export default {
 
     doneTimer: function () {
       // logic to compute the coins here?
-      this.$emit('end');
+      var timeLeft = this.totalTime - this.timePassed;
+      this.$emit('end',timeLeft, this.timeStop);
     },
 
     pauseTimer: function () {

@@ -31,8 +31,9 @@
   <div class="buttons">
     <!-- Timer completes -->
     <button id="done" class="timerControlledBtns" @click="doneTimer()">
-        End Break
+        Go back to task
     </button>
+    <p id="note">Note: Recommended break time is {{breakTimeAllowedDisplay}}.<br>Penalty will be imposed on coins earned for breaks exceeding recommended limit!</p>
   </div>
 
 </div>
@@ -65,6 +66,7 @@ export default {
       title: "Break time!",
       coinsToEarn: 0,
       allowedTime: 300,
+      breakTimeAllowedDisplay: "0 minute",
     };
   },
 
@@ -135,6 +137,17 @@ export default {
     this.totalTimePassed = this.breakTime - this.breakTimePassed;
     this.timePassed = this.breakTimePassed;
     this.allowedTime = this.breakTimeAllowed;
+    if (this.breakTimeAllowed < 60) {
+      this.breakTimeAllowedDisplay = String(this.breakTimeAllowed) + " seconds";
+    } else {
+      if (this.breakTimeAllowed % 60 == 0) {
+        this.breakTimeAllowedDisplay = String(this.breakTimeAllowed / 60) + " minutes";
+      } else {
+        var seconds = this.breakTimeAllowed % 60;
+        var minutes = Math.floor(this.breakTimeAllowed / 60);
+        this.breakTimeAllowedDisplay = String(minutes) + " minutes & " + String(seconds) + " seconds";
+      }
+    }
     this.startTimer();
   },
 
@@ -179,6 +192,10 @@ button {
   height: 40px;
   margin: 8px;
   font-size: 20px;
+}
+#note {
+  text-align: center;
+  font-size: 10px;
 }
 #timer-title {
   display: block;
