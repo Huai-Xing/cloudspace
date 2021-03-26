@@ -1,167 +1,156 @@
 <template>
-  <div>
-    <ul class="top-nav-list">
-      <li>
-        <router-link :to="{ name: 'signin', params: { newUser: false } }">
-          Log In
-        </router-link>
-      </li>
-      <li> | </li>
-      <li>
-        <router-link :to="{ name: 'signin', params: { newUser: true } }">
-          Sign Up
-        </router-link>
-      </li>
-    </ul>
+<div>
+  <ul class="top-nav-list">
+    <li>
+      <router-link :to="{ name: 'signin', params: { newUser: false } }">
+        Log In
+      </router-link>
+    </li>
+    <li> | </li>
+    <li>
+      <router-link :to="{ name: 'signin', params: { newUser: true } }">
+        Sign Up
+      </router-link>
+    </li>
+  </ul>
 
-    <img id="leftphoto" src="../assets/background5_signin.png" />
+  <img id="leftphoto" src="../assets/background5_signin.png" />
 
-    <div id="chunk">
-          <p id="sign" v-show="newUser">Sign Up</p>
-          <p id="sign" v-show="!newUser">Log In</p>
-          <form @submit.prevent="letsgo">
-            <div v-if="newUser">
-              <label for="name">Name:</label><br />
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="E.g. John Doe"
-                required
-                v-model="user.name"
-              /><br />
-            </div>
-            <label for="email">Email:</label><br />
-            <input
-              type="text"
-              id="email"
-              name="email"
-              placeholder="user@domain.com"
-              required
-              v-model="user.email"
-            /><br />
+  <div id="chunk">
+    <p id="sign" v-show="newUser">Sign Up</p>
+    <p id="sign" v-show="!newUser">Log In</p>
+    <form @submit.prevent="letsgo">
+      <div v-if="newUser">
+        <label for="name">Name:</label><br />
+        <input type="text" id="name" name="name" placeholder="E.g. John Doe" required v-model="user.name" /><br />
+      </div>
+      <label for="email">Email:</label><br />
+      <input type="text" id="email" name="email" placeholder="user@domain.com" required v-model="user.email" /><br />
 
-            <label for="password">Password:</label><br />
-            <input
-              type="text"
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-              required
-              v-model="user.password"
-            /><br />
+      <label for="password">Password:</label><br />
+      <input type="text" id="password" name="password" placeholder="Enter your password" required v-model="user.password" /><br />
 
-            <input type="checkbox" id="checkbox" />
-            <label for="checkbox" id="cblabel">Keep me logged in</label><br />
+      <input type="checkbox" id="checkbox" />
+      <label for="checkbox" id="cblabel">Keep me logged in</label><br />
 
-            <button type="submit" value="Submit" id="submit">
-              Let's go!
-            </button>
-          </form>
-        </div>
-
-    <img id="rightphoto" src="../assets/background4_signin.png" />
-
-    <!-- SignUpPage Content -->
-
-    <pgFooter></pgFooter>
+      <button type="submit" value="Submit" id="submit">
+        Let's go!
+      </button>
+    </form>
   </div>
+
+  <img id="rightphoto" src="../assets/background4_signin.png" />
+
+  <!-- SignUpPage Content -->
+
+  <pgFooter></pgFooter>
+</div>
 </template>
 
+
 <script>
-  import fb from "../firebase";
-  export default {
-    data() {
-      return {
-        newUser: this.$route.params.newUser,
-        user: {
-          name: "",
-          email: "",
-          password: "",
-          DOB: "",
-          imageIdx: 0,
-          coins: 0,
-        },
-      };
-    },
-    // mtds
-    methods: {
-      letsgo: function() {
-        var email = this.user.email;
-        var password = this.user.password;
-        var user = this.user;
-        //Signing up
-        if (this.newUser) {
-          fb.auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then((cred) => {
-              alert("Successfully registered");
+import fb from "../firebase";
 
-              console.log("Registered user: " + cred.user.uid);
-              fb.firestore()
-                .collection("users")
-                .doc(cred.user.uid)
-                .set({
-                  user,
-                });
-            })
-
-            .catch((error) => {
-              alert(error.message);
-            })
-            .then(() => {
-              this.$router.push({ name: "Home" });
-            });
-          event.target.reset();
-        } else {
-          fb.auth()
-            .signInWithEmailAndPassword(email, password)
-            .then((cred) => {
-              alert("Successfully logged into " + cred.user.email);
-              // console.log(cred.user.uid);
-            })
-            .catch((error) => {
-              alert(error.message);
-            })
-            .then(() => {
-              this.$router.push({ name: "Home" });
-            });
-          this.user.email = "";
-          this.user.password = "";
-          event.target.reset();
-        }
+export default {
+  data() {
+    return {
+      newUser: this.$route.params.newUser,
+      user: {
+        name: "",
+        email: "",
+        password: "",
+        DOB: "",
+        imageIdx: 0,
+        coins: 0,
       },
+    };
+  },
+  // mtds
+  methods: {
+    letsgo: function() {
+      var email = this.user.email;
+      var password = this.user.password;
+      var user = this.user;
+      //Signing up
+      if (this.newUser) {
+        fb.auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then((cred) => {
+            alert("Successfully registered");
 
-      // Fn to push the user to '/login/calendar' once the Let's go button is clicked
-      // logIn: function() {
-      //   // to push user to '/login/calendar'
-      //   this.$router.push({ name: "Calendar" });
+            console.log("Registered user: " + cred.user.uid);
+            fb.firestore()
+              .collection("users")
+              .doc(cred.user.uid)
+              .set({
+                user,
+              });
+          })
 
-      //   // Other logic (retriving details from firebase for the specific user?) here
-      // },
+          .catch((error) => {
+            alert(error.message);
+          })
+          .then(() => {
+            this.$router.push({
+              name: "Home"
+            });
+          });
+        event.target.reset();
+      } else {
+        fb.auth()
+          .signInWithEmailAndPassword(email, password)
+          .then((cred) => {
+            alert("Successfully logged into " + cred.user.email);
+            // console.log(cred.user.uid);
+          })
+          .catch((error) => {
+            alert(error.message);
+          })
+          .then(() => {
+            this.$router.push({
+              name: "Home"
+            });
+          });
+        this.user.email = "";
+        this.user.password = "";
+        event.target.reset();
+      }
     },
-    beforeRouteUpdate(to, from, next) {
-      this.newUser = to.params.newUser;
-      next();
-    },
-    //Register Locally
-    components: {},
-  };
+
+    // Fn to push the user to '/login/calendar' once the Let's go button is clicked
+    // logIn: function() {
+    //   // to push user to '/login/calendar'
+    //   this.$router.push({ name: "Calendar" });
+
+    //   // Other logic (retriving details from firebase for the specific user?) here
+    // },
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.newUser = to.params.newUser;
+    next();
+  },
+  //Register Locally
+  components: {},
+};
 </script>
+
 
 <style scoped>
 * {
   font-weight: lighter;
   font-size: 13px;
 }
+
 body {
   min-width: 100%;
   width: 100%;
 }
+
 img {
   width: 300px;
   height: 300px;
 }
+
 ul {
   position: absolute;
   right: 1%;
