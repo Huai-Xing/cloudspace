@@ -12,8 +12,8 @@
   export default {
     data() {
       return {
-        Data: {
-          Name: "",
+        data: {
+          name: "",
         },
       };
     },
@@ -31,7 +31,7 @@
           .doc(uid)
           .get()
           .then((doc) => {
-            this.Data.Name = doc.data().name;
+            this.data.name = doc.data().name;
           });
       },
     },

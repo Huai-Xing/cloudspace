@@ -10,12 +10,21 @@
       </template>
 
       <template v-slot:body>
-        <form>
+        <form id="myform">
           <label for="title">Title</label>
-          <input type="text" id="title" placeholder="Give your task a name" />
+          <input
+            v-model="newtask.title"
+            type="text"
+            id="title"
+            placeholder="Give your task a name"
+          />
           <br />
           <label for="category">Category</label>
-          <select v-model="newtask.category" :disabled="disabled" id="category">
+          <select
+            v-model="newtask.category"
+            :disabled="disabledselect"
+            id="category"
+          >
             <option disabled value=""
               >Please select a catergory for your task</option
             >
@@ -24,15 +33,17 @@
               v-bind:value="option"
               v-bind:key="option"
             >
-              {{ option.name }}
+              {{ option }}
             </option>
           </select>
           <br />
           Add a new category
           <input
+            id="newcategory"
             type="text"
             v-model="newcategory"
             placeholder="Enter a new category"
+            :disabled="disabledinput"
           />
           <br />
           Duration
@@ -88,12 +99,24 @@
           coinsEarned: 0,
         },
         newcategory: "",
-        disabled: false,
+        disabledselect: false,
+        disabledinput: false,
         user: fb.auth().currentUser.uid,
         categoryList: [],
       };
     },
     methods: {
+      fetchCategoryList: function() {
+        console.log(this.user);
+        fb.firestore()
+          .collection("users")
+          .doc(this.user)
+          .get()
+          .then((doc) => {
+            this.categoryList = doc.data().categoryList;
+            console.log(this.categoryList);
+          });
+      },
       showModal() {
         this.isModalVisible = true;
       },
@@ -101,9 +124,20 @@
         this.isModalVisible = false;
       },
       sendTask() {
+        console.log(this.categoryList);
+
+        //managing newcategories
         if (this.newcategory != "") {
           this.categoryList.push(this.newcategory);
+          console.log(this.categoryList);
           this.newtask.category = this.newcategory;
+
+          fb.firestore()
+            .collection("users")
+            .doc(this.user)
+            .update({
+              categoryList: this.categoryList,
+            });
         } else;
 
         //adding task to tasksList
@@ -113,28 +147,43 @@
           .collection("tasksList")
           .add(this.newtask);
 
-        //updating categoryList
-        if (this.newcategory != "") {
-          fb.firestore()
-            .collection("tasks")
-            .doc(this.user)
-            .update({
-              categoryList: this.categoryList,
-            });
-        } else;
-
+        //reset values
+        (this.newtask = {
+          category: "",
+          title: "",
+          status: "incomplete",
+          duration: {
+            hh: "",
+            mm: "",
+          },
+          breakTime: 0,
+          actualTime: 0,
+          coinsEarned: 0,
+        }),
+          (this.newcategory = "");
         this.isModalVisible = false;
+        document.getElementById("myform").reset();
         console.log("this method works");
       },
     },
     watch: {
       newcategory: function(val) {
         if (val == "") {
-          this.disabled = false;
+          this.disabledselect = false;
         } else {
-          this.disabled = true;
+          this.disabledselect = true;
         }
       },
+      "newtask.category": function(val) {
+        if (val == "") {
+          this.disabledinput = false;
+        } else {
+          this.disabledinput = true;
+        }
+      },
+    },
+    created() {
+      this.fetchCategoryList();
     },
   };
 </script>

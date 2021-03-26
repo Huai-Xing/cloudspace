@@ -102,6 +102,7 @@
               .doc(cred.user.uid)
               .set({
                 user,
+                categoryList: [],
               });
           })
           .then(() => {
