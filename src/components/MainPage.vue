@@ -125,7 +125,7 @@ li {
   float: left;
   width: 33.33%;
   padding: 10px;
-  height: 400px; /* Should be removed. Only for demonstration */
+  height: 400px; /* Should be removed. Only for demonstration */ 
 
   text-align: center;
 }

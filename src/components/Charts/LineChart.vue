@@ -6,7 +6,7 @@
 
 
 <script>
-import barchart from '../charts/BarChart.js'
+import barchart from '../Charts/BarChart.js'
 
 export default {
   components: {
