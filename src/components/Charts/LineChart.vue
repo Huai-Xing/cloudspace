@@ -6,7 +6,7 @@
 
 
 <script>
-import linechart from '../Charts/BarChart.js'
+import linechart from '../Charts/LineChart.js'
 
 export default {
   components: {
