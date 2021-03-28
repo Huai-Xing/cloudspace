@@ -26,7 +26,7 @@
             id="category"
           >
             <option disabled value=""
-              >Please select a catergory for your task</option
+              >Please select a category for your task</option
             >
             <option
               v-for="option in categoryList"
@@ -186,4 +186,13 @@
   };
 </script>
 
-<style scoped></style>
+<style scoped>
+.btn {
+  padding: 2px 2px 2px 2px;
+}  
+.btn > img {
+  height: 20px;
+  width: 20px;
+  vertical-align: middle;
+}
+</style>

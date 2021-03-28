@@ -92,8 +92,9 @@
     cursor: pointer;
   }
   .top-nav-list {
+    font-family: Lora;
     position: absolute;
-    right: 10%;
+    right: 1%;
     top: 2%;
     list-style-type: None;
     margin: 0;
@@ -124,6 +125,7 @@
     border-top: 1px solid transparent;
   }
   .left-nav-list {
+    font-family: Lora;
     list-style-type: None;
     padding: None;
     margin-top: 20px;
@@ -143,5 +145,12 @@
     margin-right: 10px;
     width: 18px;
     height: 18px;
+  }
+  a{
+    color: black;
+    text-decoration: none;
+  }
+  a:hover {
+    font-weight: 600;
   }
 </style>

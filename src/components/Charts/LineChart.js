@@ -1,10 +1,10 @@
 /* jshint esversion: 6 */
 
-import { Bar } from 'vue-chartjs';
+import { Line } from 'vue-chartjs';
 import database from '../../firebase.js'; //Import database
 
 export default {
-  extends: Bar,
+  extends: Line,
   data: function () {
     return {
       datacollection: {
