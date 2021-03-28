@@ -1,84 +1,86 @@
 <template>
-  <div>
-    <ul class="top-nav-list">
-      <li class="top-nav">
-        <span v-on:click.prevent="signout">
-          Sign Out
-        </span>
+<div>
+  <ul class="top-nav-list">
+    <li class="top-nav">
+      <span v-on:click.prevent="signout"> Sign Out </span>
+    </li>
+
+    <li class="top-nav-left">
+      <router-link :to="{ name: 'Profile' }" exact> Profile </router-link>
+    </li>
+  </ul>
+
+  <div class="left-nav-section">
+    <ul class="left-nav-list">
+      <li class="left-nav">
+        <router-link :to="{ name: 'Home' }" exact>
+          <img src="../assets/nav/nav_home.png"/> Home
+        </router-link>
       </li>
-      <li class="top-nav-left">
-        <router-link :to="{ name: 'Profile' }" exact>
-          Profile
+
+      <li class="left-nav">
+        <router-link :to="{ name: 'Calendar' }" exact>
+          <img src="../assets/nav/nav_calendar.png"/> Calendar
+        </router-link>
+      </li>
+
+      <li class="left-nav">
+        <router-link :to="{ name: 'Productivity' }" exact>
+          <img src="../assets/nav/nav_productivity.png"/> Productivity
+        </router-link>
+      </li>
+
+      <li class="left-nav">
+        <router-link :to="{ name: 'Tasks' }" exact>
+          <img src="../assets/nav/nav_task.png"/> Tasks
+        </router-link>
+      </li>
+
+      <li class="left-nav">
+        <router-link :to="{ name: 'PlantTree' }" exact>
+          <img src="../assets/nav/nav_plant.png"/> Plant A Tree
         </router-link>
       </li>
     </ul>
-    <div class="left-nav-section">
-      <ul class="left-nav-list">
-        <li class="left-nav">
-          <router-link :to="{ name: 'Home' }" exact>
-            <img src="../assets/nav/nav_home.png" />Home</router-link
-          >
-        </li>
-        <li class="left-nav">
-          <router-link :to="{ name: 'Calendar' }" exact>
-            <img src="../assets/nav/nav_calendar.png" />Calendar</router-link
-          >
-        </li>
-        <li class="left-nav">
-          <router-link :to="{ name: 'Productivity' }" exact
-            ><img
-              src="../assets/nav/nav_productivity.png"
-            />Productivity</router-link
-          >
-        </li>
-        <li class="left-nav">
-          <router-link :to="{ name: 'Tasks' }" exact
-            ><img src="../assets/nav/nav_task.png" />Tasks</router-link
-          >
-        </li>
-        <li class="left-nav">
-          <router-link :to="{ name: 'PlantTree' }" exact
-            ><img src="../assets/nav/nav_plant.png" />Plant A Tree</router-link
-          >
-        </li>
-      </ul>
-    </div>
   </div>
+</div>
 </template>
 
 <script>
-  import fb from "../firebase";
-  export default {
-    //props: ["Data"],
-    data() {
-      return {
-      };
-    },
-    /*
-    mounted() {
-      if (this.Data) {
-        this.ProfileData.Name = this.Data.Name;
-        this.ProfileData.UID = this.Data.UID;
-      }
-    },*/
-    methods: {
-      signout: function() {
-        fb.auth()
-          .signOut()
-          .then(() => {
-            alert("You have signed out");
-            // console.log("user signed out");
-            // console.log("Currently logged in: " + fb.auth().currentUser);
-          })
-          .catch((error) => {
-            alert(error.message);
-          })
-          .then(() => {
-            this.$router.push({ path: "/" });
+import fb from "../firebase";
+
+export default {
+  //props: ["Data"],
+  data() {
+    return {};
+  },
+  /*
+  mounted() {
+    if (this.Data) {
+      this.ProfileData.Name = this.Data.Name;
+      this.ProfileData.UID = this.Data.UID;
+    }
+  },*/
+  methods: {
+    signout: function() {
+      fb.auth()
+        .signOut()
+        .then(() => {
+          alert("You have signed out");
+          // console.log("user signed out");
+          // console.log("Currently logged in: " + fb.auth().currentUser);
+        })
+        .catch((error) => {
+          alert(error.message);
+        })
+        .then(() => {
+          this.$router.push({
+            path: "/"
           });
-      },
+        });
     },
-  };
+  },
+};
 </script>
 
 <style scoped>
