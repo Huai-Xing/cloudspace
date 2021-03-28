@@ -1,19 +1,20 @@
 <template>
   <div id="app">
     <button type="button" class="btn" @click="showModal">
-      <img src="../assets/task/add1.png" />
+      <img src="../assets/task/edit_small.png" />
     </button>
+    {{ currentTask }}
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
-        Add a New Task
+        Edit
       </template>
 
       <template v-slot:body>
         <form id="myform">
           <label for="title">Title</label>
           <input
-            v-model="newtask.title"
+            v-model="updatedtask.title"
             type="text"
             id="title"
             placeholder="Give your task a name"
@@ -21,7 +22,7 @@
           <br />
           <label for="category">Category</label>
           <select
-            v-model="newtask.category"
+            v-model="updatedtask.category"
             :disabled="disabledselect"
             id="category"
           >
@@ -49,13 +50,13 @@
           Duration
           <vue-timepicker
             close-on-complete
-            v-model="newtask.duration.hh"
+            v-model="updatedtask.duration.hh"
             format="hh"
           ></vue-timepicker>
           hr
           <vue-timepicker
             close-on-complete
-            v-model="newtask.duration.mm"
+            v-model="updatedtask.duration.mm"
             format="mm"
           ></vue-timepicker>
           min
@@ -63,8 +64,8 @@
       </template>
 
       <template v-slot:footer>
-        <button @click.prevent="sendTask">
-          Submit
+        <button @click.prevent="updateTask">
+          Update
         </button>
       </template>
     </Modal>
@@ -83,13 +84,15 @@
       Modal,
       VueTimepicker,
     },
+    props: {
+      idname: String,
+    },
     data() {
       return {
         isModalVisible: false,
-        newtask: {
+        updatedtask: {
           category: "",
           title: "",
-          status: "incomplete",
           duration: {
             hh: "",
             mm: "",
@@ -103,6 +106,7 @@
         disabledinput: false,
         user: fb.auth().currentUser.uid,
         categoryList: [],
+        currentTask: [],
       };
     },
     methods: {
@@ -117,18 +121,31 @@
             console.log(this.categoryList);
           });
       },
+      fetchToBeEdited: function() {
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .doc(this.idname)
+          .get()
+          .then((doc) => {
+            this.currentTask = doc.data();
+          });
+      },
       showModal() {
         this.isModalVisible = true;
       },
       closeModal() {
         this.isModalVisible = false;
       },
-      sendTask() {
+      updateTask() {
+        console.log(this.categoryList);
+
         //managing newcategories
         if (this.newcategory != "") {
           this.categoryList.push(this.newcategory);
           console.log(this.categoryList);
-          this.newtask.category = this.newcategory;
+          this.updatedtask.category = this.newcategory;
 
           fb.firestore()
             .collection("users")
@@ -143,10 +160,10 @@
           .collection("tasks")
           .doc(this.user)
           .collection("tasksList")
-          .add(this.newtask);
+          .add(this.updatedtask);
 
         //reset values
-        (this.newtask = {
+        (this.updatedtask = {
           category: "",
           title: "",
           status: "incomplete",
@@ -172,7 +189,7 @@
           this.disabledselect = true;
         }
       },
-      "newtask.category": function(val) {
+      "updatedtask.category": function(val) {
         if (val == "") {
           this.disabledinput = false;
         } else {
@@ -182,6 +199,7 @@
     },
     created() {
       this.fetchCategoryList();
+      this.fetchToBeEdited();
     },
   };
 </script>
