@@ -1,22 +1,23 @@
 <template>
 <div id="app">
   <button type="button" class="btn" @click="showModal">
-    <img src="../assets/task/add1.png" />
+    <img src="../assets/task/edit_small.png" />
   </button>
+  {{ currentTask }}
 
   <Modal v-show="isModalVisible" @close="closeModal">
     <template v-slot:header>
-      Add a New Task
+      Edit
     </template>
 
     <template v-slot:body>
       <form id="myform">
         <label for="title">Title</label>
-        <input v-model="newtask.title" type="text" id="title" placeholder="Give your task a name" />
+        <input v-model="updatedtask.title" type="text" id="title" placeholder="Give your task a name" />
         <br />
         <label for="category">Category</label>
-        <select v-model="newtask.category" :disabled="disabledselect" id="category">
-          <option disabled value="">Please select a category for your task</option>
+        <select v-model="updatedtask.category" :disabled="disabledselect" id="category">
+          <option disabled value="">Please select a catergory for your task</option>
           <option v-for="option in categoryList" v-bind:value="option" v-bind:key="option">
             {{ option }}
           </option>
@@ -26,16 +27,16 @@
         <input id="newcategory" type="text" v-model="newcategory" placeholder="Enter a new category" :disabled="disabledinput" />
         <br />
         Duration
-        <vue-timepicker close-on-complete v-model="newtask.duration.hh" format="hh"></vue-timepicker>
+        <vue-timepicker close-on-complete v-model="updatedtask.duration.hh" format="hh"></vue-timepicker>
         hr
-        <vue-timepicker close-on-complete v-model="newtask.duration.mm" format="mm"></vue-timepicker>
+        <vue-timepicker close-on-complete v-model="updatedtask.duration.mm" format="mm"></vue-timepicker>
         min
       </form>
     </template>
 
     <template v-slot:footer>
-      <button @click.prevent="sendTask">
-        Submit
+      <button @click.prevent="updateTask">
+        Update
       </button>
     </template>
   </Modal>
@@ -47,19 +48,22 @@ import Modal from "./Modal";
 import VueTimepicker from "vue2-timepicker";
 import "vue2-timepicker/dist/VueTimepicker.css";
 import fb from "../firebase";
+
 export default {
   name: "App",
   components: {
     Modal,
     VueTimepicker,
   },
+  props: {
+    idname: String,
+  },
   data() {
     return {
       isModalVisible: false,
-      newtask: {
+      updatedtask: {
         category: "",
         title: "",
-        status: "incomplete",
         duration: {
           hh: "",
           mm: "",
@@ -73,6 +77,7 @@ export default {
       disabledinput: false,
       user: fb.auth().currentUser.uid,
       categoryList: [],
+      currentTask: [],
     };
   },
   methods: {
@@ -87,18 +92,32 @@ export default {
           console.log(this.categoryList);
         });
     },
+    fetchToBeEdited: function() {
+      fb.firestore()
+        .collection("tasks")
+        .doc(this.user)
+        .collection("tasksList")
+        .doc(this.idname)
+        .get()
+        .then((doc) => {
+          this.currentTask = doc.data();
+        });
+    },
     showModal() {
       this.isModalVisible = true;
     },
     closeModal() {
       this.isModalVisible = false;
     },
-    sendTask() {
+    updateTask() {
+      console.log(this.categoryList);
+
       //managing newcategories
       if (this.newcategory != "") {
         this.categoryList.push(this.newcategory);
         console.log(this.categoryList);
-        this.newtask.category = this.newcategory;
+        this.updatedtask.category = this.newcategory;
+
         fb.firestore()
           .collection("users")
           .doc(this.user)
@@ -106,14 +125,16 @@ export default {
             categoryList: this.categoryList,
           });
       } else;
+
       //adding task to tasksList
       fb.firestore()
         .collection("tasks")
         .doc(this.user)
         .collection("tasksList")
-        .add(this.newtask);
+        .add(this.updatedtask);
+
       //reset values
-      (this.newtask = {
+      (this.updatedtask = {
         category: "",
         title: "",
         status: "incomplete",
@@ -139,7 +160,7 @@ export default {
         this.disabledselect = true;
       }
     },
-    "newtask.category": function(val) {
+    "updatedtask.category": function(val) {
       if (val == "") {
         this.disabledinput = false;
       } else {
@@ -149,18 +170,9 @@ export default {
   },
   created() {
     this.fetchCategoryList();
+    this.fetchToBeEdited();
   },
 };
 </script>
 
-<style scoped>
-.btn {
-  padding: 2px 2px 2px 2px;
-}
-
-.btn>img {
-  height: 20px;
-  width: 20px;
-  vertical-align: middle;
-}
-</style>
+<style scoped></style>

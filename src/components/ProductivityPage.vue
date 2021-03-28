@@ -37,36 +37,31 @@
 </template>
 
 
-
 <script>
-import MainNavigation from './MainNavigation.vue';
+import MainNavigation from "./MainNavigation.vue";
 
 // Importing the Chart Components
 //import LineChart from './Charts/LineChart.vue'
-import RadarChart from './Charts/RadarChart.vue'
+import RadarChart from "./Charts/RadarChart.vue";
 
 export default {
   //Register Locally
   components: {
-    'appNav': MainNavigation,
+    appNav: MainNavigation,
     //'lineChart-component': LineChart,
-    'radarChart-component': RadarChart,
-
+    "radarChart-component": RadarChart,
   },
 
   methods: {
     // Fn to fetch/bind tree summary stat here?
-    calcTotalTrees: function() {
-
-    }
-  }
-}
+    calcTotalTrees: function() {},
+  },
+};
 </script>
 
 <style scoped>
 * {
   box-sizing: border-box;
-
 }
 
 .column {
@@ -75,7 +70,8 @@ export default {
 
   width: 40%;
   padding: 10px;
-  height: 400px;  /* Should be removed. Only for demonstration */
+  height: 400px;
+  /* Should be removed. Only for demonstration */
 }
 
 /* Clear floats after the columns */
@@ -92,7 +88,7 @@ export default {
   border-radius: 50%;
 
   /* (B) BACKGROUND COLOR */
-  background: #BEDAAE;
+  background: #bedaae;
 
   /* (C) NECESSARY TO POSITION TEXT BLOCK */
   line-height: 0;
@@ -102,7 +98,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 /* (D) MATCH HEIGHT */
@@ -119,7 +114,6 @@ export default {
   bottom: 50%;
   width: 100%;
   text-align: center;
-
 
   /* (E2) THE FONT */
   /*font-weight: bold; */

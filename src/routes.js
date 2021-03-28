@@ -125,8 +125,8 @@ export default [
     },
   },
   {
-    //path: "/signin/tasks/timer/:id", // uncomment this at the moment to test out timer first
-    path: "/signin/tasks/timer/",
+    // path: "/signin/tasks/timer/:id",
+    path: "/signin/tasks/timer",
     name: "Timer",
     component: TaskTimer,
     props: true,

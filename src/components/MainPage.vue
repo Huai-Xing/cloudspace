@@ -13,8 +13,12 @@
   <!-- How It Works section -->
   <div class="content-item">
     <div id="how-cloudspace-works">
-      <h2 class="content-section-header"><strong> How Cloudspace Works </strong></h2>
-      <h3 class="content-subheader"> Keep your life in check, in time, and in balance. </h3>
+      <h2 class="content-section-header">
+        <strong> How Cloudspace Works </strong>
+      </h2>
+      <h3 class="content-subheader">
+        Keep your life in check, in time, and in balance.
+      </h3>
 
       <div class="content-describe-row">
         <div class="column">
@@ -25,14 +29,13 @@
         <div class="column">
           <img class="column-image" alt="background2_main" src="../assets/background2_main.png" />
           <h2><strong> Personalised productivity </strong></h2>
-          <p> Dashboards at your fingertips </p>
+          <p>Dashboards at your fingertips</p>
         </div>
 
         <div class="column">
           <img class="column-image" alt="background2_main" src="../assets/background3_trees.png" />
           <h2><strong> Collect coins to plant a real tree! </strong></h2>
         </div>
-
       </div>
     </div>
   </div>
@@ -40,40 +43,51 @@
   <!-- Why Cloudspace -->
   <div class="content-item">
     <div id="why-cloudspace">
-      <h2 class="content-section-header"><strong> Why Cloudspace? </strong></h2>
-      <h3 class="content-subheader"> To help Kranji Woodlands site to recover its green lands!</h3>
+      <h2 class="content-section-header">
+        <strong> Why Cloudspace? </strong>
+      </h2>
+      <h3 class="content-subheader">
+        To help Kranji Woodlands site to recover its green lands!
+      </h3>
 
       <div class="content-describe-row">
         <div class="column">
           <img class="column-image" alt="deforested" src="../assets/deforested.png" />
           <h2><strong> Did you know? </strong></h2>
-          <p> About 4.5 hectare of land at Kranji Woodlands was cleared by mistake. </p>
+          <p>
+            About 4.5 hectare of land at Kranji Woodlands was cleared by
+            mistake.
+          </p>
         </div>
 
         <div class="column">
           <img class="column-image" alt="football_field" src="../assets/football-field.png" />
           <h2><strong> How big is 4.5 hectare? </strong></h2>
-          <p> The ‘errorneously’ cleared forested area is about the size of 6 football fields! </p>
+          <p>
+            The ‘errorneously’ cleared forested area is about the size of 6
+            football fields!
+          </p>
         </div>
 
         <div class="column">
           <img class="column-image" alt="npark-logo" src="../assets/NParks_logo.jpg" />
-          <h2><strong> Cloudspace's environmental conservation efforts </strong></h2>
-          <p> Partnering with NParks, join Cloudspace to grow real trees to help Kranji Woodlands recover its greenery. </p>
+          <h2>
+            <strong> Cloudspace's environmental conservation efforts </strong>
+          </h2>
+          <p>
+            Partnering with NParks, join Cloudspace to grow real trees to help
+            Kranji Woodlands recover its greenery.
+          </p>
         </div>
-
       </div>
     </div>
   </div>
-
 </div>
 </template>
-
 
 <script>
 export default {};
 </script>
-
 
 <style scoped>
 * {
@@ -83,6 +97,27 @@ export default {};
 }
 
 img {
+  width: 350px;
+  height: auto;
+}
+
+#img_top {
+  grid-row: 1;
+  grid-column: 1 / span 8;
+  z-index: 1;
+}
+
+#img_bottom {
+  grid-column: 2 / 4;
+  grid-row: 2 / 3;
+}
+
+.img_stack {
+  display: grid;
+  grid-template-columns: 250px;
+  grid-template-rows: 100px;
+  position: relative;
+  grid-auto-rows: 5;
   width: 300px;
   height: 300px;
 }
@@ -119,14 +154,13 @@ li {
   text-align: center;
 }
 
-
 /* Create three equal columns that floats next to each other */
 .column {
   float: left;
   width: 33.33%;
   padding: 10px;
-  height: 400px; /* Should be removed. Only for demonstration */ 
-
+  height: 400px;
+  /* Should be removed. Only for demonstration */
   text-align: center;
 }
 

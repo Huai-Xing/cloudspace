@@ -8,11 +8,7 @@
       <g class="timer__circle">
         <circle class="timer__path-elapsed" cx="50" cy="50" r="45"></circle>
         <circle class="timer__inner-circle" cx="50" cy="50" r="35.5"></circle>
-        <path id="test"
-          :stroke-dasharray="circleDasharray"
-          class="timer__path-remaining"
-          :class="remainingPathColor"
-          d="
+        <path id="test" :stroke-dasharray="circleDasharray" class="timer__path-remaining" :class="remainingPathColor" d="
             M 50, 50
             m -45, 0
             a 45,45 0 1,1 90,0
@@ -31,7 +27,7 @@
   <div class="buttons">
     <!-- Timer completes -->
     <button id="done" class="timerControlledBtns" @click="doneTimer()">
-        Go back to task
+      Go back to task
     </button>
     <p id="note">Note: Recommended break time is {{breakTimeAllowedDisplay}}.<br>Penalty will be imposed on coins earned for breaks exceeding recommended limit!</p>
   </div>
@@ -53,14 +49,15 @@ const COLOR_CODES = {
 //const this.allowedTime= 900; // dummy timing value start from 0 for testing at the moment
 
 export default {
-    props:{
-      breakTime: Number,
-      breakTimePassed: Number,
-      breakTimeAllowed: Number,
-    },
+  props: {
+    breakTime: Number,
+    breakTimePassed: Number,
+    breakTimeAllowed: Number,
+  },
   data() {
     return {
-      timePassed: 0, /* To store the amount of time (in sec) that has passed */
+      timePassed: 0,
+      /* To store the amount of time (in sec) that has passed */
       timerInterval: null,
       totalTimePassed: 0,
       title: "Break time!",
@@ -119,7 +116,9 @@ export default {
     },
 
     remainingPathColor() {
-      const { info } = COLOR_CODES;
+      const {
+        info
+      } = COLOR_CODES;
       return info.color;
     }
 
@@ -187,22 +186,27 @@ export default {
   margin-right: auto;
   text-align: center;
 }
+
 button {
   width: auto;
   height: 40px;
   margin: 8px;
   font-size: 20px;
 }
+
 #note {
   text-align: center;
-  font-size: 12px; /* originally 10px */
+  font-size: 12px;
+  /* originally 10px */
 }
+
 #timer-title {
   display: block;
   text-align: center;
   width: 400px;
   word-wrap: break-word;
 }
+
 /* Sets the containers height and width; i.e. setting the timer's size */
 .timer-container {
   position: relative;
@@ -220,7 +224,8 @@ button {
 
 /* The SVG path that displays the timer's progress */
 .timer__path-elapsed {
-  stroke-width: 3px; /* The original circle ring */
+  stroke-width: 3px;
+  /* The original circle ring */
   stroke: #e6e6e6;
 }
 
@@ -231,16 +236,20 @@ button {
 
 /* stacking a new green ring on top of the original gray ring for the duration progress animation */
 .timer__path-remaining {
-  stroke-width: 6px; /* This need be the same size as the original ring */
-  stroke-linecap: round; /* Rounds the line endings to create a seamless circle */
+  stroke-width: 6px;
+  /* This need be the same size as the original ring */
+  stroke-linecap: round;
+  /* Rounds the line endings to create a seamless circle */
 
   /* Makes sure the animation starts at the top of the circle */
   transform: rotate(90deg);
   transform-origin: center;
 
-  transition: 1s linear all; /* One second aligns with the speed of the countdown timer */
+  transition: 1s linear all;
+  /* One second aligns with the speed of the countdown timer */
   fill-rule: nonzero;
-  stroke: currentColor;  /* Allows the ring to change color when the color value updates */
+  stroke: currentColor;
+  /* Allows the ring to change color when the color value updates */
   opacity: 1;
 }
 
@@ -251,7 +260,8 @@ button {
 /* Styling to show the timing value inside the circle */
 .timer__label {
   position: absolute;
-  top: 10px; /* Keep the label placed 10px down from the top edge to make it more like in the middle */
+  top: 10px;
+  /* Keep the label placed 10px down from the top edge to make it more like in the middle */
 
   /* Size should match the parent container, i.e. timer-container */
   width: 300px;

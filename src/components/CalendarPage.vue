@@ -1,19 +1,19 @@
 <template>
-  <div>
-      <!-- Side MainNavigation after log in -->
+<div>
+  <!-- Side MainNavigation after log in -->
   <appNav></appNav>
   <div class="cal">
     <CalHeader v-on:changeMonth="reGenerate"></CalHeader>
     <ul>
       <CalCell v-for="date in dates" v-bind:key="date" :date="date" :selectedDate="selectedDate"></CalCell>
     </ul>
-    </div>
   </div>
+</div>
 </template>
 
 
 <script>
-import MainNavigation from './MainNavigation.vue';
+import MainNavigation from "./MainNavigation.vue";
 import CalHeader from "./Calendar/CalendarHeader.vue";
 import CalCell from "./Calendar/CalendarCell.vue";
 import dayjs from "dayjs";
@@ -32,12 +32,12 @@ export default {
       this.selectedDate = x;
     },
     generateDays: function(x = dayjs()) {
-      var firstDay = x.startOf('month').get('day');
+      var firstDay = x.startOf("month").get("day");
       var counter = 0 - firstDay;
-      var days = []
+      var days = [];
       for (let i = 0; i < 35; i++) {
-        var dayAdd = x.startOf('month').add(counter,'days');
-        days.push(dayAdd)
+        var dayAdd = x.startOf("month").add(counter, "days");
+        days.push(dayAdd);
         counter += 1;
       }
       this.dates = days;
@@ -63,20 +63,22 @@ export default {
   components: {
     CalHeader: CalHeader,
     CalCell: CalCell,
-    'appNav': MainNavigation,
+    appNav: MainNavigation,
   },
   created: function() {
     this.generateDays();
-  }
+  },
 };
 </script>
 
 
 <style scoped>
 .cal {
-  margin-left: 200px;
-  margin-bottom: 140px;
+  margin-left: 240px;
+  margin-right: 80px;
+  z-index: -1;
 }
+
 ul {
   flex-wrap: wrap;
   list-style-type: none;
@@ -84,5 +86,7 @@ ul {
   margin: 0;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  row-gap: 0px;
 }
 </style>

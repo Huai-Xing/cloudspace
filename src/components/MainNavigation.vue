@@ -94,6 +94,7 @@ export default {
     cursor: pointer;
   }
   .top-nav-list {
+    font-family: Lora;
     position: absolute;
     right: 1%;
     top: 2%;
@@ -126,6 +127,7 @@ export default {
     border-top: 1px solid transparent;
   }
   .left-nav-list {
+    font-family: Lora;
     list-style-type: None;
     padding: None;
     margin-top: 20px;
@@ -145,5 +147,12 @@ export default {
     margin-right: 10px;
     width: 18px;
     height: 18px;
+  }
+  a{
+    color: black;
+    text-decoration: none;
+  }
+  a:hover {
+    font-weight: 600;
   }
 </style>

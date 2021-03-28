@@ -49,6 +49,7 @@
 
 <script>
 import fb from "../firebase";
+
 export default {
   data() {
     return {
@@ -69,18 +70,17 @@ export default {
       var password = this.user.password;
       var user = this.user;
       //Signing up
-
       fb.auth()
         .createUserWithEmailAndPassword(email, password)
         .then((cred) => {
           alert("Successfully registered");
-
           console.log("Registered user: " + cred.user.uid);
           fb.firestore()
             .collection("users")
             .doc(cred.user.uid)
             .set({
               user,
+              categoryList: [],
             });
         })
         .then(() => {
@@ -88,19 +88,15 @@ export default {
             name: "Home"
           });
         })
-
         .catch((error) => {
           alert(error.message);
         });
-
       event.target.reset();
     },
-
     // Fn to push the user to '/login/calendar' once the Let's go button is clicked
     // logIn: function() {
     //   // to push user to '/login/calendar'
     //   this.$router.push({ name: "Calendar" });
-
     //   // Other logic (retriving details from firebase for the specific user?) here
     // },
   },
@@ -131,7 +127,7 @@ img {
 
 ul {
   position: absolute;
-  right: 1%;
+  right: 10%;
   top: 2%;
   list-style-type: None;
   margin: 0;

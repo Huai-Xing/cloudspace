@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
-    <div class="head">
-      <p id="welcome">{{ name }}</p>
-    </div>
-    <quote></quote>
+<div>
+  <!-- Side MainNavigation after log in -->
+  <appNav></appNav>
+  <div class="head">
+    <p id="welcome">{{ name }}</p>
   </div>
+  <quote></quote>
+</div>
 </template>
 
 <script>
@@ -26,7 +26,7 @@ export default {
     quote: quote,
   },
   methods: {
-    fetchData: async function () {
+    fetchData: async function() {
       var currentUser = fb.auth().currentUser;
       var uid = currentUser.uid;
       await fb
@@ -39,7 +39,7 @@ export default {
         });
     },
   },
-  created: async function () {
+  created: async function() {
     await this.fetchData();
   },
 };
@@ -53,6 +53,7 @@ export default {
   justify-content: center;
   margin-bottom: 10px;
 }
+
 #welcome {
   font-size: 28px;
   font-style: italic;
