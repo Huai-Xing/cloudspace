@@ -2,7 +2,7 @@ import fb from "../firebase.js";
 
 async function coinCal(x) {
     var taskList = await getList();
-    if (taskList.length < 2) {
+    if (taskList.length < 10) {
         return countBasic(x);
     } else {
         return countAdvance(x, taskList);
