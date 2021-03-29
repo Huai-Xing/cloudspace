@@ -31,6 +31,7 @@ import MainNavigation from "./MainNavigation.vue";
 import CountDownTimerComponent from "./Timer/CountDownTimerComponent.vue";
 import CountUpTimerComponent from "./Timer/CountUpTimerComponent.vue";
 import fb from "../firebase.js";
+import coinCal from "./CoinLogic.js";
 
 export default {
   /*
@@ -70,6 +71,7 @@ export default {
         this.currentBreak = y;
         this.breakTimePassed = z;
       }
+      coinCal();
     },
     endTimer: function (x, y) {
       //y is amount of time taken to end task after timer is up
