@@ -1,25 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div>
-    <br />
-    <h2 id="timer-title">{{ title }}</h2>
-
-    <div class="timer-container">
-      <svg
-        class="timer__svg"
-        viewBox="0 0 100 100"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g class="timer__circle">
-          <circle class="timer__path-elapsed" cx="50" cy="50" r="45"></circle>
-          <circle class="timer__inner-circle" cx="50" cy="50" r="35.5"></circle>
-          <path
-            id="test"
-            :stroke-dasharray="circleDasharray"
-            class="timer__path-remaining"
-            :class="remainingPathColor"
-            d="
-=======
 <div>
   <h2 id="timer-title"> {{title}} </h2>
 
@@ -33,7 +12,6 @@
           class="timer__path-remaining"
           :class="remainingPathColor"
           d="
->>>>>>> master_p
             M 50, 50
             m -45, 0
             a 45,45 0 1,1 90,0
