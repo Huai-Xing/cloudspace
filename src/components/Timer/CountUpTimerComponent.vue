@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div>
     <br />
     <h2 id="timer-title">{{ title }}</h2>
@@ -18,6 +19,21 @@
             class="timer__path-remaining"
             :class="remainingPathColor"
             d="
+=======
+<div>
+  <h2 id="timer-title"> {{title}} </h2>
+
+  <div class="timer-container">
+    <svg class="timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <g class="timer__circle">
+        <circle class="timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+        <circle class="timer__inner-circle" cx="50" cy="50" r="35.5"></circle>
+        <path id="test"
+          :stroke-dasharray="circleDasharray"
+          class="timer__path-remaining"
+          :class="remainingPathColor"
+          d="
+>>>>>>> master_p
             M 50, 50
             m -45, 0
             a 45,45 0 1,1 90,0
@@ -196,6 +212,9 @@ export default {
 
 
 <style scoped>
+* {
+  font-family: Lora;
+}
 .buttons {
   display: block;
   margin-left: auto;
@@ -205,8 +224,6 @@ export default {
 button {
   width: auto;
   height: 40px;
-  margin: 8px;
-  font-size: 20px;
 }
 #note {
   text-align: center;
@@ -246,7 +263,7 @@ button {
 
 /* stacking a new green ring on top of the original gray ring for the duration progress animation */
 .timer__path-remaining {
-  stroke-width: 6px; /* This need be the same size as the original ring */
+  stroke-width: 3px; /* This need be the same size as the original ring */
   stroke-linecap: round; /* Rounds the line endings to create a seamless circle */
 
   /* Makes sure the animation starts at the top of the circle */
@@ -277,7 +294,23 @@ button {
   align-items: center;
   justify-content: center;
 
-  font-size: 48px;
+  font-size: 28px;
+  letter-spacing: 1.3px;
   text-align: center;
+}
+.timerControlledBtns {
+  font-size: 13px;
+  background-color: white;
+  margin: 16px 0px 8px 0px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  padding: 0px 15px 0px 15px;
+}
+.timerControlledBtns:focus {
+  box-shadow: inset 0px 0px 4px #c1c1c1;
+  transform: translateY(4px);
+  outline: none;
 }
 </style>

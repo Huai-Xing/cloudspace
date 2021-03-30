@@ -27,8 +27,8 @@
 
       <!-- to show the remaining time in the timer -->
       <span class="timer__label">
-        {{ formattedTimeLeft }}<br />{{ leftWord }}</span
-      >
+        {{ formattedTimeLeft }}<br />{{ leftWord }}
+      </span>
     </div>
 
     <div class="buttons">
@@ -60,8 +60,7 @@
         <img
           src="../../assets/timer/done_icon.png"
           alt="timerDone"
-          height="18px"
-          width="18px"
+          class='doneBtn'
         />
       </button>
       <!-- Pause Timer -->
@@ -70,8 +69,7 @@
         <img
           src="../../assets/timer/pause_icon.png"
           alt="timerPause"
-          height="18px"
-          width="18px"
+          class='pauseBtn'
         />
       </button>
       <!-- Cancel Timer -->
@@ -80,8 +78,7 @@
         <img
           src="../../assets/timer/cancel_icon.png"
           alt="timerCancel"
-          height="18px"
-          width="18px"
+          class='cancelBtn'
         />
       </button>
       <p id="note">
@@ -160,7 +157,7 @@ export default {
       if (timeLeft != 0) {
         return `${hours}:${minutes}:${seconds}`;
       } else {
-        return "Times Up!";
+        return "Time's Up!";
       }
     },
     leftWord() {
@@ -250,6 +247,9 @@ export default {
 
 
 <style scoped>
+* {
+  font-family: Lora;
+}
 .tooltiptext {
   visibility: hidden;
   width: auto;
@@ -257,11 +257,11 @@ export default {
   color: rgb(0, 0, 0);
   text-align: center;
   border-radius: 6px;
-  padding: 5px 0;
+  padding: 5px 10px 5px 10px;
   position: absolute;
   z-index: 1;
   top: 125%;
-  left: 0%;
+  left: -10%;
   margin-left: 0px;
   opacity: 0;
   transition: opacity 0.3s;
@@ -362,7 +362,6 @@ img {
   text-align: center;
   width: 400px;
   word-wrap: break-word;
-  text-decoration: underline;
 }
 /* Sets the containers height and width; i.e. setting the timer's size */
 .timer-container {
@@ -387,7 +386,8 @@ img {
   align-items: center;
   justify-content: center;
 
-  font-size: 48px;
+  font-size: 28px;
+  letter-spacing: 1.3px;
   text-align: center;
 }
 
@@ -400,7 +400,7 @@ img {
 /* The SVG path that displays the timer's progress */
 .timer__path-elapsed {
   stroke-width: 3px; /* The original circle ring */
-  stroke: #e6e6e6;
+  stroke: #fff; /* #e6e6e6; */
 }
 
 .timer__inner-circle {
@@ -410,7 +410,7 @@ img {
 
 /* stacking a new green ring on top of the original gray ring for the duration progress animation */
 .timer__path-remaining {
-  stroke-width: 6px; /* This need be the same size as the original ring */
+  stroke-width: 3px; /* This need be the same size as the original ring */
   stroke-linecap: round; /* Rounds the line endings to create a seamless circle */
 
   /* Makes sure the animation starts at the top of the circle */
@@ -432,6 +432,39 @@ img {
 }
 
 .timer__path-remaining.red {
-  color: red;
+  color: rgb(255, 96, 96);
+}
+.timerControlledBtns {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+}
+.timerControlledBtns:focus {
+  box-shadow: inset 0px 0px 4px #c1c1c1;
+  transform: translateY(4px);
+  outline: none;
+}
+.doneBtn {
+  height: 18px;
+  width: auto;
+  padding-left: 5px;
+  padding-bottom: 3px;
+  vertical-align: middle;
+}
+.pauseBtn {
+  height: 24px;
+  width: auto;
+  padding-left: 5px;
+  padding-bottom: 3px;
+  vertical-align: middle;
+}
+.cancelBtn {
+  height: 18px;
+  width: auto;
+  padding-left: 5px;
+  padding-bottom: 3px;
+  vertical-align: middle;
 }
 </style>
