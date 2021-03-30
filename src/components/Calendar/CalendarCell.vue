@@ -61,9 +61,9 @@ export default {
     fetchData: function () {
       var uid = firebase.auth().currentUser.uid;
       firebase.firestore()
-        .collection("users")
-        .doc(uid)
         .collection("tasks")
+        .doc(uid)
+        .collection("tasksList")
         .get()
         .then((snap) =>
           snap.forEach((doc) => {
