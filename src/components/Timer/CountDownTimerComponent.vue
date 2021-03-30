@@ -289,15 +289,16 @@ export default {
   font-weight: 700;
   font-style: italic;
   display: block;
+  padding: None;
   margin-left: 10px;
 }
 
 #coinsToolTip {
   position: absolute;
   z-index: 1;
-  top: -390%;
-  left: 350%;
-  width: 260px;
+  top: -430%;
+  left: 370%;
+  width: 290px;
   height: auto;
   padding: 10px;
   font-size: 11px;
