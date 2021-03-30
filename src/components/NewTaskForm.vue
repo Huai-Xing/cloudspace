@@ -34,6 +34,10 @@
               v-bind:key="option"
             >
               {{ option }}
+              <img
+                src="../assets/task/trash_btn.png"
+                v-on:click="deleteCategory($event)"
+              />
             </option>
           </select>
           <br />
@@ -84,6 +88,9 @@
       Modal,
       VueTimepicker,
     },
+    props: {
+      taskDate: Date,
+    },
     data() {
       return {
         isModalVisible: false,
@@ -98,6 +105,7 @@
           breakTime: 0,
           actualTime: 0,
           coinsEarned: 0,
+          date: this.taskDate.toDate(),
         },
         newcategory: "",
         disabledselect: false,
@@ -119,7 +127,6 @@
           .get()
           .then((doc) => {
             this.categoryList = doc.data().categoryList;
-            console.log(this.categoryList);
           });
       },
       showModal() {
@@ -133,7 +140,7 @@
         (this.newtask = {
           category: "",
           title: "",
-          status: "incomplete",
+          status: "Incomplete",
           duration: {
             hh: "",
             mm: "",
@@ -141,6 +148,7 @@
           breakTime: 0,
           actualTime: 0,
           coinsEarned: 0,
+          date: this.taskDate.toDate(),
         }),
           (this.newcategory = "");
         document.getElementById("myform").reset();
@@ -165,17 +173,20 @@
             event.preventdefault();
           }
         } else;
+        console.log(this.newtask);
 
         //adding task to tasksList
         fb.firestore()
           .collection("tasks")
           .doc(this.user)
           .collection("tasksList")
-          .add(this.newtask);
+          .add(this.newtask)
+          .then(() => location.reload());
 
         //reset values
+        this.isModalVisible = false;
+        document.getElementById("myform").reset();
         this.resetForm();
-        console.log("this method works");
       },
     },
     watch: {

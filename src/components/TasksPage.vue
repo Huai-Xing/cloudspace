@@ -2,6 +2,9 @@
   <div>
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
+    {{ date.toDate() > test }}
+    {{ date.toDate() }}
+    {{ test }}
 
     <!-- Tasks
     To Do: <new-task-form></new-task-form>
@@ -39,23 +42,26 @@
       <span class="backToToday" v-show="isToday" v-on:click="change(2)"
         >Jump to today</span
       >
+      {{ date.get("month") }}
+      {{ date.get("year") }}
+      {{ date.get("date") }}
 
       <div class="deadlines">
         <p class="sublabel">Deadlines:</p>
-        <new-task-form class="addTask"></new-task-form>
+        <new-task-form class="addTask" v-bind:taskDate="date"></new-task-form>
         <hr class="line" />
         <div class="deadlinesList"></div>
       </div>
 
       <div class="tasks">
         <p class="sublabel">To Do:</p>
-        <new-task-form class="addTask"></new-task-form>
+        <new-task-form class="addTask" v-bind:taskDate="date"></new-task-form>
         <hr class="line" />
         <br />
         <div class="label-container">
           <span class="taskLabel"> Category </span>
           <span class="taskLabel"> Task </span>
-          <span class="taskLabel"> Est. Duration </span>
+          <span class="taskLabel"> Time Allocated </span>
           <span class="taskLabel"> Status </span>
         </div>
 
@@ -68,7 +74,7 @@
             </span>
             <span class="taskText"> {{ task[1].status }} </span>
 
-            <span v-if="task[1].status == 'incomplete'">
+            <span v-if="task[1].status == 'Incomplete'">
               <img src="../assets/task/start_btn.png" />
               <edit-form v-bind:idname="task[0]"></edit-form>
               <img
@@ -78,7 +84,7 @@
               />
             </span>
 
-            <span v-if="task[1].status == 'complete'">
+            <span v-if="task[1].status == 'Complete'">
               <button>More info</button>
               <img
                 src="../assets/task/trash_btn.png"
@@ -107,6 +113,7 @@
         date: dayjs(),
         user: fb.auth().currentUser.uid,
         tasks: [],
+        test: new Date(2021, 2, 30, 0, 0),
       };
     },
     //Register Locally
@@ -117,10 +124,17 @@
     },
     methods: {
       fetchTasks: function() {
+        var day = this.date.toDate().get("date");
+        var month = this.date.toDate().get("month");
+        var year = this.date.toDate().get("year");
+        let start = new Date(year, month, day, 0, 0);
+        let end = new Date(year, month, day, 23, 59);
         fb.firestore()
           .collection("tasks")
           .doc(this.user)
           .collection("tasksList")
+          .where(date, ">=", start)
+          .where(date, "<=", end)
           .get()
           .then((snapshot) => {
             snapshot.forEach((doc) => {

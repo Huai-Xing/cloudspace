@@ -128,6 +128,7 @@
           .get()
           .then((doc) => {
             this.currentTask = doc.data();
+            this.updatedtask = doc.data();
           });
       },
       showModal() {
@@ -150,9 +151,6 @@
             .doc(this.user)
             .update({
               categoryList: this.categoryList,
-            })
-            .then(() => {
-              location.reload();
             });
         } else;
 
@@ -165,13 +163,14 @@
           .update(this.updatedtask)
           .then(() => {
             this.isModalVisible = false;
+            location.reload();
           });
 
         //reset values
         (this.updatedtask = {
           category: "",
           title: "",
-          status: "incomplete",
+          status: "Incomplete",
           duration: {
             hh: "",
             mm: "",
