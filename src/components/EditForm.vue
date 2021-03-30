@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-    <button type="button" class="btn" @click="showModal">
-      <img src="../assets/task/edit_small.png" />
-    </button>
-    {{ currentTask }}
+    <img src="../assets/task/edit_btn.png" @click="showModal" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
-        Edit
+        You are currently editing: {{ currentTask.category }}-
+        {{ currentTask.title }}
       </template>
 
       <template v-slot:body>
@@ -17,7 +15,7 @@
             v-model="updatedtask.title"
             type="text"
             id="title"
-            placeholder="Give your task a name"
+            v-bind:placeholder="currentTask.title"
           />
           <br />
           <label for="category">Category</label>
@@ -27,7 +25,7 @@
             id="category"
           >
             <option disabled value=""
-              >Please select a catergory for your task</option
+              >Please select a new catergory for your task</option
             >
             <option
               v-for="option in categoryList"
@@ -152,15 +150,22 @@
             .doc(this.user)
             .update({
               categoryList: this.categoryList,
+            })
+            .then(() => {
+              location.reload();
             });
         } else;
 
-        //adding task to tasksList
+        //updating task to tasksList
         fb.firestore()
           .collection("tasks")
           .doc(this.user)
           .collection("tasksList")
-          .add(this.updatedtask);
+          .doc(this.idname)
+          .update(this.updatedtask)
+          .then(() => {
+            this.isModalVisible = false;
+          });
 
         //reset values
         (this.updatedtask = {
@@ -176,7 +181,7 @@
           coinsEarned: 0,
         }),
           (this.newcategory = "");
-        this.isModalVisible = false;
+        // this.isModalVisible = false;
         document.getElementById("myform").reset();
         console.log("this method works");
       },
@@ -204,4 +209,11 @@
   };
 </script>
 
-<style scoped></style>
+<style scoped>
+  img {
+    height: 28px;
+    width: auto;
+    margin: 2px;
+    text-align: center;
+  }
+</style>

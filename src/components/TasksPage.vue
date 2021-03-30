@@ -63,18 +63,28 @@
           <div class="task-container">
             <span class="taskText"> {{ task[1].category }} </span>
             <span class="taskText"> {{ task[1].title }} </span>
-            <span class="taskText"> {{ task[1].duration }} </span>
+            <span class="taskText">
+              {{ task[1].duration.hh }}hr {{ task[1].duration.mm }}min
+            </span>
             <span class="taskText"> {{ task[1].status }} </span>
 
             <span v-if="task[1].status == 'incomplete'">
               <img src="../assets/task/start_btn.png" />
               <edit-form v-bind:idname="task[0]"></edit-form>
-              <img src="../assets/task/trash_btn.png" />
+              <img
+                src="../assets/task/trash_btn.png"
+                v-bind:idname="task[0]"
+                v-on:click="deleteTask($event)"
+              />
             </span>
 
             <span v-if="task[1].status == 'complete'">
               <button>More info</button>
-              <img src="../assets/task/trash_btn.png" />
+              <img
+                src="../assets/task/trash_btn.png"
+                v-bind:idname="task[0]"
+                v-on:click="deleteTask($event)"
+              />
             </span>
           </div>
           <hr class="line" />
@@ -128,10 +138,19 @@
         }
         this.$emit("changeMonth", this.SelectedDate);
       },
-      // editTask: function() {
-      //   var doc_id = event.target.getAttribute("id");
-      //   this.$emit("edit", doc_id);
-      // },
+      deleteTask: function(event) {
+        let doc_id = event.target.getAttribute("idname");
+        console.log(doc_id);
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .doc(doc_id)
+          .delete()
+          .then(() => {
+            location.reload();
+          });
+      },
     },
     created() {
       this.fetchTasks();

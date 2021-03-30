@@ -45,6 +45,7 @@
             placeholder="Enter a new category"
             :disabled="disabledinput"
           />
+          <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
           <br />
           Duration
           <vue-timepicker
@@ -89,7 +90,7 @@
         newtask: {
           category: "",
           title: "",
-          status: "incomplete",
+          status: "Incomplete",
           duration: {
             hh: "",
             mm: "",
@@ -103,6 +104,10 @@
         disabledinput: false,
         user: fb.auth().currentUser.uid,
         categoryList: [],
+        errors: {
+          title: "",
+          category: "",
+        },
       };
     },
     methods: {
@@ -118,34 +123,13 @@
           });
       },
       showModal() {
+        this.resetForm();
         this.isModalVisible = true;
       },
       closeModal() {
         this.isModalVisible = false;
       },
-      sendTask() {
-        //managing newcategories
-        if (this.newcategory != "") {
-          this.categoryList.push(this.newcategory);
-          console.log(this.categoryList);
-          this.newtask.category = this.newcategory;
-
-          fb.firestore()
-            .collection("users")
-            .doc(this.user)
-            .update({
-              categoryList: this.categoryList,
-            });
-        } else;
-
-        //adding task to tasksList
-        fb.firestore()
-          .collection("tasks")
-          .doc(this.user)
-          .collection("tasksList")
-          .add(this.newtask);
-
-        //reset values
+      resetForm() {
         (this.newtask = {
           category: "",
           title: "",
@@ -159,8 +143,38 @@
           coinsEarned: 0,
         }),
           (this.newcategory = "");
-        this.isModalVisible = false;
         document.getElementById("myform").reset();
+      },
+      sendTask() {
+        //managing newcategories
+        if (this.newcategory != "") {
+          if (!this.categoryList.includes(this.newcategory)) {
+            this.categoryList.push(this.newcategory);
+            console.log(this.categoryList);
+            this.newtask.category = this.newcategory;
+
+            fb.firestore()
+              .collection("users")
+              .doc(this.user)
+              .update({
+                categoryList: this.categoryList,
+              });
+          } else {
+            // this.errors.category = "Category already exists";
+            alert("Error - this category already exists!");
+            event.preventdefault();
+          }
+        } else;
+
+        //adding task to tasksList
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .add(this.newtask);
+
+        //reset values
+        this.resetForm();
         console.log("this method works");
       },
     },
@@ -187,12 +201,12 @@
 </script>
 
 <style scoped>
-.btn {
-  padding: 2px 2px 2px 2px;
-}  
-.btn > img {
-  height: 20px;
-  width: 20px;
-  vertical-align: middle;
-}
+  .btn {
+    padding: 2px 2px 2px 2px;
+  }
+  .btn > img {
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+  }
 </style>
