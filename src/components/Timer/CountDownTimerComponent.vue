@@ -223,6 +223,7 @@ export default {
   methods: {
     onTimesUp: function () {
       clearInterval(this.timerInterval);
+      document.getElementById("pause").setAttribute("disabled", true);
       this.timeToStop = setInterval(() => (this.timeStop += 1), 1000);
     },
 
@@ -443,6 +444,9 @@ img {
   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
   border: none;
   cursor: pointer;
+}
+.timerControlledBtns[disabled=true] {
+  background: rgb(211, 211, 211);
 }
 .timerControlledBtns:focus {
   box-shadow: inset 0px 0px 4px #c1c1c1;
