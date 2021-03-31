@@ -51,7 +51,7 @@
           />
           <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
           <br />
-          Date Due <input type="date" v-model.trim="newdeadline.duedate" />
+          Date Due <input type="date" v-model.trim="newdeadline.datedue" />
           <br />
           Time Due
           <vue-timepicker
