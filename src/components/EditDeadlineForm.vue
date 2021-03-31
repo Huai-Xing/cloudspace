@@ -49,12 +49,14 @@
           <br />
           Time Due
           <vue-timepicker
+            manual-input
             close-on-complete
             v-model="updateddeadline.timedue.hh"
             format="HH"
           ></vue-timepicker>
           hr
           <vue-timepicker
+            manual-input
             close-on-complete
             v-model="updateddeadline.timedue.mm"
             format="mm"
@@ -176,8 +178,6 @@
             hh: "",
             mm: "",
           },
-          breakTime: 0,
-          actualTime: 0,
           coinsEarned: 0,
         }),
           (this.newcategory = "");

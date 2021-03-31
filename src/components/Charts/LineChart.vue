@@ -4,17 +4,14 @@
   </div>
 </template>
 
-
 <script>
-import linechart from '../Charts/LineChart.js'
+  import LineChart from "../Charts/LineChart.js";
 
-export default {
-  components: {
-    'line-chart': linechart,
-  }
-};
+  export default {
+    components: {
+      LineChart,
+    },
+  };
 </script>
 
-
-<style scoped>
-</style>
+<style scoped></style>

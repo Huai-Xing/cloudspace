@@ -47,12 +47,14 @@
           <br />
           Duration
           <vue-timepicker
+            manual-input
             close-on-complete
             v-model="updatedtask.duration.hh"
             format="HH"
           ></vue-timepicker>
           hr
           <vue-timepicker
+            manual-input
             close-on-complete
             v-model="updatedtask.duration.mm"
             format="mm"
