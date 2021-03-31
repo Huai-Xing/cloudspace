@@ -32,7 +32,28 @@
     </div>
 
     <div class="buttons">
-      <p id="coins-to-earn">Coins to earn: {{ coinsToEarn }}</p>
+      <p id="coins-to-earn">
+        Coins to earn:
+        <u
+          ><b>{{ coinsToEarn }}</b></u
+        >
+        <span id="info"
+          >i
+          <span id="coinsToolTip" class="tooltiptext">
+            Maximum number of coins earned per task is based on the rate of
+            <b>1 coin per 10 minutes</b>, adjusted for previous trend of
+            overestimate or underestimate of task timing.
+            <br />
+            By default, a 1 hr task will earn a maximum of 6 coins.
+            <br />
+            However, if there is a consistent overestimate or underestimate of
+            the allocated time per task, then the maximum number of coins to be
+            earned will be reduced.
+            <br />
+            <u>This is to encourage accurate allocation of time per task.</u>
+          </span>
+        </span>
+      </p>
       <!-- Timer completes -->
       <button id="done" class="timerControlledBtns" @click="doneTimer()">
         <span class="tooltiptext">Complete task</span>
@@ -60,13 +81,18 @@
           class='cancelBtn'
         />
       </button>
-      <p id="note">Note: Please click on the 'tick' to complete the task before the time is up.<br>Penalty will be imposed on coins earned for tasks that exceed time limit!</p>
+      <p id="note">
+        Note: Please click on the 'tick' to complete the task before the time is
+        up.<br />Penalty will be imposed on coins earned for tasks that exceed
+        time limit!
+      </p>
     </div>
   </div>
 </template>
 
 
 <script>
+import coinCal from ".././CoinLogic.js";
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 0.25;
 const ALERT_THRESHOLD = 0.1;
@@ -89,17 +115,17 @@ const COLOR_CODES = {
 //const this.totalTime= 10; // dummy timing value (e.g 3913sec => 1hr5min13sec) for testing at the moment
 
 export default {
-    props:{
-      currentTimer: Number,
-      timerTimePassed: Number,
-      taskTitle: String,
-      coin: Number,
-    },
+  props: {
+    currentTimer: Number,
+    timerTimePassed: Number,
+    taskTitle: String,
+    coin: Number,
+  },
   data() {
     return {
       timePassed: 0 /* To store the amount of time (in sec) that has passed */,
       timerInterval: null,
-      title:"Task",
+      title: "Task",
       coinsToEarn: 0,
       totalTime: 3600,
       timeToStop: null,
@@ -183,11 +209,13 @@ export default {
     },
   },
 
-  mounted() {
+  async created() {
     this.title = this.taskTitle;
     this.totalTime = this.currentTimer + this.timerTimePassed;
     this.timePassed = this.timerTimePassed;
     this.coinsToEarn = this.coin;
+    this.coinsToEarn = await coinCal(this.currentTimer);
+    //console.log("COINS: " + this.coinsToEarn);
     // to start the timer immediately when the component gets mounted
     this.startTimer();
   },
@@ -205,16 +233,15 @@ export default {
     },
 
     doneTimer: function () {
-      // logic to compute the coins here?
-      this.$emit('end',this.timePassed, this.timeStop);
+      this.$emit("end", this.timePassed, this.timeStop, this.coinsToEarn);
     },
 
     pauseTimer: function () {
       var timeLeft = this.totalTime - this.timePassed;
-      this.$emit('switch', true, timeLeft, this.timePassed);
+      this.$emit("switch", true, timeLeft, this.timePassed);
     },
     cancelTimer: function () {
-      this.$emit('cancel');
+      this.$emit("cancel");
     },
   },
 };
@@ -254,10 +281,61 @@ export default {
   border-color: transparent transparent rgb(235, 235, 235) transparent;
 }
 
+#info {
+  border: 1px solid black;
+  border-radius: 100%;
+  width: 12px;
+  height: 12px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  font-style: italic;
+  display: block;
+  padding: None;
+  margin-left: 10px;
+}
+
+#coinsToolTip {
+  position: absolute;
+  z-index: 1;
+  top: -430%;
+  left: 370%;
+  width: 290px;
+  height: auto;
+  padding: 10px;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 300;
+  text-align: justify;
+  border-radius: 20px;
+}
+
+#coinsToolTip::after {
+  content: "";
+  position: absolute;
+  bottom: 42%;
+  left: -10%;
+  margin-left: -5px;
+  border-width: 20px;
+  border-style: solid;
+  border-color: transparent rgb(235, 235, 235) transparent transparent;
+}
+
 button:hover > .tooltiptext {
   visibility: visible;
   opacity: 1;
 }
+
+#info:hover > .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+#info {
+  position: relative;
+  display: inline-block;
+}
+
 .buttons {
   display: block;
   margin-left: auto;

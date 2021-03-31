@@ -2,7 +2,7 @@
   <div>
     <p id="title">Quote of the day</p>
     <p id="quote">"{{ quote }}"</p>
-    <p>~{{ author }}</p>
+    <p id="author">~{{ author }}</p>
   </div>
 </template>
 
@@ -49,23 +49,34 @@ export default {
 </script>
 
 <style scoped>
+div {
+  position: relative;
+  display: inline-block;
+  border: 5px solid #81b762;
+  border-radius: 20px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
 p {
-  margin-left: 200px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  font-size: 16px;
+  margin: 0;
+  padding: 0.8%;
 }
 #title {
-  padding-right: 35%;
   text-decoration: underline;
+  background-color: #81b762;
+  border-radius: 10px 10px 0 0;
+  font-size: 16px;
+  color: white;
+  font-weight: 550;
 }
 #quote {
+    margin-top: 5px;
     font-style: italic;
-    animation: type 20s steps(60, end);
-    font-size: 20px;
-    text-align: center;
-    padding-left: 20%;
-    padding-right: 20%;
+    font-size: 18px;
+}
+#author {
+  text-align: left;
+  font-size: 14px;
 }
 </style>

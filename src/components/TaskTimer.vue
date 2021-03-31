@@ -26,15 +26,14 @@
 </template>
 
 <script>
-  import MainNavigation from "./MainNavigation.vue";
-  import CountDownTimerComponent from "./Timer/CountDownTimerComponent.vue";
-  import CountUpTimerComponent from "./Timer/CountUpTimerComponent.vue";
-  import fb from "../firebase.js";
+import MainNavigation from "./MainNavigation.vue";
+import CountDownTimerComponent from "./Timer/CountDownTimerComponent.vue";
+import CountUpTimerComponent from "./Timer/CountUpTimerComponent.vue";
+import fb from "../firebase.js";
 
-  export default {
+export default {
     props: {
       timeForTask: Number,
-      // coinForTask: Number,
       taskId: String,
     },
     //Register Locally
@@ -53,7 +52,7 @@
         timerTimePassed: 0,
         breakTimePassed: 0,
         taskTitle: "Cloudspace Timer Task",
-        coin: 1,
+        coin: 0,
         breakTimeAllowed: 300,
       };
     },
@@ -69,13 +68,15 @@
           this.breakTimePassed = z;
         }
       },
-      endTimer: function(x, y) {
+      endTimer: function(x, y, z) {
         //y is amount of time taken to end task after timer is up
+        //z is coins
         console.log("complete " + x);
         console.log("extra " + y);
+        this.coin = z;
         this.coinPenalty(y);
         this.timerTimePassed = x + y;
-        //this.updateData("completed");
+        this.updateData("Completed");
         this.$router.push({
           name: "Tasks",
         });
@@ -83,7 +84,6 @@
       cancelTimer: function() {
         console.log("cancel");
         this.coin = 0;
-        //this.updateData("cancelled");
         this.$router.push({
           name: "Tasks",
         });
@@ -106,7 +106,7 @@
           .update({
             actualTime: this.timerTimePassed,
             breakTime: this.currentBreak,
-            coinsEarned: this.coins,
+            coinsEarned: this.coin,
             status: x,
           })
           .then(() => {
@@ -122,7 +122,7 @@
 
     created() {
       this.currentTimer = this.timeForTask;
-      // this.coin = this.coinForTask;
+      this.coin = Math.floor(this.timeForTask / 600);
       this.breakTimeAllowed = (this.timeForTask / 1200) * 300;
     },
   };
