@@ -178,7 +178,6 @@
             hh: "",
             mm: "",
           },
-          coinsEarned: 0,
         }),
           (this.newcategory = "");
         // this.isModalVisible = false;
