@@ -29,19 +29,18 @@
       <tree-purchase
         :treeName="data[visibleImg].name"
         :treePrice="data[visibleImg].price"
-        class="treePurchaseBtn"
+        :coins="coins"
       />
 
     </div>
   </div>
 </template>
 
-
-
 <script>
 import MainNavigation from "./MainNavigation.vue";
 import TreeSlide from "./Tree/TreeSlide";
 import TreePurchase from "./Tree/TreePurchase";
+import firebase from "../firebase";
 
 export default {
   //Register Locally
@@ -130,11 +129,24 @@ export default {
       }
       dots[this.visibleImg].className += " active";
     },
+    fetchCoins() {
+      var uid = firebase.auth().currentUser.uid;
+      firebase.firestore()
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((doc) => {
+          this.coins = doc.data().user.coins;
+        })
+    }
   },
   mounted() {
     document.getElementsByClassName("treeDots")[this.visibleImg].className +=
       " active";
   },
+  created() {
+    this.fetchCoins();
+  }
 };
 </script>
 
@@ -144,6 +156,7 @@ export default {
 }
 .plantTreePage {
   text-align: center;
+  margin-left: 160px; /* nav bar width: 160px */
 }
 .treeSlides {
   width: 350px;
@@ -214,9 +227,5 @@ export default {
 .plantText {
   font-size: 12px;
   padding: 10px;
-  margin-left: 160px; /* nav bar width: 160px */
-}
-.treePurchaseBtn {
-  margin-left: 160px;
 }
 </style>

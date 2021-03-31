@@ -1,57 +1,84 @@
 <template>
   <div id="app">
     <button type="button" class="buyBtn" @click="showModal">
-        <img class="priceCoin" src="../../assets/coin.png" />
-        <span class="priceText"> {{ treePrice }} </span>
+      <img class="priceCoin" src="../../assets/coin.png" />
+      <span class="priceText"> {{ treePrice }} </span>
     </button>
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
-        Are you sure?
+        <div v-show="afford">
+          <p v-show="!bought">Are you sure?</p>
+          <p v-show="bought">You planted a tree!</p>
+        </div>
+        <div v-show="!afford">Sorry!</div>
       </template>
 
       <template v-slot:body>
-        {{ treeName }}  costs {{ treePrice }} coins. Proceed with purchase?
+        <div v-show="afford">
+          <p class="treeModalText" v-show="!bought">
+            {{ treeName }} costs {{ treePrice }} coins. <br />
+            Proceed with purchase?
+          </p>
+          <p class="treeModalText" v-show="bought">
+            Thank you! <br />
+            A confirmation has been sent to your email.
+          </p>
+        </div>
+
+        <div v-show="!afford">Come back when you have enough coins!</div>
       </template>
 
       <template v-slot:footer>
-        <button @click="purchase">
-          Buy
-        </button>
+        <button v-show="!bought && afford" @click="purchase" class="cfmBtn">Buy</button>
       </template>
     </Modal>
   </div>
 </template>
 
 <script>
-  import Modal from "../Modal.vue";
+import Modal from "../Modal.vue";
+import firebase from "../../firebase";
 
-  export default {
-    name: "App",
-    props: [ "treeName", "treePrice" ],
-    components: {
-      Modal,
+export default {
+  name: "App",
+  props: ["treeName", "treePrice", "coins"],
+  components: {
+    Modal,
+  },
+  data() {
+    return {
+      isModalVisible: false,
+      bought: false,
+      afford: true,
+    };
+  },
+  methods: {
+    showModal() {
+      this.isModalVisible = true;
     },
-    data() {
-      return {
-        isModalVisible: false,
-      };
+    closeModal() {
+      this.isModalVisible = false;
     },
-    methods: {
-      showModal() {
-        this.isModalVisible = true;
-      },
-      closeModal() {
-        this.isModalVisible = false;
-      },
-      purchase() {
-          console.log("bought");
-      }
-    }
-  };
+    purchase() {
+      this.bought = true;
+      var newCoins = parseInt(this.coins) - parseInt(this.treePrice);
+      var uid = firebase.auth().currentUser.uid;
+      firebase.firestore().collection("users").doc(uid).update({
+        "user.coins": newCoins,
+      }).then(() => location.reload());
+    },
+  },
+  created() {
+    this.afford = this.coins >= this.treePrice;
+  },
+};
 </script>
 
 <style scoped>
+* {
+  font-family: Lora;
+}
 .buyBtn {
   display: flex;
   height: 35px;
@@ -90,7 +117,19 @@
 }
 .priceText {
   padding: 6px;
-  font-family: Lora;
   letter-spacing: 1.5px;
+}
+.treeModalText {
+  font-family: Roboto;
+  padding: 3px 50px 3px 50px;
+}
+.cfmBtn {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  width: 50px;
+  padding: 4px 10px 4px 10px;
 }
 </style>

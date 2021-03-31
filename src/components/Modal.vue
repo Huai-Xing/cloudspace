@@ -56,10 +56,11 @@
 
   .modal {
     background: #ffffff;
-    box-shadow: 2px 2px 20px 1px;
+    box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.5);
     overflow-x: auto;
     display: flex;
     flex-direction: column;
+    border-radius: 6px;
   }
 
   .modal-header,
