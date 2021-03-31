@@ -6,27 +6,27 @@
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
-        Add a New Task
+        Add a New Deadline
       </template>
 
       <template v-slot:body>
         <form id="myform">
           <label for="title">Title</label>
           <input
-            v-model="newtask.title"
+            v-model="newdeadline.title"
             type="text"
             id="title"
-            placeholder="Give your task a name"
+            placeholder="Give your deadline a name"
           />
           <br />
           <label for="category">Category</label>
           <select
-            v-model="newtask.category"
+            v-model="newdeadline.category"
             :disabled="disabledselect"
             id="category"
           >
             <option disabled value=""
-              >Please select a category for your task</option
+              >Please select a category for your deadline</option
             >
             <option
               v-for="option in categoryList"
@@ -51,24 +51,29 @@
           />
           <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
           <br />
-          Duration
+          Date Due <input type="date" v-model.trim="newdeadline.duedate" />
+          <br />
+          Time Due
           <vue-timepicker
             close-on-complete
-            v-model="newtask.duration.hh"
+            v-model="newdeadline.timedue.hh"
             format="HH"
           ></vue-timepicker>
           hr
           <vue-timepicker
             close-on-complete
-            v-model="newtask.duration.mm"
+            v-model="newdeadline.timedue.mm"
             format="mm"
           ></vue-timepicker>
           min
+          <br />
+          Show Deadline <input v-model="newdeadline.showInAdvance" /> days in
+          advance
         </form>
       </template>
 
       <template v-slot:footer>
-        <button @click.prevent="sendTask">
+        <button @click.prevent="sendDeadline">
           Submit
         </button>
       </template>
@@ -94,17 +99,16 @@
     data() {
       return {
         isModalVisible: false,
-        newtask: {
+        newdeadline: {
           category: "",
           title: "",
           status: "Incomplete",
-          duration: {
+          timedue: {
             hh: "",
             mm: "",
           },
-          breakTime: 0,
-          actualTime: 0,
-          coinsEarned: 0,
+          datedue: null,
+          showInAdvance: 0,
           date: this.taskDate.toDate(),
         },
         newcategory: "",
@@ -137,11 +141,11 @@
         this.isModalVisible = false;
       },
       resetForm() {
-        (this.newtask = {
+        (this.newdeadline = {
           category: "",
           title: "",
           status: "Incomplete",
-          duration: {
+          timedue: {
             hh: "",
             mm: "",
           },
@@ -153,13 +157,13 @@
           (this.newcategory = "");
         document.getElementById("myform").reset();
       },
-      sendTask() {
+      sendDeadline() {
         //managing newcategories
         if (this.newcategory != "") {
           if (!this.categoryList.includes(this.newcategory)) {
             this.categoryList.push(this.newcategory);
             console.log(this.categoryList);
-            this.newtask.category = this.newcategory;
+            this.newdeadline.category = this.newcategory;
 
             fb.firestore()
               .collection("users")
@@ -173,14 +177,14 @@
             event.preventdefault();
           }
         } else;
-        console.log(this.newtask);
+        console.log(this.newdeadline);
 
         //adding task to tasksList
         fb.firestore()
           .collection("tasks")
           .doc(this.user)
-          .collection("tasksList")
-          .add(this.newtask)
+          .collection("deadlinesList")
+          .add(this.newdeadline)
           .then(() => location.reload());
 
         //reset values
@@ -197,7 +201,7 @@
           this.disabledselect = true;
         }
       },
-      "newtask.category": function(val) {
+      "newdeadline.category": function(val) {
         if (val == "") {
           this.disabledinput = false;
         } else {

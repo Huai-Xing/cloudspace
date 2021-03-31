@@ -49,7 +49,7 @@
           <vue-timepicker
             close-on-complete
             v-model="updatedtask.duration.hh"
-            format="hh"
+            format="HH"
           ></vue-timepicker>
           hr
           <vue-timepicker

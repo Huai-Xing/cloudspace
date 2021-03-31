@@ -13,9 +13,22 @@
 
       <div class="deadlines">
         <p class="sublabel">Deadlines:</p>
-        <new-task-form class="addTask" v-bind:taskDate="date"></new-task-form>
+        <new-deadline-form
+          class="addTask"
+          v-bind:taskDate="date"
+        ></new-deadline-form>
         <hr class="line" />
-        <div class="deadlinesList"></div>
+        <div
+          class="tasksList"
+          v-for="deadline in deadlines"
+          v-bind:key="deadline[0]"
+        >
+          <div>
+            {{ deadline[1].category }} - {{ deadline[1].title }}: Due on
+            {{ deadline[1].datedue }} @ {{ deadline[1].timedue.hh
+            }}{{ deadline[1].timedue.mm }}
+          </div>
+        </div>
       </div>
 
       <div class="tasks">
@@ -42,7 +55,7 @@
 
               <span v-if="task[1].status == 'Incomplete'">
                 <img src="../assets/task/start_btn.png" />
-                <edit-form v-bind:idname="task[0]"></edit-form>
+                <edit-task-form v-bind:idname="task[0]"></edit-task-form>
                 <img
                   src="../assets/task/trash_btn.png"
                   v-bind:idname="task[0]"
@@ -59,8 +72,8 @@
                 />
               </span>
             </div>
+            <hr class="line" />
           </div>
-          <hr class="line" />
         </div>
       </div>
     </div>
@@ -69,10 +82,11 @@
 
 <script>
   import fb from "../firebase";
-  import EditForm from "./EditForm.vue";
+  import EditTaskForm from "./EditTaskForm.vue";
   import MainNavigation from "./MainNavigation.vue";
   import NewTaskForm from "./NewTaskForm.vue";
   import dayjs from "dayjs";
+  import NewDeadlineForm from "./NewDeadlineForm.vue";
 
   export default {
     data() {
@@ -80,15 +94,18 @@
         date: dayjs(),
         user: fb.auth().currentUser.uid,
         tasks: [],
+        deadlines: [],
       };
     },
     //Register Locally
     components: {
       appNav: MainNavigation,
       NewTaskForm,
-      EditForm,
+      EditTaskForm,
+      NewDeadlineForm,
     },
     methods: {
+      //Checking which tasks to display
       checkDate: function(task) {
         console.log(task[1].date.toDate());
         var day = this.date.get("date");
@@ -102,6 +119,7 @@
           false;
         }
       },
+      //Fetching all user's tasks
       fetchTasks: function() {
         fb.firestore()
           .collection("tasks")
@@ -111,6 +129,19 @@
           .then((snapshot) => {
             snapshot.forEach((doc) => {
               this.tasks.push([doc.id, doc.data()]);
+            });
+          });
+      },
+      //Fetching user's deadlines
+      fetchDeadLines: function() {
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("deadlinesList")
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              this.deadlines.push([doc.id, doc.data()]);
             });
           });
       },
@@ -124,6 +155,7 @@
         }
         this.$emit("changeMonth", this.SelectedDate);
       },
+
       deleteTask: function(event) {
         let doc_id = event.target.getAttribute("idname");
         console.log(doc_id);
@@ -140,6 +172,7 @@
     },
     created() {
       this.fetchTasks();
+      this.fetchDeadLines();
       var passedDate = this.$route.params.date;
       if (Object.keys(passedDate).length != 0) {
         this.date = passedDate;
