@@ -10,20 +10,20 @@
       </template>
 
       <template v-slot:body>
-        <form id="myform">
-          <label for="title">Title</label>
+        <form id="new-task-form">
+          <label for="tasktitle">Title</label>
           <input
             v-model="newtask.title"
             type="text"
-            id="title"
+            id="tasktitle"
             placeholder="Give your task a name"
           />
           <br />
-          <label for="category">Category</label>
+          <label for="new-task-category">Category</label>
           <select
             v-model="newtask.category"
             :disabled="disabledselect"
-            id="category"
+            id="new-task-category"
           >
             <option disabled value=""
               >Please select a category for your task</option
@@ -43,7 +43,7 @@
           <br />
           Add a new category
           <input
-            id="newcategory"
+            id="nt-newcategory"
             type="text"
             v-model="newcategory"
             placeholder="Enter a new category"
@@ -151,7 +151,7 @@
           date: this.taskDate.toDate(),
         }),
           (this.newcategory = "");
-        document.getElementById("myform").reset();
+        document.getElementById("new-task-form").reset();
       },
       sendTask() {
         //managing newcategories
@@ -185,7 +185,7 @@
 
         //reset values
         this.isModalVisible = false;
-        document.getElementById("myform").reset();
+        document.getElementById("new-task-form").reset();
         this.resetForm();
       },
     },

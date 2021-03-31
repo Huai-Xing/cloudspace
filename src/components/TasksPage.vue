@@ -23,11 +23,19 @@
           v-for="deadline in deadlines"
           v-bind:key="deadline[0]"
         >
-          <div>
+          <br />
+          <input type="checkbox" id="key" />
+          <label for="key">
             {{ deadline[1].category }} - {{ deadline[1].title }}: Due on
             {{ deadline[1].datedue }} @ {{ deadline[1].timedue.hh
             }}{{ deadline[1].timedue.mm }}
-          </div>
+          </label>
+          <edit-deadline-form class="edl"></edit-deadline-form>
+          <img
+            src="../assets/task/trash_btn.png"
+            v-bind:idname="deadline[0]"
+            v-on:click="deleteDeadline($event)"
+          />
         </div>
       </div>
 
@@ -91,6 +99,7 @@
   import NewTaskForm from "./NewTaskForm.vue";
   import dayjs from "dayjs";
   import NewDeadlineForm from "./NewDeadlineForm.vue";
+  import EditDeadlineForm from "./EditDeadlineForm.vue";
 
   export default {
     data() {
@@ -107,6 +116,7 @@
       NewTaskForm,
       EditTaskForm,
       NewDeadlineForm,
+      EditDeadlineForm,
     },
     methods: {
       //Checking which tasks to display
@@ -172,9 +182,20 @@
             location.reload();
           });
       },
+      deleteDeadline: function(event) {
+        let doc_id = event.target.getAttribute("idname");
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("deadlinesList")
+          .doc(doc_id)
+          .delete()
+          .then(() => {
+            location.reload();
+          });
+      },
       startTask: function(event) {
         let doc_id = event.target.getAttribute("idname");
-        // let totalseconds = 0;
 
         fb.firestore()
           .collection("tasks")

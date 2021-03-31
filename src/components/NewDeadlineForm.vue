@@ -10,20 +10,20 @@
       </template>
 
       <template v-slot:body>
-        <form id="myform">
-          <label for="title">Title</label>
+        <form id="new-deadline-form">
+          <label for="deadlinetitle">Title</label>
           <input
             v-model="newdeadline.title"
             type="text"
-            id="title"
+            id="deadlinetitle"
             placeholder="Give your deadline a name"
           />
           <br />
-          <label for="category">Category</label>
+          <label for="new-deadline-category">Category</label>
           <select
             v-model="newdeadline.category"
             :disabled="disabledselect"
-            id="category"
+            id="new-deadline-category"
           >
             <option disabled value=""
               >Please select a category for your deadline</option
@@ -43,7 +43,7 @@
           <br />
           Add a new category
           <input
-            id="newcategory"
+            id="ndl-newcategory"
             type="text"
             v-model="newcategory"
             placeholder="Enter a new category"
@@ -155,7 +155,7 @@
           date: this.taskDate.toDate(),
         }),
           (this.newcategory = "");
-        document.getElementById("myform").reset();
+        document.getElementById("new-deadline-form").reset();
       },
       sendDeadline() {
         //managing newcategories
@@ -189,7 +189,7 @@
 
         //reset values
         this.isModalVisible = false;
-        document.getElementById("myform").reset();
+        document.getElementById("new-deadline-form").reset();
         this.resetForm();
       },
     },
