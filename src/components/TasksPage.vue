@@ -30,7 +30,7 @@
             {{ deadline[1].datedue }} @ {{ deadline[1].timedue.hh
             }}{{ deadline[1].timedue.mm }}
           </label>
-          <edit-deadline-form class="edl"></edit-deadline-form>
+          <edit-deadline-form v-bind:idname="deadline[0]"></edit-deadline-form>
           <img
             src="../assets/task/trash_btn.png"
             v-bind:idname="deadline[0]"
