@@ -23,19 +23,23 @@
           v-for="deadline in deadlines"
           v-bind:key="deadline[0]"
         >
-          <br />
-          <input type="checkbox" id="key" />
-          <label for="key">
-            {{ deadline[1].category }} - {{ deadline[1].title }}: Due on
-            {{ deadline[1].datedue }} @ {{ deadline[1].timedue.hh
-            }}{{ deadline[1].timedue.mm }}
-          </label>
-          <edit-deadline-form v-bind:idname="deadline[0]"></edit-deadline-form>
-          <img
-            src="../assets/task/trash_btn.png"
-            v-bind:idname="deadline[0]"
-            v-on:click="deleteDeadline($event)"
-          />
+          <div v-if="checkDeadlineDate(deadline)">
+            <br />
+            <input type="checkbox" id="key" />
+            <label for="key">
+              {{ deadline[1].category }} - {{ deadline[1].title }}: Due on
+              {{ deadline[1].datedue }} @ {{ deadline[1].timedue.hh
+              }}{{ deadline[1].timedue.mm }}
+            </label>
+            <edit-deadline-form
+              v-bind:idname="deadline[0]"
+            ></edit-deadline-form>
+            <img
+              src="../assets/task/trash_btn.png"
+              v-bind:idname="deadline[0]"
+              v-on:click="deleteDeadline($event)"
+            />
+          </div>
         </div>
       </div>
 
@@ -52,7 +56,7 @@
         </div>
 
         <div class="tasksList" v-for="task in tasks" v-bind:key="task[0]">
-          <div v-if="checkDate(task)">
+          <div v-if="checkTaskDate(task)">
             <div class="task-container">
               <span class="taskText"> {{ task[1].category }} </span>
               <span class="taskText"> {{ task[1].title }} </span>
@@ -120,17 +124,47 @@
     },
     methods: {
       //Checking which tasks to display
-      checkDate: function(task) {
+      checkTaskDate: function(task) {
         console.log(task[1].date.toDate());
-        var day = this.date.get("date");
+        var date = this.date.get("date");
         var month = this.date.get("month");
         var year = this.date.get("year");
-        let start = new Date(year, month, day, 0, 0, 0);
-        let end = new Date(year, month, day, 23, 59, 59);
+        let start = new Date(year, month, date, 0, 0, 0);
+        let end = new Date(year, month, date, 23, 59, 59);
         if (task[1].date.toDate() >= start && task[1].date.toDate() <= end) {
           return true;
         } else {
           false;
+        }
+      },
+      checkDeadlineDate: function(deadline) {
+        let duedate = new Date(deadline[1].datedue);
+        var month = duedate.getMonth();
+        var date = duedate.getDate();
+        var year = duedate.getFullYear();
+        var end = new Date(
+          year,
+          month,
+          date,
+          deadline[1].timedue.hh,
+          deadline[1].timedue.mm,
+          59
+        );
+        var start = new Date(
+          year,
+          month,
+          date - deadline[1].showInAdvance,
+          0,
+          0,
+          0
+        );
+        console.log(start);
+        console.log(end);
+
+        if (this.date >= start && this.date <= end) {
+          return true;
+        } else {
+          return false;
         }
       },
       //Fetching all user's tasks

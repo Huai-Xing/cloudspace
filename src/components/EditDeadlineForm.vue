@@ -45,7 +45,7 @@
             :disabled="disabledinput"
           />
           <br />
-          Date Due <input type="date" v-model.trim="updateddeadline.duedate" />
+          Date Due <input type="date" v-model.trim="updateddeadline.datedue" />
           <br />
           Time Due
           <vue-timepicker
