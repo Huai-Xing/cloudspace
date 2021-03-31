@@ -109,14 +109,12 @@
     },
     methods: {
       fetchCategoryList: function() {
-        console.log(this.user);
         fb.firestore()
           .collection("users")
           .doc(this.user)
           .get()
           .then((doc) => {
             this.categoryList = doc.data().categoryList;
-            console.log(this.categoryList);
           });
       },
       fetchToBeEdited: function() {
@@ -138,12 +136,10 @@
         this.isModalVisible = false;
       },
       updateTask() {
-        console.log(this.categoryList);
-
         //managing newcategories
         if (this.newcategory != "") {
           this.categoryList.push(this.newcategory);
-          console.log(this.categoryList);
+
           this.updatedtask.category = this.newcategory;
 
           fb.firestore()
