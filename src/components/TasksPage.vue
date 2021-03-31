@@ -54,7 +54,11 @@
               <span class="taskText"> {{ task[1].status }} </span>
 
               <span v-if="task[1].status == 'Incomplete'">
-                <img src="../assets/task/start_btn.png" />
+                <img
+                  src="../assets/task/start_btn.png"
+                  v-on:click="startTask($event)"
+                  v-bind:idname="task[0]"
+                />
                 <edit-task-form v-bind:idname="task[0]"></edit-task-form>
                 <img
                   src="../assets/task/trash_btn.png"
@@ -158,7 +162,6 @@
 
       deleteTask: function(event) {
         let doc_id = event.target.getAttribute("idname");
-        console.log(doc_id);
         fb.firestore()
           .collection("tasks")
           .doc(this.user)
@@ -167,6 +170,26 @@
           .delete()
           .then(() => {
             location.reload();
+          });
+      },
+      startTask: function(event) {
+        let doc_id = event.target.getAttribute("idname");
+        // let totalseconds = 0;
+
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .doc(doc_id)
+          .get()
+          .then((doc) => {
+            let totalseconds =
+              doc.data().duration.hh * 3600 + doc.data().duration.mm * 60;
+            console.log(totalseconds);
+            this.$router.push({
+              name: "Timer",
+              params: { taskId: doc_id, timeForTask: totalseconds },
+            });
           });
       },
     },
