@@ -12,22 +12,21 @@ async function coinCal(x) {
 function countAdvance(x, taskList) {
     var basicCoins = countBasic(x);
     var totalTR = 0;
-    console.log(taskList);
     var i;
     for (i = 0; i < taskList.length; i++) {
         var item = taskList[i];
         var timeRatio = getTimeRatio(item.actualTime, item.breakTime, item.duration.hh, item.duration.mm);
+        //console.log(timeRatio);
         totalTR += timeRatio;
-        console.log("NEW: " + timeRatio);
     }
-    var averageTR = totalTR / 10;
+    var averageTR = totalTR / taskList.length;
+    //console.log(averageTR);
     if (averageTR < 0.9 || averageTR > 1.1) {
         return getAdvanceCoin(basicCoins, averageTR);
     }
 }
 
 function getTimeRatio(actualTime, breakTime, hh, mm) {
-    console.log(actualTime + " : " + breakTime + " : " + hh + " : " + mm);
     var allocatedTime = (hh * 3600) + (mm * 60);
     var allocatedBreakTime = (allocatedTime / 1200) * 300
     var totalTime = 0;
@@ -44,9 +43,9 @@ function getTimeRatio(actualTime, breakTime, hh, mm) {
 
 function getAdvanceCoin(x, averageTR) {
     if (averageTR < 0.9) {
-        return Math.floor(x * (averageTR - 0.1));
+        return Math.max(Math.floor(x * (averageTR - 0.1)),0);
     } else {
-        return Math.floor(x * ((1/averageTR) - 0.1));
+        return Math.max(Math.floor(x * ((1/averageTR) - 0.1)),0);
     }
 }
 
@@ -64,19 +63,21 @@ async function getList() {
       .collection("tasks")
       .doc(uid)
       .collection("tasksList")
-      .where("status", "==", "complete")
-      //.orderBy("Date", "desc")
-      .limit(10)
+      .orderBy("date", "desc")
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
+            console.log(doc.id, " => ", doc.data().date);
             taskList.push(doc.data());
         });
     });
-    console.log(taskList);
-    return taskList;
+    taskList = taskList.filter(checkStatus);
+    return taskList.slice(0,10);
 }
+
+function checkStatus(data) {
+    return data.status == "Completed";
+} 
 
 
 export default coinCal;

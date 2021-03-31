@@ -3,35 +3,6 @@
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
 
-    <!-- Tasks
-    To Do: <new-task-form></new-task-form>
-    <table>
-      <tr>
-        <th>Category</th>
-        <th>Title</th>
-        <th>Time allocated</th>
-        <th>Status</th>
-      </tr>
-      <tr v-for="task in tasks" v-bind:key="task[0]">
-        <td>{{ task[1].category }}</td>
-        <td>{{ task[1].title }}</td>
-        <td>{{ task[1].duration }}</td>
-        <td>{{ task[1].status }}</td> -->
-
-    <!-- Incomplete status -->
-    <!-- <div v-if="task[1].status == 'incomplete'">
-          <button>Start task</button>
-          <edit-form v-bind:idname="task[0]"></edit-form>
-          <button>Delete</button>
-        </div> -->
-    <!-- Complete status -->
-    <!-- <div v-if="task[1].status == 'complete'">
-          <button>More Info</button>
-          <button>Delete</button>
-        </div>
-      </tr>
-    </table> -->
-
     <div class="task">
       <i class="arrow left" v-on:click="change(0)"></i>
       <h2>{{ date.format("DD MMMM YYYY") }}</h2>
@@ -42,42 +13,83 @@
 
       <div class="deadlines">
         <p class="sublabel">Deadlines:</p>
-        <new-task-form class="addTask"></new-task-form>
+        <new-deadline-form
+          class="addTask"
+          v-bind:taskDate="date"
+        ></new-deadline-form>
         <hr class="line" />
-        <div class="deadlinesList"></div>
+        <div
+          class="tasksList"
+          v-for="deadline in deadlines"
+          v-bind:key="deadline[0]"
+        >
+          <div v-if="checkDeadlineDate(deadline)">
+            <br />
+            <input type="checkbox" id="key" />
+            <label for="key">
+              {{ deadline[1].category }} - {{ deadline[1].title }}: Due on
+              {{ deadline[1].datedue }} @ {{ deadline[1].timedue.hh
+              }}{{ deadline[1].timedue.mm }}
+            </label>
+            <edit-deadline-form
+              v-bind:idname="deadline[0]"
+            ></edit-deadline-form>
+            <img
+              src="../assets/task/trash_btn.png"
+              v-bind:idname="deadline[0]"
+              v-on:click="deleteDeadline($event)"
+            />
+          </div>
+        </div>
       </div>
 
       <div class="tasks">
         <p class="sublabel">To Do:</p>
-        <new-task-form class="addTask"></new-task-form>
+        <new-task-form class="addTask" v-bind:taskDate="date"></new-task-form>
         <hr class="line" />
         <br />
         <div class="label-container">
           <span class="taskLabel"> Category </span>
           <span class="taskLabel"> Task </span>
-          <span class="taskLabel"> Est. Duration </span>
+          <span class="taskLabel"> Time Allocated </span>
           <span class="taskLabel"> Status </span>
         </div>
 
         <div class="tasksList" v-for="task in tasks" v-bind:key="task[0]">
-          <div class="task-container">
-            <span class="taskText"> {{ task[1].category }} </span>
-            <span class="taskText"> {{ task[1].title }} </span>
-            <span class="taskText"> {{ task[1].duration }} </span>
-            <span class="taskText"> {{ task[1].status }} </span>
+          <div v-if="checkTaskDate(task)">
+            <div class="task-container">
+              <span class="taskText"> {{ task[1].category }} </span>
+              <span class="taskText"> {{ task[1].title }} </span>
+              <span class="taskText">
+                {{ task[1].duration.hh }}hr {{ task[1].duration.mm }}min
+              </span>
+              <span class="taskText"> {{ task[1].status }} </span>
 
-            <span v-if="task[1].status == 'incomplete'">
-              <img src="../assets/task/start_btn.png" />
-              <edit-form v-bind:idname="task[0]"></edit-form>
-              <img src="../assets/task/trash_btn.png" />
-            </span>
+              <span v-if="task[1].status == 'Incomplete'">
+                <img
+                  src="../assets/task/start_btn.png"
+                  v-on:click="startTask($event)"
+                  v-bind:idname="task[0]"
+                />
+                <edit-task-form v-bind:idname="task[0]"></edit-task-form>
+                <img
+                  src="../assets/task/trash_btn.png"
+                  v-bind:idname="task[0]"
+                  v-on:click="deleteTask($event)"
+                />
+              </span>
 
-            <span v-if="task[1].status == 'complete'">
-              <button>More info</button>
-              <img src="../assets/task/trash_btn.png" />
-            </span>
+              <span v-if="task[1].status == 'Complete'">
+                <button>More info</button>
+                <img
+                  src="../assets/task/trash_btn.png"
+                  v-bind:idname="task[0]"
+                  v-on:click="deleteTask($event)"
+                />
+              </span>
+            </div>
+            <hr class="line" />
           </div>
-          <hr class="line" />
         </div>
       </div>
     </div>
@@ -86,10 +98,12 @@
 
 <script>
   import fb from "../firebase";
-  import EditForm from "./EditForm.vue";
+  import EditTaskForm from "./EditTaskForm.vue";
   import MainNavigation from "./MainNavigation.vue";
   import NewTaskForm from "./NewTaskForm.vue";
   import dayjs from "dayjs";
+  import NewDeadlineForm from "./NewDeadlineForm.vue";
+  import EditDeadlineForm from "./EditDeadlineForm.vue";
 
   export default {
     data() {
@@ -97,15 +111,63 @@
         date: dayjs(),
         user: fb.auth().currentUser.uid,
         tasks: [],
+        deadlines: [],
       };
     },
     //Register Locally
     components: {
       appNav: MainNavigation,
       NewTaskForm,
-      EditForm,
+      EditTaskForm,
+      NewDeadlineForm,
+      EditDeadlineForm,
     },
     methods: {
+      //Checking which tasks to display
+      checkTaskDate: function(task) {
+        console.log(task[1].date.toDate());
+        var date = this.date.get("date");
+        var month = this.date.get("month");
+        var year = this.date.get("year");
+        let start = new Date(year, month, date, 0, 0, 0);
+        let end = new Date(year, month, date, 23, 59, 59);
+        if (task[1].date.toDate() >= start && task[1].date.toDate() <= end) {
+          return true;
+        } else {
+          false;
+        }
+      },
+      checkDeadlineDate: function(deadline) {
+        let duedate = new Date(deadline[1].datedue);
+        var month = duedate.getMonth();
+        var date = duedate.getDate();
+        var year = duedate.getFullYear();
+        var end = new Date(
+          year,
+          month,
+          date,
+          deadline[1].timedue.hh,
+          deadline[1].timedue.mm,
+          59
+        );
+        var start = new Date(
+          year,
+          month,
+          date - deadline[1].showInAdvance,
+          0,
+          0,
+          0
+        );
+        console.log(start);
+        console.log(end);
+
+        if (this.date >= start && this.date <= end) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      //Fetching all user's tasks
       fetchTasks: function() {
         fb.firestore()
           .collection("tasks")
@@ -115,6 +177,19 @@
           .then((snapshot) => {
             snapshot.forEach((doc) => {
               this.tasks.push([doc.id, doc.data()]);
+            });
+          });
+      },
+      //Fetching user's deadlines
+      fetchDeadLines: function() {
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("deadlinesList")
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              this.deadlines.push([doc.id, doc.data()]);
             });
           });
       },
@@ -128,13 +203,54 @@
         }
         this.$emit("changeMonth", this.SelectedDate);
       },
-      // editTask: function() {
-      //   var doc_id = event.target.getAttribute("id");
-      //   this.$emit("edit", doc_id);
-      // },
+
+      deleteTask: function(event) {
+        let doc_id = event.target.getAttribute("idname");
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .doc(doc_id)
+          .delete()
+          .then(() => {
+            location.reload();
+          });
+      },
+      deleteDeadline: function(event) {
+        let doc_id = event.target.getAttribute("idname");
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("deadlinesList")
+          .doc(doc_id)
+          .delete()
+          .then(() => {
+            location.reload();
+          });
+      },
+      startTask: function(event) {
+        let doc_id = event.target.getAttribute("idname");
+
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .doc(doc_id)
+          .get()
+          .then((doc) => {
+            let totalseconds =
+              doc.data().duration.hh * 3600 + doc.data().duration.mm * 60;
+            console.log(totalseconds);
+            this.$router.push({
+              name: "Timer",
+              params: { taskId: doc_id, timeForTask: totalseconds },
+            });
+          });
+      },
     },
     created() {
       this.fetchTasks();
+      this.fetchDeadLines();
       var passedDate = this.$route.params.date;
       if (Object.keys(passedDate).length != 0) {
         this.date = passedDate;
@@ -143,58 +259,6 @@
       }
     },
   };
-  // =======
-  // import MainNavigation from "./MainNavigation.vue";
-  // import NewTaskForm from "./NewTaskForm.vue";
-  // import dayjs from "dayjs";
-
-  // export default {
-  //   //Register Locally
-  //   components: {
-  //     appNav: MainNavigation,
-  //     NewTaskForm,
-  //   },
-  //   data() {
-  //     return {
-  //       date: dayjs(),
-  //       data: {
-  //         task1: {
-  //           category: "BT3103",
-  //           task: "Discovery Assignment",
-  //           duration: "1 hr 00 min",
-  //           status: "incomplete",
-  //         },
-  //         task2: {
-  //           category: "GEH1000",
-  //           task: "Worksheet",
-  //           duration: "1 hr 30 min",
-  //           status: "incomplete",
-  //         },
-  //       },
-  //     };
-  //   },
-  //   methods: {
-  //     change: function (x) {
-  //       if (x == 0) {
-  //         this.date = this.date.subtract(1, "day");
-  //       } else if (x == 1) {
-  //         this.date = this.date.add(1, "day");
-  //       } else {
-  //         this.date = dayjs();
-  //       }
-  //       this.$emit("changeMonth", this.SelectedDate);
-  // >>>>>>> 5e5a4448d00ad5d27e605bb7f256801b3e84dbb5
-  //     },
-  //   },
-  //   created() {
-  //     var passedDate = this.$route.params.date;
-  //     if (Object.keys(passedDate).length != 0) {
-  //       this.date = passedDate;
-  //     } else {
-  //       this.date = dayjs();
-  //     }
-  //   },
-  // };
 </script>
 
 <style scoped>

@@ -92,6 +92,7 @@
 
 
 <script>
+import coinCal from ".././CoinLogic.js";
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 0.25;
 const ALERT_THRESHOLD = 0.1;
@@ -208,11 +209,13 @@ export default {
     },
   },
 
-  mounted() {
+  async created() {
     this.title = this.taskTitle;
     this.totalTime = this.currentTimer + this.timerTimePassed;
     this.timePassed = this.timerTimePassed;
     this.coinsToEarn = this.coin;
+    this.coinsToEarn = await coinCal(this.currentTimer);
+    //console.log("COINS: " + this.coinsToEarn);
     // to start the timer immediately when the component gets mounted
     this.startTimer();
   },
@@ -230,8 +233,7 @@ export default {
     },
 
     doneTimer: function () {
-      // logic to compute the coins here?
-      this.$emit("end", this.timePassed, this.timeStop);
+      this.$emit("end", this.timePassed, this.timeStop, this.coinsToEarn);
     },
 
     pauseTimer: function () {

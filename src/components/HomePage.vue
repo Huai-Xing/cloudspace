@@ -16,8 +16,10 @@
                 cloudspace help you be productive.
               </p>
               <li v-for="data in task" v-bind:key="data.title">
-                <p id="taskContent">{{ data.category }}: {{ data.title }}</p>
-                <p id="status">Status: {{ data.status }}</p>
+                <p id="taskContent">
+                  {{ data.category }}: {{ data.title }}
+                </p>
+                <p id="taskStatus">Status: {{ data.status }}</p>
               </li>
             </ul>
           </div>
@@ -27,12 +29,11 @@
           <div>
             <ul>
               <p v-show="deadlineEmpty">Hurray! No deadline for this week!</p>
-              <li
-                class="deadlineContent"
-                v-for="data in deadline"
-                v-bind:key="data"
-              >
-                <p>{{ data }}</p>
+              <li v-for="data in deadline" v-bind:key="data">
+                <p id="deadlineContent">
+                  {{ data.category }}: {{ data.title }}
+                </p>
+                <p id="deadlineStatus">Due Date: {{ data.datedue }} @ {{data.timedue.hh}}{{data.timedue.mm}}</p>
               </li>
             </ul>
           </div>
@@ -98,28 +99,40 @@ export default {
         .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
+            //console.log(doc.id, " => ", doc.data());
             this.task.push(doc.data());
           });
         });
-      /*
-      const nextWeek = new Date();
-      nextWeek.setDate(nextWeek.getDate() + 7);
-      nextWeek.setHours(0, 0, 0, 0);
       fb.firestore()
-      .collection("tasks")
-      .doc(uid)
-      .collection("deadlineList")
-      .where("date", ">=", today)
-      .where("date", "<", nextWeek)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-            this.deadline.push(doc.data());
+        .collection("tasks")
+        .doc(uid)
+        .collection("deadlinesList")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            //console.log(doc.id, " => ", doc.data());
+            if (this.checkDate(doc.data().datedue)) {
+              this.deadline.push(doc.data());
+            }
+          });
         });
-      });
-      */
+    },
+    checkDate: function(date) {
+      //console.log(date);
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 7);
+      const year = targetDate.getFullYear();
+      const month = targetDate.getMonth() + 1;
+      const day = targetDate.getDate();
+      //console.log(year +" "+ month +" "+ day);
+      if (year == parseInt(date.substring(0,4))) {
+        if (month == parseInt(date.substring(5,7))) {
+          if (day > parseInt(date.substring(8,10))) {
+            return true;
+          }
+        }
+      }
+      return false;
     },
   },
   created: async function () {
@@ -192,19 +205,6 @@ ul {
 li {
   display: flex;
 }
-.deadlineContent {
-  list-style-type: None;
-  display: block;
-  border-radius: 20px;
-  background-color: rgba(209, 209, 209, 0.5);
-  padding: 2% 15px;
-  margin-bottom: 1%;
-  width: 95%;
-  height: 15px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  cursor: pointer;
-}
 #taskContent {
   border-radius: 20px 0px 0px 20px;
   background-color: rgba(209, 209, 209, 0.5);
@@ -221,7 +221,7 @@ li > p {
   font-size: 11px;
   text-align: left;
 }
-#status {
+#taskStatus {
   border-radius: 0px 20px 20px 0px;
   border-left: 2px solid white;
   background-color: rgba(209, 209, 209, 0.5);
@@ -230,6 +230,29 @@ li > p {
   margin-left: 0;
   height: 15px;
   min-width: 23%;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+#deadlineContent {
+  border-radius: 20px 0px 0px 20px;
+  background-color: rgba(209, 209, 209, 0.5);
+  padding: 2% 15px;
+  margin-bottom: 1%;
+  min-width: 60%;
+  height: 15px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: pointer;
+}
+#deadlineStatus {
+  border-radius: 0px 20px 20px 0px;
+  border-left: 2px solid white;
+  background-color: rgba(209, 209, 209, 0.5);
+  padding: 2%;
+  margin-bottom: 1%;
+  margin-left: 0;
+  height: 15px;
+  min-width: 30%;
   text-overflow: ellipsis;
   cursor: pointer;
 }
