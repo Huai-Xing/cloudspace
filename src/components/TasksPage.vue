@@ -69,7 +69,7 @@
                 <img
                   src="../assets/task/start_btn.png"
                   v-on:click="startTask($event)"
-                  v-bind:taskId="task[0]"
+                  v-bind:idname="task[0]"
                 />
                 <edit-task-form
                   class="editTaskIcon"

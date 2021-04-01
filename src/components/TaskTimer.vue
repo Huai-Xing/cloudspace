@@ -32,10 +32,10 @@
   import fb from "../firebase.js";
 
   export default {
-    props: {
-      timeForTask: Number,
-      taskId: String,
-    },
+    // props: {
+    //   timeForTask: Number,
+    //   taskId: String,
+    // },
     //Register Locally
     components: {
       appNav: MainNavigation,
@@ -54,6 +54,8 @@
         coin: 0,
         breakTimeAllowed: 300,
         taskTitle: this.$route.params.taskTitle,
+        timeForTask: this.$route.params.timeForTask,
+        taskId: this.$route.params.taskId,
       };
     },
     methods: {
@@ -135,7 +137,7 @@
     },
 
     created() {
-      this.currentTimer = this.timeForTask;
+      // this.currentTimer = this.timeForTask;
       this.coin = Math.floor(this.timeForTask / 600);
       this.breakTimeAllowed = (this.timeForTask / 1200) * 300;
     },
