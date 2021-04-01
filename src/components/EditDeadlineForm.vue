@@ -1,33 +1,31 @@
 <template>
   <div id="app">
-    <button type="button" class="btn" @click="showModal">
-      <img src="../assets/task/edit_small.png" />
-    </button>
-    {{ currentTask }}
+    <img src="../assets/task/edit_btn.png" @click="showModal" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
-        Edit
+        You are currently editing: {{ currentDeadline.category }}-
+        {{ currentDeadline.title }}
       </template>
 
       <template v-slot:body>
-        <form id="myform">
+        <form id="edit-deadline-form">
           <label for="title">Title</label>
           <input
-            v-model="updatedtask.title"
+            v-model="updateddeadline.title"
             type="text"
             id="title"
-            placeholder="Give your task a name"
+            v-bind:placeholder="currentDeadline.title"
           />
           <br />
-          <label for="category">Category</label>
+          <label for="edit-task-category">Category</label>
           <select
-            v-model="updatedtask.category"
+            v-model="updateddeadline.category"
             :disabled="disabledselect"
-            id="category"
+            id="edit-deadline-category"
           >
             <option disabled value=""
-              >Please select a catergory for your task</option
+              >Please select a new catergory for your deadline</option
             >
             <option
               v-for="option in categoryList"
@@ -40,31 +38,38 @@
           <br />
           Add a new category
           <input
-            id="newcategory"
+            id="et-newcategory"
             type="text"
             v-model="newcategory"
             placeholder="Enter a new category"
             :disabled="disabledinput"
           />
           <br />
-          Duration
+          Date Due <input type="date" v-model.trim="updateddeadline.datedue" />
+          <br />
+          Time Due
           <vue-timepicker
+            manual-input
             close-on-complete
-            v-model="updatedtask.duration.hh"
-            format="hh"
+            v-model="updateddeadline.timedue.hh"
+            format="HH"
           ></vue-timepicker>
           hr
           <vue-timepicker
+            manual-input
             close-on-complete
-            v-model="updatedtask.duration.mm"
+            v-model="updateddeadline.timedue.mm"
             format="mm"
           ></vue-timepicker>
           min
+          <br />
+          Show Deadline <input v-model="updateddeadline.showInAdvance" /> days
+          in advance
         </form>
       </template>
 
       <template v-slot:footer>
-        <button @click.prevent="updateTask">
+        <button @click.prevent="updateDeadline">
           Update
         </button>
       </template>
@@ -90,46 +95,45 @@
     data() {
       return {
         isModalVisible: false,
-        updatedtask: {
+        updateddeadline: {
           category: "",
           title: "",
-          duration: {
+          status: "Incomplete",
+          timedue: {
             hh: "",
             mm: "",
           },
-          breakTime: 0,
-          actualTime: 0,
-          coinsEarned: 0,
+          datedue: null,
+          showInAdvance: 0,
         },
         newcategory: "",
         disabledselect: false,
         disabledinput: false,
         user: fb.auth().currentUser.uid,
         categoryList: [],
-        currentTask: [],
+        currentDeadline: [],
       };
     },
     methods: {
       fetchCategoryList: function() {
-        console.log(this.user);
         fb.firestore()
           .collection("users")
           .doc(this.user)
           .get()
           .then((doc) => {
             this.categoryList = doc.data().categoryList;
-            console.log(this.categoryList);
           });
       },
       fetchToBeEdited: function() {
         fb.firestore()
           .collection("tasks")
           .doc(this.user)
-          .collection("tasksList")
+          .collection("deadlinesList")
           .doc(this.idname)
           .get()
           .then((doc) => {
-            this.currentTask = doc.data();
+            this.currentDeadline = doc.data();
+            this.updateddeadline = doc.data();
           });
       },
       showModal() {
@@ -138,14 +142,12 @@
       closeModal() {
         this.isModalVisible = false;
       },
-      updateTask() {
-        console.log(this.categoryList);
-
+      updateDeadline() {
         //managing newcategories
         if (this.newcategory != "") {
           this.categoryList.push(this.newcategory);
-          console.log(this.categoryList);
-          this.updatedtask.category = this.newcategory;
+
+          this.updateddeadline.category = this.newcategory;
 
           fb.firestore()
             .collection("users")
@@ -155,29 +157,31 @@
             });
         } else;
 
-        //adding task to tasksList
+        //updating task to tasksList
         fb.firestore()
           .collection("tasks")
           .doc(this.user)
-          .collection("tasksList")
-          .add(this.updatedtask);
+          .collection("deadlinesList")
+          .doc(this.idname)
+          .update(this.updateddeadline)
+          .then(() => {
+            this.isModalVisible = false;
+            location.reload();
+          });
 
         //reset values
-        (this.updatedtask = {
+        (this.updateddeadline = {
           category: "",
           title: "",
-          status: "incomplete",
+          status: "Incomplete",
           duration: {
             hh: "",
             mm: "",
           },
-          breakTime: 0,
-          actualTime: 0,
-          coinsEarned: 0,
         }),
           (this.newcategory = "");
-        this.isModalVisible = false;
-        document.getElementById("myform").reset();
+        // this.isModalVisible = false;
+        document.getElementById("edit-deadline-form").reset();
         console.log("this method works");
       },
     },
@@ -189,7 +193,7 @@
           this.disabledselect = true;
         }
       },
-      "updatedtask.category": function(val) {
+      "updateddeadline.category": function(val) {
         if (val == "") {
           this.disabledinput = false;
         } else {
@@ -204,4 +208,11 @@
   };
 </script>
 
-<style scoped></style>
+<style scoped>
+  img {
+    height: 28px;
+    width: auto;
+    margin: 2px;
+    text-align: center;
+  }
+</style>
