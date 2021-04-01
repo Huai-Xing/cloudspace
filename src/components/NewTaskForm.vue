@@ -89,7 +89,7 @@
       VueTimepicker,
     },
     props: {
-      taskDate: Date,
+      taskDate: Object,
     },
     data() {
       return {

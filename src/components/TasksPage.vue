@@ -71,7 +71,7 @@
                   v-on:click="startTask($event)"
                   v-bind:idname="task[0]"
                 />
-                <edit-task-form v-bind:idname="task[0]"></edit-task-form>
+                <edit-task-form class="editTaskIcon" v-bind:idname="task[0]"></edit-task-form>
                 <img
                   src="../assets/task/trash_btn.png"
                   v-bind:idname="task[0]"
@@ -206,7 +206,7 @@ export default {
       } else {
         this.date = dayjs();
       }
-      this.isToday = this.date.isSame(dayjs());
+      this.isToday = this.date.isSame(dayjs(), "day");
     },
 
     deleteTask: function (event) {
@@ -265,7 +265,7 @@ export default {
     if (Object.keys(passedDate).length != 0) {
       // if task page came from calendar
       this.date = passedDate.date;
-      this.isToday = this.date.isSame(dayjs());
+      this.isToday = this.date.isSame(dayjs(), "day");
     } else {
       this.date = dayjs();
     }
@@ -374,5 +374,8 @@ img {
   width: auto;
   margin: 2px;
   text-align: center;
+}
+.editTaskIcon {
+  display: inline-block;
 }
 </style>
