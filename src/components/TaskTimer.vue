@@ -1,47 +1,25 @@
 <template>
-  <div>
-    <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+<div>
 
-    <div class="timer-content">
-      <countdown-timer
-        v-if="showTimer"
-        v-on:switch="switchTimer"
-        v-on:end="endTimer"
-        v-on:cancel="cancelTimer"
-        v-bind:currentTimer="currentTimer"
-        :timerTimePassed="timerTimePassed"
-        :taskTitle="taskTitle"
-        :coin="coin"
-      ></countdown-timer>
-      <countup-timer
-        v-else-if="showBreak"
-        v-on:switch="switchTimer"
-        v-bind:breakTime="currentBreak"
-        :breakTimePassed="breakTimePassed"
-        :breakTimeAllowed="breakTimeAllowed"
-      ></countup-timer>
-    </div>
+  <div class="timer-content">
+    <countdown-timer v-if="showTimer" v-on:switch="switchTimer" v-on:end="endTimer" v-on:cancel="cancelTimer" v-bind:currentTimer="currentTimer" :timerTimePassed="timerTimePassed" :taskTitle="taskTitle" :coin="coin"></countdown-timer>
+    <countup-timer v-else-if="showBreak" v-on:switch="switchTimer" v-bind:breakTime="currentBreak" :breakTimePassed="breakTimePassed" :breakTimeAllowed="breakTimeAllowed"></countup-timer>
   </div>
+</div>
 </template>
 
-
 <script>
-import MainNavigation from "./MainNavigation.vue";
 import CountDownTimerComponent from "./Timer/CountDownTimerComponent.vue";
 import CountUpTimerComponent from "./Timer/CountUpTimerComponent.vue";
 import fb from "../firebase.js";
 
 export default {
-  /*
-  props: {
-    timeForTask: Number,
-    coinForTask: Number,
-    taskId: String,
-  },*/
+  // props: {
+  //   timeForTask: Number,
+  //   taskId: String,
+  // },
   //Register Locally
   components: {
-    appNav: MainNavigation,
     "countdown-timer": CountDownTimerComponent,
     "countup-timer": CountUpTimerComponent,
   },
@@ -54,13 +32,15 @@ export default {
       currentTimer: 10,
       timerTimePassed: 0,
       breakTimePassed: 0,
-      taskTitle: "Cloudspace Timer Task",
-      coin: 1,
+      coin: 0,
       breakTimeAllowed: 300,
+      taskTitle: this.$route.params.taskTitle,
+      timeForTask: this.$route.params.timeForTask,
+      taskId: this.$route.params.taskId,
     };
   },
   methods: {
-    switchTimer: function (x, y, z) {
+    switchTimer: function(x, y, z) {
       this.showTimer = !x;
       this.showBreak = x;
       if (x) {
@@ -71,35 +51,50 @@ export default {
         this.breakTimePassed = z;
       }
     },
-    endTimer: function (x, y) {
+    endTimer: function(x, y, z) {
       //y is amount of time taken to end task after timer is up
+      //z is coins
       console.log("complete " + x);
       console.log("extra " + y);
+      this.coin = z;
       this.coinPenalty(y);
       this.timerTimePassed = x + y;
-      //this.updateData("completed");
-      this.$router.push({
-        name: "Tasks",
-      });
+      this.updateData("Completed");
     },
-    cancelTimer: function () {
+    cancelTimer: function() {
       console.log("cancel");
       this.coin = 0;
-      //this.updateData("cancelled");
       this.$router.push({
         name: "Tasks",
       });
     },
-    coinPenalty: function (x) {
+    coinPenalty: function(x) {
       var penalty = Math.floor(this.currentBreak / this.breakTimeAllowed);
       if (x > 60) {
         penalty += 1;
       }
-      this.coin = this.coin - penalty;
+      this.coin = Math.max(this.coin - penalty, 0);
     },
-    updateData: function (x) {
+    updateData: function(x) {
       var currentUser = fb.auth().currentUser;
       var uid = currentUser.uid;
+      var localUser;
+      fb.firestore()
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((doc) => {
+          localUser = doc.data().user;
+        })
+        .then(() => {
+          localUser.coins = localUser.coins + this.coin;
+          fb.firestore()
+            .collection("users")
+            .doc(uid)
+            .update({
+              user: localUser,
+            });
+        });
       fb.firestore()
         .collection("tasks")
         .doc(uid)
@@ -108,7 +103,7 @@ export default {
         .update({
           actualTime: this.timerTimePassed,
           breakTime: this.currentBreak,
-          coinsEarned: this.coins,
+          coinsEarned: this.coin,
           status: x,
         })
         .then(() => {
@@ -118,18 +113,17 @@ export default {
         });
     },
     convertToSecond: function(x) {
-      return (x.hh * 3600) + (x.mm * 60);
+      return x.hh * 3600 + x.mm * 60;
     },
   },
-  /*
-  mounted() {
+
+  created() {
     this.currentTimer = this.timeForTask;
-    this.coin = this.coinForTask;
-    this.breakTimeAllowed = (this.timeForTask / 1200) * 300
-  }*/
+    this.coin = Math.floor(this.timeForTask / 600);
+    this.breakTimeAllowed = (this.timeForTask / 1200) * 300;
+  },
 };
 </script>
-
 
 <style scoped>
 .timer-content {

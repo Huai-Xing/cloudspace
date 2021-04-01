@@ -49,13 +49,12 @@ export default {
     fetchData: function() {
       var uid = firebase.auth().currentUser.uid;
       firebase.firestore()
-        .collection("users")
-        .doc(uid)
         .collection("tasks")
+        .doc(uid)
+        .collection("tasksList")
         .get()
         .then((snap) =>
           snap.forEach((doc) => {
-            //console.log(doc.data());
             if (this.compareDate(doc.data().date.toDate(), this.date)) {
               this.tasksToday.push(doc.data());
               this.data.push(doc.data().title);
@@ -73,12 +72,16 @@ export default {
       }
     },
     goToTaskPage: function() {
+<<<<<<< HEAD
       this.$router.push({
         name: "Tasks",
         params: {
           date: this.date
         }
       }); // push with date
+=======
+      this.$router.push({ name: "Tasks", params: { date: this.date.format() } }); // push with date
+>>>>>>> master_p
     }
   },
   created() {

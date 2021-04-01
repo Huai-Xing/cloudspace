@@ -39,7 +39,51 @@
     </form>
   </div>
 
-  <img id="rightphoto" src="../assets/background4_signin.png" />
+<script>
+  import fb from "../firebase";
+  export default {
+    data() {
+      return {
+        user: {
+          name: "",
+          email: "",
+          password: "",
+          DOB: "",
+          imageIdx: 0,
+          coins: 0,
+          trees: 0,
+        },
+      };
+    },
+    // mtds
+    methods: {
+      letsgo: function() {
+        var email = this.user.email;
+        var password = this.user.password;
+        var user = this.user;
+        //Signing up
+
+        fb.auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then((cred) => {
+            alert("Successfully registered");
+
+            console.log("Registered user: " + cred.user.uid);
+            fb.firestore()
+              .collection("users")
+              .doc(cred.user.uid)
+              .set({
+                user,
+                categoryList: [],
+              });
+          })
+          .then(() => {
+            this.$router.push({ name: "Home" });
+          })
+
+          .catch((error) => {
+            alert(error.message);
+          });
 
   <!-- SignUpPage Content -->
 

@@ -71,7 +71,7 @@ export default [
   },
 
   {
-    path: "/signin/calendar",
+    path: "/signin/calendar/",
     name: "Calendar",
     component: CalendarPage,
     props: true,
@@ -107,7 +107,7 @@ export default [
     },
   },
   {
-    path: "/signin/tasks",
+    path: "/signin/tasks/:date",
     name: "Tasks",
     component: TasksPage,
     props: true,
@@ -126,7 +126,7 @@ export default [
   },
   {
     // path: "/signin/tasks/timer/:id",
-    path: "/signin/tasks/timer",
+    path: "/signin/tasks/timer/:taskId/:timeForTask/:taskTitle",
     name: "Timer",
     component: TaskTimer,
     props: true,

@@ -1,30 +1,24 @@
 /* jshint esversion: 6 */
 
-import { Line } from 'vue-chartjs';
-import database from '../../firebase.js'; //Import database
+import { Line } from "vue-chartjs";
+import fb from "../../firebase.js"; //Import database
 
 export default {
   extends: Line,
-  data: function () {
+  data: function() {
     return {
       datacollection: {
         labels: [],
-        datasets: [
-          {},
-        ],
+        datasets: [{}],
       },
 
-      options: {
-
-      },
+      options: {},
     };
   },
 
   methods: {
-    fetchItems: function () {
-
-
-        this.renderChart(this.datacollection, this.options); // render the chart
+    fetchItems: function() {
+      this.renderChart(this.datacollection, this.options); // render the chart
     },
   },
 

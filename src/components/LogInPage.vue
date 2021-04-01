@@ -43,17 +43,49 @@
 </template>
 
 <script>
-import fb from "../firebase";
-export default {
-  data() {
-    return {
-      user: {
-        name: "",
-        email: "",
-        password: "",
-        DOB: "",
-        imageIdx: 0,
-        coins: 0,
+  import fb from "../firebase";
+  export default {
+    data() {
+      return {
+        user: {
+          name: "",
+          email: "",
+          password: "",
+          DOB: "",
+          imageIdx: 0,
+          coins: 0,
+          trees: 0,
+        },
+      };
+    },
+    // mtds
+    methods: {
+      letsgo: function() {
+        var email = this.user.email;
+        var password = this.user.password;
+        // var user = this.user;
+        //Signing up
+
+        //Singing in
+        fb.auth()
+          .signInWithEmailAndPassword(email, password)
+          .then((cred) => {
+            alert("Successfully logged into " + cred.user.email);
+            // console.log(cred.user.uid);
+          })
+          .then(() => {
+            this.$router.push({
+              name: "Home",
+              params: { name: this.user.email },
+            });
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+
+        this.user.email = "";
+        this.user.password = "";
+        event.target.reset();
       },
     };
   },

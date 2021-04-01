@@ -1,8 +1,6 @@
 <template>
 <div id="app">
-  <button type="button" class="btn" @click="showModal">
-    <img src="../assets/task/add1.png" />
-  </button>
+  <img src="../assets/task/add_btn.png" @click="showModal" />
 
   <Modal v-show="isModalVisible" @close="closeModal">
     <template v-slot:header>
@@ -10,25 +8,31 @@
     </template>
 
     <template v-slot:body>
-      <form id="myform">
-        <label for="title">Title</label>
-        <input v-model="newtask.title" type="text" id="title" placeholder="Give your task a name" />
+      <form id="new-task-form">
+        <label for="tasktitle">Title</label>
+        <input v-model.trim="newtask.title" type="text" id="tasktitle" placeholder="Give your task a name" />
+        <div v-if="!$v.newtask.title.required">
+          Field is required
+        </div>
+
         <br />
-        <label for="category">Category</label>
-        <select v-model="newtask.category" :disabled="disabledselect" id="category">
+        <label for="new-task-category">Category</label>
+        <select v-model="newtask.category" :disabled="disabledselect" id="new-task-category">
           <option disabled value="">Please select a category for your task</option>
           <option v-for="option in categoryList" v-bind:value="option" v-bind:key="option">
             {{ option }}
+            <img src="../assets/task/trash_btn.png" v-on:click="deleteCategory($event)" />
           </option>
         </select>
         <br />
         Add a new category
-        <input id="newcategory" type="text" v-model="newcategory" placeholder="Enter a new category" :disabled="disabledinput" />
+        <input id="nt-newcategory" type="text" v-model="newcategory" placeholder="Enter a new category" :disabled="disabledinput" />
+        <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
         <br />
         Duration
-        <vue-timepicker close-on-complete v-model="newtask.duration.hh" format="hh"></vue-timepicker>
+        <vue-timepicker manual-input close-on-complete v-model="newtask.duration.hh" format="HH"></vue-timepicker>
         hr
-        <vue-timepicker close-on-complete v-model="newtask.duration.mm" format="mm"></vue-timepicker>
+        <vue-timepicker manual-input close-on-complete v-model="newtask.duration.mm" format="mm"></vue-timepicker>
         min
       </form>
     </template>
@@ -47,11 +51,18 @@ import Modal from "./Modal";
 import VueTimepicker from "vue2-timepicker";
 import "vue2-timepicker/dist/VueTimepicker.css";
 import fb from "../firebase";
+import {
+  required
+} from "vuelidate/lib/validators";
+
 export default {
   name: "App",
   components: {
     Modal,
     VueTimepicker,
+  },
+  props: {
+    taskDate: Object,
   },
   data() {
     return {
@@ -59,7 +70,7 @@ export default {
       newtask: {
         category: "",
         title: "",
-        status: "incomplete",
+        status: "Incomplete",
         duration: {
           hh: "",
           mm: "",
@@ -67,71 +78,102 @@ export default {
         breakTime: 0,
         actualTime: 0,
         coinsEarned: 0,
+        date: this.taskDate.toDate(),
       },
       newcategory: "",
       disabledselect: false,
       disabledinput: false,
       user: fb.auth().currentUser.uid,
       categoryList: [],
+      errors: {
+        title: "",
+        category: "",
+      },
     };
   },
-  methods: {
-    fetchCategoryList: function() {
-      console.log(this.user);
+  sendTask() {
+    //managing newcategories
+    if (this.newcategory != "") {
+      this.categoryList.push(this.newcategory);
+      console.log(this.categoryList);
+      this.newtask.category = this.newcategory;
       fb.firestore()
         .collection("users")
         .doc(this.user)
         .get()
         .then((doc) => {
           this.categoryList = doc.data().categoryList;
-          console.log(this.categoryList);
         });
     },
     showModal() {
-      this.isModalVisible = true;
-    },
-    closeModal() {
-      this.isModalVisible = false;
-    },
-    sendTask() {
-      //managing newcategories
-      if (this.newcategory != "") {
-        this.categoryList.push(this.newcategory);
-        console.log(this.categoryList);
-        this.newtask.category = this.newcategory;
+        this.resetForm();
+        this.isModalVisible = true;
+      },
+      closeModal() {
+        this.isModalVisible = false;
+      },
+      resetForm() {
+        (this.newtask = {
+          category: "",
+          title: "",
+          status: "Incomplete",
+          duration: {
+            hh: "",
+            mm: "",
+          },
+          breakTime: 0,
+          actualTime: 0,
+          coinsEarned: 0,
+          date: this.taskDate.toDate(),
+        }),
+        (this.newcategory = "");
+        document.getElementById("new-task-form").reset();
+      },
+      sendTask() {
+        //managing newcategories
+        if (this.newcategory != "") {
+          if (!this.categoryList.includes(this.newcategory)) {
+            this.categoryList.push(this.newcategory);
+            console.log(this.categoryList);
+            this.newtask.category = this.newcategory;
+
+            fb.firestore()
+              .collection("users")
+              .doc(this.user)
+              .update({
+                categoryList: this.categoryList,
+              });
+          } else {
+            // this.errors.category = "Category already exists";
+            alert("Error - this category already exists!");
+            event.preventdefault();
+          }
+        } else;
+        console.log(this.newtask);
+
+        //adding task to tasksList
         fb.firestore()
-          .collection("users")
+          .collection("tasks")
           .doc(this.user)
-          .update({
-            categoryList: this.categoryList,
-          });
-      } else;
-      //adding task to tasksList
-      fb.firestore()
-        .collection("tasks")
-        .doc(this.user)
-        .collection("tasksList")
-        .add(this.newtask);
-      //reset values
-      (this.newtask = {
-        category: "",
-        title: "",
-        status: "incomplete",
-        duration: {
-          hh: "",
-          mm: "",
-        },
-        breakTime: 0,
-        actualTime: 0,
-        coinsEarned: 0,
-      }),
-      (this.newcategory = "");
-      this.isModalVisible = false;
-      document.getElementById("myform").reset();
-      console.log("this method works");
+          .collection("tasksList")
+          .add(this.newtask)
+          .then(() => location.reload());
+
+        //reset values
+        this.isModalVisible = false;
+        document.getElementById("new-task-form").reset();
+        this.resetForm();
+      },
+  },
+  validations: {
+    newtask: {
+      title: {
+        required,
+      },
     },
   },
-  watch: {
+},
+watch: {
     newcategory: function(val) {
       if (val == "") {
         this.disabledselect = false;
@@ -154,13 +196,19 @@ export default {
 </script>
 
 <style scoped>
-.btn {
-  padding: 2px 2px 2px 2px;
+img {
+  width: 38px;
+  height: 38px;
 }
 
-.btn>img {
-  height: 20px;
-  width: 20px;
-  vertical-align: middle;
+button {
+  font-family: Lora;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  width: 100px;
+  padding: 5px 12px 5px 12px;
 }
 </style>
