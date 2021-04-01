@@ -86,9 +86,9 @@ input {
   font-style: italic;
 }
 
-a{
-  position: absolute;
-  right: 5px;
-  top: 175px;
+a {
+  position: relative;
+  right: 28px;
+  top: 7px;
 }
 </style>
