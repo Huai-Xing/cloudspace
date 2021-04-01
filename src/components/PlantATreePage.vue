@@ -29,9 +29,8 @@
       <tree-purchase
         :treeName="data[visibleImg].name"
         :treePrice="data[visibleImg].price"
-        :coins="coins"
+        :afford="afford(treePrice)"
       />
-
     </div>
   </div>
 </template>
@@ -129,16 +128,20 @@ export default {
       }
       dots[this.visibleImg].className += " active";
     },
-  fetchCoins() {
+    fetchCoins() {
       var uid = firebase.auth().currentUser.uid;
-      firebase.firestore()
+      firebase
+        .firestore()
         .collection("users")
         .doc(uid)
         .get()
         .then((doc) => {
           this.coins = doc.data().user.coins;
-        })
-    }
+        });
+    },
+    afford: function (price) {
+      return this.coins >= price;
+    },
   },
   mounted() {
     document.getElementsByClassName("treeDots")[this.visibleImg].className +=
@@ -146,7 +149,7 @@ export default {
   },
   created() {
     this.fetchCoins();
-  }
+  },
 };
 </script>
 
