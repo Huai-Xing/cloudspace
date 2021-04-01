@@ -23,6 +23,8 @@ function countAdvance(x, taskList) {
     //console.log(averageTR);
     if (averageTR < 0.9 || averageTR > 1.1) {
         return getAdvanceCoin(basicCoins, averageTR);
+    } else {
+        return basicCoins;
     }
 }
 
