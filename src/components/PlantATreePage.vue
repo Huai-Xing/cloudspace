@@ -129,7 +129,7 @@ export default {
       }
       dots[this.visibleImg].className += " active";
     },
-    fetchCoins() {
+  fetchCoins() {
       var uid = firebase.auth().currentUser.uid;
       firebase.firestore()
         .collection("users")

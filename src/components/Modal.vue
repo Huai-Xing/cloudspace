@@ -67,24 +67,26 @@
   .modal-footer {
     padding: 15px;
     display: flex;
+    font-family: Lora;
   }
 
   .modal-header {
     position: relative;
-    border-bottom: 1px solid #eeeeee;
+    /* border-bottom: 1px solid #eeeeee; */
     color: #4aae9b;
-    justify-content: space-between;
+    justify-content: center;
+    font-weight: bold;
   }
 
   .modal-footer {
-    border-top: 1px solid #eeeeee;
-    flex-direction: column;
-    justify-content: flex-end;
+    /* border-top: 1px solid #eeeeee; */
+    justify-content: center;
+    text-align: center;
   }
 
   .modal-body {
     position: relative;
-    padding: 20px 10px;
+    padding: 15px 30px;
   }
 
   .btn-close {
@@ -93,7 +95,7 @@
     right: 0;
     border: none;
     font-size: 20px;
-    padding: 10px;
+    padding: 10px 15px;
     cursor: pointer;
     font-weight: bold;
     color: #4aae9b;
@@ -113,6 +115,6 @@
 
   .modal-fade-enter-active,
   .modal-fade-leave-active {
-    transition: opacity 0.5s ease;
+    transition: opacity 0.3s ease;
   }
 </style>

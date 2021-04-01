@@ -50,7 +50,6 @@ export default {
     return {
       isModalVisible: false,
       bought: false,
-      afford: true,
     };
   },
   methods: {
@@ -68,9 +67,9 @@ export default {
         "user.coins": newCoins,
       }).then(() => location.reload());
     },
-  },
-  created() {
-    this.afford = this.coins >= this.treePrice;
+    afford() {
+      return this.coins >= this.treePrice;
+    }
   },
 };
 </script>
@@ -129,7 +128,7 @@ export default {
   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
   border: none;
   cursor: pointer;
-  width: 50px;
-  padding: 4px 10px 4px 10px;
+  width: 100px;
+  padding: 5px 12px 5px 12px;
 }
 </style>

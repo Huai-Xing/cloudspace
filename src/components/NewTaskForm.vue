@@ -212,16 +212,18 @@
 </script>
 
 <style scoped>
-  /* .btn {
-    padding: 2px 2px 2px 2px;
-  }
-  .btn > img {
-    height: 20px;
-    width: 20px;
-    vertical-align: middle;
-  } */
   img {
     width: 38px;
     height: 38px;
+  }
+  button {
+    font-family: Lora;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  width: 100px;
+  padding: 5px 12px 5px 12px;
   }
 </style>
