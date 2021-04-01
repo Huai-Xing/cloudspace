@@ -67,7 +67,6 @@ export default {
         .get()
         .then((snap) =>
           snap.forEach((doc) => {
-            //console.log(doc.data());
             if (this.compareDate(doc.data().date.toDate(), this.date)) {
               this.tasksToday.push(doc.data());
               this.data.push(doc.data().title);
