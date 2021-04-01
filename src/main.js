@@ -2,7 +2,9 @@
 import Vue from "vue";
 import App from "./App.vue";
 import Routes from "./routes.js"; // Register routes
-// import fb from "./firebase";
+//Form validation
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
 
 import VueRouter from "vue-router";
 Vue.use(VueRouter);

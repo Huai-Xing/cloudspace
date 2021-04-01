@@ -11,11 +11,14 @@
         <form id="new-task-form">
           <label for="tasktitle">Title</label>
           <input
-            v-model="newtask.title"
+            v-model.trim="newtask.title"
             type="text"
             id="tasktitle"
             placeholder="Give your task a name"
           />
+          <div v-if="!$v.newtask.title.required">
+            Field is required
+          </div>
           <br />
           <label for="new-task-category">Category</label>
           <select
@@ -81,6 +84,7 @@
   import VueTimepicker from "vue2-timepicker";
   import "vue2-timepicker/dist/VueTimepicker.css";
   import fb from "../firebase";
+  import { required } from "vuelidate/lib/validators";
 
   export default {
     name: "App",
@@ -187,6 +191,13 @@
         this.isModalVisible = false;
         document.getElementById("new-task-form").reset();
         this.resetForm();
+      },
+    },
+    validations: {
+      newtask: {
+        title: {
+          required,
+        },
       },
     },
     watch: {

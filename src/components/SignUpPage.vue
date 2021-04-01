@@ -80,6 +80,7 @@
           DOB: "",
           imageIdx: 0,
           coins: 0,
+          trees: 0,
         },
       };
     },
