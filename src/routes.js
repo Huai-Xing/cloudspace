@@ -99,7 +99,7 @@ export default [
     },
   },
   {
-    path: "/signin/tasks",
+    path: "/signin/tasks/",
     name: "Tasks",
     component: TasksPage,
     props: true,
@@ -116,7 +116,7 @@ export default [
   },
   {
     // path: "/signin/tasks/timer/:id",
-    path: "/signin/tasks/timer",
+    path: "/signin/tasks/timer/",
     name: "Timer",
     component: TaskTimer,
     props: true,

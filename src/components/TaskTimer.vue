@@ -90,7 +90,7 @@
         if (x > 60) {
           penalty += 1;
         }
-        this.coin = Math.max(this.coin - penalty,0);
+        this.coin = Math.max(this.coin - penalty, 0);
       },
       updateData: function(x) {
         var currentUser = fb.auth().currentUser;
