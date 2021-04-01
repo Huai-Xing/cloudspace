@@ -42,7 +42,7 @@ import firebase from "../../firebase";
 
 export default {
   name: "App",
-  props: ["treeName", "treePrice", "coins"],
+  props: ["treeName", "treePrice", "afford"],
   components: {
     Modal,
   },
@@ -66,9 +66,6 @@ export default {
       firebase.firestore().collection("users").doc(uid).update({
         "user.coins": newCoins,
       }).then(() => location.reload());
-    },
-    afford() {
-      return this.coins >= this.treePrice;
     }
   },
 };
