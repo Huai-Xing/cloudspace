@@ -19,6 +19,7 @@
           <div v-if="!$v.newtask.title.required">
             Field is required
           </div>
+
           <br />
           <label for="new-task-category">Category</label>
           <select

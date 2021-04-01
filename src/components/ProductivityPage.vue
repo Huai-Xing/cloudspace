@@ -3,7 +3,7 @@
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
     <productivity></productivity>
-
+    {{ trees }}
     <!-- ProductivityPage contents -->
     <div class="content-item">
       <div class="top-row" id="chart">
@@ -57,12 +57,13 @@
     },
     methods: {
       fetchNumOfTrees: function() {
-        fb.firestore
+        fb.firestore()
           .collection("users")
           .doc(this.user)
           .get()
           .then((doc) => {
-            this.trees = doc.data().trees;
+            console.log(doc.data().user.trees);
+            this.trees = doc.data().user.trees;
           });
       },
     },
