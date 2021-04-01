@@ -77,9 +77,6 @@
         this.coinPenalty(y);
         this.timerTimePassed = x + y;
         this.updateData("Completed");
-        this.$router.push({
-          name: "Tasks",
-        });
       },
       cancelTimer: function() {
         console.log("cancel");
@@ -93,7 +90,7 @@
         if (x > 60) {
           penalty += 1;
         }
-        this.coin = this.coin - penalty;
+        this.coin = Math.max(this.coin - penalty,0);
       },
       updateData: function(x) {
         var currentUser = fb.auth().currentUser;
