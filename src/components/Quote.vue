@@ -36,7 +36,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      var idx = Math.floor(quotes.length/dayjs().get("Date")) + dayjs().get("M");
+      var idx = (Math.floor(quotes.length/dayjs().get("Date")) + dayjs().get("M") ) % quotes.length;
       this.quote = quotes[idx].quote;
       this.author = quotes[idx].author;
     },
