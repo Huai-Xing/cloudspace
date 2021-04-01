@@ -14,7 +14,7 @@
     <div class="content-item">
       <div id="how-cloudspace-works">
         <h2 class="content-section-header">
-          <strong> How Cloudspace Works </strong>
+           How Cloudspace Works
         </h2>
         <h3 class="content-subheader">
           Keep your life in check, in time, and in balance.
@@ -56,7 +56,7 @@
     <div class="content-item">
       <div id="why-cloudspace">
         <h2 class="content-section-header">
-          <strong> Why Cloudspace? </strong>
+          Why Cloudspace?
         </h2>
         <h3 class="content-subheader">
           To help Kranji Woodlands site to recover its green lands!
@@ -171,11 +171,13 @@
   /* Styling for the contents begins here */
   .content-section-header {
     text-align: center;
-    font-size: 15px;
+    font-size: 22px;
+    font-weight: 600;
   }
 
   .content-subheader {
     text-align: center;
+    font-size: 15px;
   }
 
   /* Create three equal columns that floats next to each other */
