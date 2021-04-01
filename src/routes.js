@@ -115,7 +115,6 @@ export default [
     },
   },
   {
-    // path: "/signin/tasks/timer/:id",
     path: "/signin/tasks/timer/:taskId/:timeForTask/:taskTitle",
     name: "Timer",
     component: TaskTimer,
