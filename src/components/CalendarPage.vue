@@ -87,10 +87,10 @@ export default {
 <style scoped>
 .cal {
   position: fixed;
-  margin-top: -30px;
+  margin-top: 0px;
   margin-left: 240px;
   margin-right: 80px;
-  z-index: -1;
+  z-index: 0;
 }
 ul {
   flex-wrap: wrap;
