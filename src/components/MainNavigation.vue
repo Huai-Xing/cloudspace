@@ -1,81 +1,51 @@
 <template>
-  <div>
-    <ul class="top-nav-list">
-      <li class="top-nav">
-        <span v-on:click.prevent="signout"> Sign Out </span>
+<div>
+  <ul class="top-nav-list">
+    <li class="top-nav">
+      <span v-on:click.prevent="signout"> Sign Out </span>
+    </li>
+
+    <li class="top-nav-left">
+      <router-link :to="{ name: 'Profile' }" @click.native="isActive = 'Profile'" v-bind:class="{ active: isActive == 'Profile' }" exact>
+        Profile
+      </router-link>
+    </li>
+  </ul>
+
+  <div class="left-nav-section">
+    <ul class="left-nav-list">
+      <li class="left-nav">
+        <router-link :to="{ name: 'Home' }" @click.native="isActive = 'Home'" v-bind:class="{ active: isActive == 'Home' }" exact>
+          <img src="../assets/nav/nav_home.png" /> Home
+        </router-link>
       </li>
 
-      <li class="top-nav-left">
-        <router-link
-          :to="{ name: 'Profile' }"
-          @click.native="isActive = 'Profile'"
-          v-bind:class="{ active: isActive == 'Profile' }"
-          exact
-        >
-          Profile
+      <li class="left-nav">
+        <router-link :to="{ name: 'Calendar' }" @click.native="isActive = 'Calendar'" v-bind:class="{ active: isActive == 'Calendar' }" exact>
+          <img src="../assets/nav/nav_calendar.png" /> Calendar
+        </router-link>
+      </li>
+
+      <li class="left-nav">
+        <router-link :to="{ name: 'Productivity' }" @click.native="isActive = 'Productivity'" v-bind:class="{ active: isActive == 'Productivity' }" exact>
+          <img src="../assets/nav/nav_productivity.png" /> Productivity
+        </router-link>
+      </li>
+
+      <li class="left-nav">
+        <router-link :to="{ name: 'Tasks', params: { date: this.date.format() }}" @click.native="isActive = 'Tasks'" v-bind:class="{ active: isActive == 'Tasks' }" exact>
+          <img src="../assets/nav/nav_task.png" /> Tasks
+        </router-link>
+      </li>
+
+      <li class="left-nav">
+        <router-link :to="{ name: 'PlantTree' }" @click.native="isActive = 'PlantTree'" v-bind:class="{ active: isActive == 'PlantTree' }" exact>
+          <img src="../assets/nav/nav_plant.png" /> Plant A Tree
         </router-link>
       </li>
     </ul>
-
-    <div class="left-nav-section">
-      <ul class="left-nav-list">
-        <li class="left-nav">
-          <router-link
-            :to="{ name: 'Home' }"
-            @click.native="isActive = 'Home'"
-            v-bind:class="{ active: isActive == 'Home' }"
-            exact
-          >
-            <img src="../assets/nav/nav_home.png" /> Home
-          </router-link>
-        </li>
-
-        <li class="left-nav">
-          <router-link
-            :to="{ name: 'Calendar' }"
-            @click.native="isActive = 'Calendar'"
-            v-bind:class="{ active: isActive == 'Calendar' }"
-            exact
-          >
-            <img src="../assets/nav/nav_calendar.png" /> Calendar
-          </router-link>
-        </li>
-
-        <li class="left-nav">
-          <router-link
-            :to="{ name: 'Productivity' }"
-            @click.native="isActive = 'Productivity'"
-            v-bind:class="{ active: isActive == 'Productivity' }"
-            exact
-          >
-            <img src="../assets/nav/nav_productivity.png" /> Productivity
-          </router-link>
-        </li>
-
-        <li class="left-nav">
-          <router-link
-            :to="{ name: 'Tasks', params: { date: this.date.format() }}"
-            @click.native="isActive = 'Tasks'"
-            v-bind:class="{ active: isActive == 'Tasks' }"
-            exact
-          >
-            <img src="../assets/nav/nav_task.png" /> Tasks
-          </router-link>
-        </li>
-
-        <li class="left-nav">
-          <router-link
-            :to="{ name: 'PlantTree' }"
-            @click.native="isActive = 'PlantTree'"
-            v-bind:class="{ active: isActive == 'PlantTree' }"
-            exact
-          >
-            <img src="../assets/nav/nav_plant.png" /> Plant A Tree
-          </router-link>
-        </li>
-      </ul>
-    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -98,7 +68,7 @@ export default {
     }
   },*/
   methods: {
-    signout: function () {
+    signout: function() {
       fb.auth()
         .signOut()
         .then(() => {
@@ -126,12 +96,14 @@ export default {
 div {
   float: left;
 }
+
 span {
   font-size: 14px;
   color: rgb(209, 5, 5);
   text-decoration: underline;
   cursor: pointer;
 }
+
 .top-nav-list {
   font-family: Lora;
   position: absolute;
@@ -141,6 +113,7 @@ span {
   margin: 0;
   padding: 0;
 }
+
 .top-nav {
   display: inline;
   font-size: 14px;
@@ -148,6 +121,7 @@ span {
   margin-right: 10px;
   float: right;
 }
+
 .top-nav-left {
   display: inline;
   font-size: 14px;
@@ -157,6 +131,7 @@ span {
   float: right;
   border-right: 2px solid black;
 }
+
 .left-nav-section {
   margin-top: 30px;
   padding: 0;
@@ -165,12 +140,14 @@ span {
   border-right: 2px solid black;
   border-top: 1px solid transparent;
 }
+
 .left-nav-list {
   font-family: Lora;
   list-style-type: None;
   padding: None;
   margin-top: 20px;
 }
+
 .left-nav {
   list-style-type: None;
   margin: None;
@@ -180,6 +157,7 @@ span {
   position: relative;
   left: -20px;
 }
+
 img {
   position: relative;
   top: 4px;
@@ -187,14 +165,17 @@ img {
   width: 18px;
   height: 18px;
 }
+
 a {
   color: black;
   text-decoration: none;
 }
+
 a:hover,
 span:hover {
   font-weight: 600;
 }
+
 .active {
   font-weight: 600;
 }

@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <p id="title">Quote of the day</p>
-    <p id="quote">"{{ quote }}"</p>
-    <p id="author">~{{ author }}</p>
-  </div>
+<div>
+  <p id="title">Quote of the day</p>
+  <p id="quote">"{{ quote }}"</p>
+  <p id="author">~{{ author }}</p>
+</div>
 </template>
 
 <script>
@@ -19,7 +19,7 @@ export default {
   },
   //Register Locally
   methods: {
-    fetchQuotes: async function () {
+    fetchQuotes: async function() {
       var quotes = [];
       await axios
         .get("https://type.fit/api/quotes")
@@ -36,13 +36,13 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      var idx = (Math.floor(quotes.length/dayjs().get("Date")) + dayjs().get("M") ) % quotes.length;
+      var idx = (Math.floor(quotes.length / dayjs().get("Date")) + dayjs().get("M")) % quotes.length;
       this.quote = quotes[idx].quote;
       this.author = quotes[idx].author;
     },
   },
-  created: async function () {
-      console.log(dayjs().get("month"));
+  created: async function() {
+    console.log(dayjs().get("month"));
     await this.fetchQuotes();
   },
 };
@@ -58,10 +58,12 @@ div {
   margin: 0;
   padding: 0;
 }
+
 p {
   margin: 0;
   padding: 0.8%;
 }
+
 #title {
   text-decoration: underline;
   background-color: #81b762;
@@ -70,11 +72,13 @@ p {
   color: white;
   font-weight: 550;
 }
+
 #quote {
-    margin-top: 5px;
-    font-style: italic;
-    font-size: 18px;
+  margin-top: 5px;
+  font-style: italic;
+  font-size: 18px;
 }
+
 #author {
   text-align: left;
   font-size: 14px;

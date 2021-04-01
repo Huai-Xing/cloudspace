@@ -1,36 +1,24 @@
 <template>
-  <div>
-    <li
-      class="cell"
-      :class="{
+<div>
+  <li class="cell" :class="{
         dayCurrentMonth: isNotCurrentMonth,
         dayTodayCell: isToday,
-      }"
-    >
-      <div class="cellItems">
-        <li
-          class="day"
-          :class="{
+      }">
+    <div class="cellItems">
+  <li class="day" :class="{
             dayToday: isToday,
-          }"
-          v-on:click="goToTaskPage"
-        >
-          {{ date.get('date') }}
-        </li>
-        <div>
-          <li class="items" 
-          v-for="item in tasksToday"  
-          v-bind:key="item.title"
-          :class="{ itemsEmpty: isNotCurrentMonth }" 
-          v-on:click="goToTaskPage"
-          >
-            {{ item.title }}
-          </li>
-        </div>
-
-      </div>
+          }" v-on:click="goToTaskPage">
+    {{ date.get('date') }}
+  </li>
+  <div>
+    <li class="items" v-for="item in tasksToday" v-bind:key="item.title" :class="{ itemsEmpty: isNotCurrentMonth }" v-on:click="goToTaskPage">
+      {{ item.title }}
     </li>
   </div>
+
+</div>
+</li>
+</div>
 </template>
 
 
@@ -49,16 +37,16 @@ export default {
       isToday: dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
       todayDate: dayjs(),
       data: [
-        //"BT3103 Assignment 2", 
-        //"Meeting with Group", 
-        //"Take a short break :)", 
+        //"BT3103 Assignment 2",
+        //"Meeting with Group",
+        //"Take a short break :)",
         //"Very very very very very very very very very very very long task"
       ],
       tasksToday: []
     };
   },
   methods: {
-    fetchData: function () {
+    fetchData: function() {
       var uid = firebase.auth().currentUser.uid;
       firebase.firestore()
         .collection("tasks")
@@ -74,7 +62,7 @@ export default {
           })
         );
     },
-    compareDate: function (curr, fixed) {
+    compareDate: function(curr, fixed) {
       if (
         curr.getDate() === fixed.date() &&
         curr.getMonth() == fixed.month() &&
@@ -107,9 +95,11 @@ export default {
   padding: 3px;
   overflow: scroll;
 }
+
 .dayCurrentMonth {
   background-color: rgb(220, 220, 220);
 }
+
 /*
 .dayTodayCell {
   border: 3px solid rgb(192, 2, 2);
@@ -118,6 +108,7 @@ export default {
   display: inline;
   align-content: center;
 }
+
 .day {
   font-family: montserrat;
   font-weight: 700;
@@ -136,15 +127,18 @@ export default {
   margin-bottom: 8px;
   cursor: pointer;
 }
-.day:hover, .day:focus {
+
+.day:hover,
+.day:focus {
   color: black;
 }
+
 .dayToday {
   background-color: #26818f;
   color: white;
   font-weight: 700;
   border-radius: 100%;
-  height:22px;
+  height: 22px;
   width: 22px;
   padding-top: 2px;
   padding-left: 1px;
@@ -152,6 +146,7 @@ export default {
   text-align: center;
   position: relative;
 }
+
 .items {
   font-family: roboto;
   font-size: 10px;
@@ -172,23 +167,29 @@ export default {
   overflow: hidden;
   cursor: pointer;
 }
-.itemsEmpty{
+
+.itemsEmpty {
   visibility: hidden;
 }
+
 .items:hover {
   filter: brightness(90%);
 }
+
 .items:nth-child(odd) {
   background-color: #d1e0f3;
 }
+
 ::-webkit-scrollbar {
   width: 0px;
   height: 0px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #ffffff; 
+  background: #ffffff;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #888; 
+  background: #888;
 }
 </style>

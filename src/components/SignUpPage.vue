@@ -1,47 +1,68 @@
 <template>
-<div>
-  <ul class="top-nav-list">
-    <li>
-      <router-link :to="{ path: '/signin' }">
-        Log In
-      </router-link>
-    </li>
-    <li>|</li>
-    <li>
-      <router-link :to="{ path: '/signup' }">
-        Sign Up
-      </router-link>
-    </li>
-  </ul>
+  <div>
+    <ul class="top-nav-list">
+      <li>
+        <router-link :to="{ path: '/signin' }">
+          Log In
+        </router-link>
+      </li>
+      <li>|</li>
+      <li>
+        <router-link :to="{ path: '/signup' }">
+          Sign Up
+        </router-link>
+      </li>
+    </ul>
 
-  <img id="leftphoto" src="../assets/background5_signin.png" />
+    <img id="leftphoto" src="../assets/background5_signin.png" />
 
-  <div id="chunk">
-    <p id="sign">Sign Up</p>
+    <div id="chunk">
+      <p id="sign">Sign Up</p>
 
-    <form @submit.prevent="letsgo">
-      <div>
-        <label for="name">Name:</label><br />
-        <input type="text" id="name" name="name" placeholder="E.g. John Doe" required v-model="user.name" /><br />
-      </div>
-      <label for="email">Email:</label><br />
-      <input type="text" id="email" name="email" placeholder="user@domain.com" required v-model="user.email" /><br />
+      <form @submit.prevent="letsgo">
+        <div>
+          <label for="name">Name:</label><br />
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="E.g. John Doe"
+            required
+            v-model="user.name"
+          /><br />
+        </div>
+        <label for="email">Email:</label><br />
+        <input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="user@domain.com"
+          required
+          v-model="user.email"
+        /><br />
 
-      <label for="password">Password:</label><br />
-      <input type="text" id="password" name="password" placeholder="Enter your password" required v-model="user.password" /><br />
+        <label for="password">Password:</label><br />
+        <input
+          type="text"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          required
+          v-model="user.password"
+        /><br />
 
-      <input type="checkbox" id="checkbox" />
-      <label for="checkbox" id="cblabel">Keep me logged in</label><br />
+        <input type="checkbox" id="checkbox" />
+        <label for="checkbox" id="cblabel">Keep me logged in</label><br />
 
-      <button type="submit" value="Submit" id="submit">
-        Let's go!
-      </button>
-    </form>
+        <button type="submit" value="Submit" id="submit">
+          Let's go!
+        </button>
+      </form>
+    </div>
+
+    <img id="rightphoto" src="../assets/background4_signin.png" />
+
   </div>
-
-  <img id="rightphoto" src="../assets/background4_signin.png" />
-
-</div>
 </template>
 
 <script>
@@ -57,7 +78,6 @@ export default {
         DOB: "",
         imageIdx: 0,
         coins: 0,
-        trees: 0,
       },
     };
   },
@@ -68,12 +88,10 @@ export default {
       var password = this.user.password;
       var user = this.user;
       //Signing up
-
       fb.auth()
         .createUserWithEmailAndPassword(email, password)
         .then((cred) => {
           alert("Successfully registered");
-
           console.log("Registered user: " + cred.user.uid);
           fb.firestore()
             .collection("users")
@@ -88,19 +106,15 @@ export default {
             name: "Home"
           });
         })
-
         .catch((error) => {
           alert(error.message);
         });
-
       event.target.reset();
     },
-
     // Fn to push the user to '/login/calendar' once the Let's go button is clicked
     // logIn: function() {
     //   // to push user to '/login/calendar'
     //   this.$router.push({ name: "Calendar" });
-
     //   // Other logic (retriving details from firebase for the specific user?) here
     // },
   },

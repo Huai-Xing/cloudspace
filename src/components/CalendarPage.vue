@@ -1,25 +1,20 @@
 <template>
-  <div>
-    <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
-    <!--
+<div>
+  <!-- Side MainNavigation after log in -->
+  <appNav></appNav>
+  <!--
     <div class="coinBox">
       <img src="../assets/coin.png" class="coinImg" />
       <span class="coinNo">{{ coins }}</span>
     </div>
     -->
-    <div class="cal">
-      <CalHeader v-on:changeMonth="reGenerate"></CalHeader>
-      <ul>
-        <CalCell
-          v-for="date in dates"
-          v-bind:key="date"
-          :date="date"
-          :selectedDate="selectedDate"
-        ></CalCell>
-      </ul>
-    </div>
+  <div class="cal">
+    <CalHeader v-on:changeMonth="reGenerate"></CalHeader>
+    <ul>
+      <CalCell v-for="date in dates" v-bind:key="date" :date="date" :selectedDate="selectedDate"></CalCell>
+    </ul>
   </div>
+</div>
 </template>
 
 
@@ -39,11 +34,11 @@ export default {
     };
   },
   methods: {
-    reGenerate: function (x) {
+    reGenerate: function(x) {
       this.generateDays(x);
       this.selectedDate = x;
     },
-    generateDays: function (x = dayjs()) {
+    generateDays: function(x = dayjs()) {
       var firstDay = x.startOf("month").get("day");
       var counter = 0 - firstDay;
       var days = [];
@@ -77,7 +72,7 @@ export default {
     CalCell: CalCell,
     appNav: MainNavigation,
   },
-  created: function () {
+  created: function() {
     this.generateDays();
   },
 };
@@ -92,6 +87,7 @@ export default {
   margin-right: 80px;
   z-index: 0;
 }
+
 ul {
   flex-wrap: wrap;
   list-style-type: none;
@@ -102,8 +98,9 @@ ul {
   grid-template-rows: repeat(5, 1fr);
   row-gap: 0px;
 }
+
 .coinBox {
-  display:flex;
+  display: flex;
   font-family: Lora;
   font-size: 18px;
   margin-left: 80%;
@@ -114,10 +111,12 @@ ul {
   align-items: center;
   justify-content: center;
 }
+
 .coinImg {
   height: 28px;
   margin: 2px;
 }
+
 .coinNo {
   padding: 5px;
 }

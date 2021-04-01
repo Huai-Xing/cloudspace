@@ -38,7 +38,9 @@ export default [
     path: "/signin/home",
     name: "Home",
     component: HomePage,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true
+    },
     beforeEnter: (to, from, next) => {
       fb.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -54,7 +56,9 @@ export default [
     name: "Profile",
     component: UserProfilePage,
     props: true,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true
+    },
     beforeEnter: (to, from, next) => {
       fb.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -71,7 +75,9 @@ export default [
     name: "Calendar",
     component: CalendarPage,
     props: true,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true
+    },
     beforeEnter: (to, from, next) => {
       fb.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -87,7 +93,9 @@ export default [
     name: "Productivity",
     component: ProductivityPage,
     props: true,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true
+    },
     beforeEnter: (to, from, next) => {
       fb.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -103,7 +111,9 @@ export default [
     name: "Tasks",
     component: TasksPage,
     props: true,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true
+    },
     beforeEnter: (to, from, next) => {
       fb.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -120,7 +130,9 @@ export default [
     name: "Timer",
     component: TaskTimer,
     props: true,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true
+    },
     beforeEnter: (to, from, next) => {
       fb.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -136,7 +148,9 @@ export default [
     name: "PlantTree",
     component: PlantATreePage,
     props: true,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true
+    },
     beforeEnter: (to, from, next) => {
       fb.auth().onAuthStateChanged(function(user) {
         if (user) {
