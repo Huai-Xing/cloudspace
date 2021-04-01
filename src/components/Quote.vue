@@ -1,8 +1,12 @@
 <template>
   <div>
-    <p id="title">Quote of the day</p>
-    <p id="quote">"{{ quote }}"</p>
-    <p id="author">~{{ author }}</p>
+    <div id="top">
+      <p id="title">Quote of the day</p>
+    </div>
+    <div id="bottom">
+      <p id="quote">"{{ quote }}"</p>
+      <p id="author">~{{ author }}</p>
+    </div>
   </div>
 </template>
 
@@ -36,47 +40,60 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      var idx = (Math.floor(quotes.length/dayjs().get("Date")) + dayjs().get("M") ) % quotes.length;
+      var idx =
+        (Math.floor(quotes.length / dayjs().get("Date")) + dayjs().get("M")) %
+        quotes.length;
       this.quote = quotes[idx].quote;
       this.author = quotes[idx].author;
     },
   },
   created: async function () {
-      console.log(dayjs().get("month"));
+    console.log(dayjs().get("month"));
     await this.fetchQuotes();
   },
 };
 </script>
 
 <style scoped>
-div {
+#top {
   position: relative;
   display: inline-block;
   border: 5px solid #81b762;
-  border-radius: 20px;
+  background-color: #81b762;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+#bottom {
+  position: relative;
+  display: inline-block;
+  border: 5px solid #81b762;
+  border-radius: 0 0 20px 20px;
   width: 100%;
   margin: 0;
   padding: 0;
 }
 p {
   margin: 0;
-  padding: 0.8%;
+  padding: 0;
+  padding-left: 0.8%;
 }
 #title {
   text-decoration: underline;
-  background-color: #81b762;
-  border-radius: 10px 10px 0 0;
   font-size: 16px;
   color: white;
   font-weight: 550;
 }
 #quote {
-    margin-top: 5px;
-    font-style: italic;
-    font-size: 18px;
+  margin-top: 5px;
+  font-style: italic;
+  font-size: 18px;
+  padding-bottom: 0.8%;
 }
 #author {
   text-align: left;
   font-size: 14px;
+  padding-bottom: 0.8%;
 }
 </style>
