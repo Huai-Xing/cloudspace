@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
 
     <div class="timer-content">
       <countdown-timer
@@ -26,7 +24,6 @@
 </template>
 
 <script>
-  import MainNavigation from "./MainNavigation.vue";
   import CountDownTimerComponent from "./Timer/CountDownTimerComponent.vue";
   import CountUpTimerComponent from "./Timer/CountUpTimerComponent.vue";
   import fb from "../firebase.js";
@@ -38,7 +35,6 @@
     // },
     //Register Locally
     components: {
-      appNav: MainNavigation,
       "countdown-timer": CountDownTimerComponent,
       "countup-timer": CountUpTimerComponent,
     },
@@ -137,7 +133,7 @@
     },
 
     created() {
-      // this.currentTimer = this.timeForTask;
+      this.currentTimer = this.timeForTask;
       this.coin = Math.floor(this.timeForTask / 600);
       this.breakTimeAllowed = (this.timeForTask / 1200) * 300;
     },

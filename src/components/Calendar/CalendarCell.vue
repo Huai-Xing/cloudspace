@@ -84,7 +84,7 @@ export default {
       }
     },
     goToTaskPage: function() {
-      this.$router.push({ name: "Tasks", params: { date: this.date } }); // push with date
+      this.$router.push({ name: "Tasks", params: { date: this.date.format() } }); // push with date
     }
   },
   created() {

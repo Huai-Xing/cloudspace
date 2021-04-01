@@ -54,7 +54,7 @@
 
         <li class="left-nav">
           <router-link
-            :to="{ name: 'Tasks' }"
+            :to="{ name: 'Tasks', params: { date: this.date.format() }}"
             @click.native="isActive = 'Tasks'"
             v-bind:class="{ active: isActive == 'Tasks' }"
             exact
@@ -80,12 +80,14 @@
 
 <script>
 import fb from "../firebase";
+import dayjs from "dayjs";
 
 export default {
   //props: ["Data"],
   data() {
     return {
       isActive: "",
+      date: dayjs()
     };
   },
   /*

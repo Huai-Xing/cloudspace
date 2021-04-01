@@ -67,7 +67,7 @@ export default [
   },
 
   {
-    path: "/signin/calendar",
+    path: "/signin/calendar/",
     name: "Calendar",
     component: CalendarPage,
     props: true,
@@ -99,7 +99,7 @@ export default [
     },
   },
   {
-    path: "/signin/tasks/",
+    path: "/signin/tasks/:date",
     name: "Tasks",
     component: TasksPage,
     props: true,
