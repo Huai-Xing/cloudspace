@@ -214,7 +214,7 @@ export default {
     this.totalTime = this.currentTimer + this.timerTimePassed;
     this.timePassed = this.timerTimePassed;
     this.coinsToEarn = this.coin;
-    this.coinsToEarn = await coinCal(this.currentTimer);
+    this.coinsToEarn = await coinCal(this.totalTime);
     //console.log("COINS: " + this.coinsToEarn);
     // to start the timer immediately when the component gets mounted
     this.startTimer();

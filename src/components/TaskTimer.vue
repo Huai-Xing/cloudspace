@@ -95,6 +95,23 @@
       updateData: function(x) {
         var currentUser = fb.auth().currentUser;
         var uid = currentUser.uid;
+        var localUser;
+        fb.firestore()
+          .collection("users")
+          .doc(uid)
+          .get()
+          .then((doc) => {
+            localUser = doc.data().user;
+          })
+          .then(() => {
+            localUser.coins = localUser.coins + this.coin;
+            fb.firestore()
+              .collection("users")
+              .doc(uid)
+              .update({
+                user: localUser,
+              });
+          });
         fb.firestore()
           .collection("tasks")
           .doc(uid)
