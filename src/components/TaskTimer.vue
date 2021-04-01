@@ -26,12 +26,12 @@
 </template>
 
 <script>
-import MainNavigation from "./MainNavigation.vue";
-import CountDownTimerComponent from "./Timer/CountDownTimerComponent.vue";
-import CountUpTimerComponent from "./Timer/CountUpTimerComponent.vue";
-import fb from "../firebase.js";
+  import MainNavigation from "./MainNavigation.vue";
+  import CountDownTimerComponent from "./Timer/CountDownTimerComponent.vue";
+  import CountUpTimerComponent from "./Timer/CountUpTimerComponent.vue";
+  import fb from "../firebase.js";
 
-export default {
+  export default {
     props: {
       timeForTask: Number,
       taskId: String,
@@ -51,9 +51,9 @@ export default {
         currentTimer: 10,
         timerTimePassed: 0,
         breakTimePassed: 0,
-        taskTitle: "Cloudspace Timer Task",
         coin: 0,
         breakTimeAllowed: 300,
+        taskTitle: this.$route.params.taskTitle,
       };
     },
     methods: {

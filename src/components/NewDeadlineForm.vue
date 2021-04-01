@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <button type="button" class="btn" @click="showModal">
-      <img src="../assets/task/add1.png" />
-    </button>
+    <img src="../assets/task/add_btn.png" @click="showModal" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
@@ -215,12 +213,16 @@
 </script>
 
 <style scoped>
-  .btn {
+  /* .btn {
     padding: 2px 2px 2px 2px;
   }
   .btn > img {
     height: 20px;
     width: 20px;
     vertical-align: middle;
+  } */
+  img {
+    width: 38px;
+    height: 38px;
   }
 </style>

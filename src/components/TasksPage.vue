@@ -79,8 +79,12 @@
                 />
               </span>
 
-              <span v-if="task[1].status == 'Complete'">
-                <button>More info</button>
+              <span v-if="task[1].status == 'Completed'">
+                <img
+                  src="../assets/task/moreinfo_btn.png"
+                  v-bind:idname="task[0]"
+                  v-on:click="showInfo($event)"
+                />
                 <img
                   src="../assets/task/trash_btn.png"
                   v-bind:idname="task[0]"
@@ -241,9 +245,14 @@
             let totalseconds =
               doc.data().duration.hh * 3600 + doc.data().duration.mm * 60;
             console.log(totalseconds);
+            let title = doc.data().category + " - " + doc.data().title;
             this.$router.push({
               name: "Timer",
-              params: { taskId: doc_id, timeForTask: totalseconds },
+              params: {
+                taskId: doc_id,
+                timeForTask: totalseconds,
+                taskTitle: title,
+              },
             });
           });
       },
