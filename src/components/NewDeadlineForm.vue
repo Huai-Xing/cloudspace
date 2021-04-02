@@ -171,6 +171,7 @@ export default {
       document.getElementById("new-deadline-form").reset();
     },
     sendDeadline() {
+      this.newdeadline.date = new Date(this.newdeadline.datedue);
       //managing newcategories
       if (this.newcategory != "") {
         if (!this.categoryList.includes(this.newcategory)) {

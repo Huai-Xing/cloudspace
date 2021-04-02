@@ -18,6 +18,15 @@
           {{ date.get('date') }}
         </li>
         <div>
+          <li class="deadlines" 
+          v-for="item in deadlinesToday"  
+          v-bind:key="item.title"
+          :class="{ itemsEmpty: isNotCurrentMonth }" 
+          v-on:click="goToTaskPage"
+          >
+            {{ item.title }}
+          </li>
+
           <li class="items" 
           v-for="item in tasksToday"  
           v-bind:key="item.title"
@@ -54,12 +63,26 @@ export default {
         //"Take a short break :)", 
         //"Very very very very very very very very very very very long task"
       ],
-      tasksToday: []
+      tasksToday: [],
+      deadlinesToday: [],
     };
   },
   methods: {
     fetchData: function () {
       var uid = firebase.auth().currentUser.uid;
+      firebase.firestore()
+        .collection("tasks")
+        .doc(uid)
+        .collection("deadlinesList")
+        .get()
+        .then((snap) =>
+          snap.forEach((doc) => {
+            if (this.compareDate(doc.data().date.toDate(), this.date)) {
+              this.deadlinesToday.push(doc.data());
+            }
+          })
+        );
+
       firebase.firestore()
         .collection("tasks")
         .doc(uid)
@@ -152,6 +175,13 @@ export default {
   text-align: center;
   position: relative;
 }
+.deadlines {
+  font-family: Roboto;
+  font-size: 10px;
+  padding: 2px 9px;
+  color: rgb(209, 5, 5);
+
+}
 .items {
   font-family: roboto;
   font-size: 10px;
@@ -160,10 +190,7 @@ export default {
   display: block;
   border-radius: 4px;
   background-color: #ffe1bb;
-  padding-left: 9px;
-  padding-right: 9px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px 9px;
   margin: 3px;
   min-width: 80px;
   max-height: 10px;
