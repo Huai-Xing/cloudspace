@@ -95,7 +95,6 @@ export default {
   color: #fff;
   background-color: #bfdaaf;
   box-shadow: 0px 10px 15px #6da34e51;
-  color: #fff;
   transform: translateY(-2px);
 }
 .buyBtn:active,
@@ -103,7 +102,6 @@ export default {
   color: #fff;
   background-color: #bfdaaf;
   box-shadow: 0px 10px 15px #6da34e51;
-  color: #fff;
   transform: translateY(2px);
 }
 .priceCoin {
@@ -117,7 +115,7 @@ export default {
 }
 .treeModalText {
   font-family: Roboto;
-  padding: 3px 50px 3px 50px;
+  padding: 3px 50px 13px 50px;
 }
 .cfmBtn {
   background-color: white;

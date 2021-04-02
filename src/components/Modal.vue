@@ -65,7 +65,6 @@
 
   .modal-header,
   .modal-footer {
-    padding: 15px;
     display: flex;
     font-family: Lora;
   }
@@ -75,27 +74,30 @@
     /* border-bottom: 1px solid #eeeeee; */
     color: #4aae9b;
     justify-content: center;
+    align-items: center;
     font-weight: bold;
+    font-size: 15px;
+    padding: 20px;
   }
 
   .modal-footer {
     /* border-top: 1px solid #eeeeee; */
     justify-content: center;
     text-align: center;
+    padding: 10px 20px 20px 20px;
   }
 
   .modal-body {
     position: relative;
-    padding: 15px 30px;
+    padding: 15px 60px;
   }
 
   .btn-close {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 10px;
+    right: 10px;
     border: none;
     font-size: 20px;
-    padding: 10px 15px;
     cursor: pointer;
     font-weight: bold;
     color: #4aae9b;
@@ -117,4 +119,8 @@
   .modal-fade-leave-active {
     transition: opacity 0.3s ease;
   }
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
 </style>
