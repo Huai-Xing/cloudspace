@@ -29,7 +29,7 @@
       <tree-purchase
         :treeName="data[visibleImg].name"
         :treePrice="data[visibleImg].price"
-        :afford="afford(treePrice)"
+        :afford="afford(data[visibleImg].price)"
       />
     </div>
   </div>

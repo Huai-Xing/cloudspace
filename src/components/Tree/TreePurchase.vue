@@ -61,10 +61,10 @@ export default {
     },
     purchase() {
       this.bought = true;
-      var newCoins = parseInt(this.coins) - parseInt(this.treePrice);
       var uid = firebase.auth().currentUser.uid;
       firebase.firestore().collection("users").doc(uid).update({
-        "user.coins": newCoins,
+        "user.coins": firebase.firestore.FieldValue.increment(0 - this.treePrice),
+        "user.trees": firebase.firestore.FieldValue.increment(1),
       }).then(() => location.reload());
     }
   },
