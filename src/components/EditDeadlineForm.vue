@@ -10,209 +10,279 @@
 
       <template v-slot:body>
         <form id="edit-deadline-form">
-          <label for="title">Title</label>
-          <input
-            v-model="updateddeadline.title"
-            type="text"
-            id="title"
-            v-bind:placeholder="currentDeadline.title"
-          />
+          <div class="row">
+            <label for="title">Title</label>
+            <input
+              v-model="updateddeadline.title"
+              type="text"
+              id="title"
+              v-bind:placeholder="currentDeadline.title"
+            />
+          </div>
           <br />
-          <label for="edit-task-category">Category</label>
-          <select
-            v-model="updateddeadline.category"
-            :disabled="disabledselect"
-            id="edit-deadline-category"
-          >
-            <option disabled value=""
-              >Please select a new catergory for your deadline</option
+
+          <div class="row">
+            <label for="edit-task-category">Category</label>
+            <select
+              v-model="updateddeadline.category"
+              :disabled="disabledselect"
+              id="edit-deadline-category"
             >
-            <option
-              v-for="option in categoryList"
-              v-bind:value="option"
-              v-bind:key="option"
-            >
-              {{ option }}
-            </option>
-          </select>
+              <option disabled value="">
+                Please select a new catergory for your deadline
+              </option>
+              <option
+                v-for="option in categoryList"
+                v-bind:value="option"
+                v-bind:key="option"
+              >
+                {{ option }}
+              </option>
+            </select>
+          </div>
           <br />
-          Add a new category
-          <input
-            id="et-newcategory"
-            type="text"
-            v-model="newcategory"
-            placeholder="Enter a new category"
-            :disabled="disabledinput"
-          />
+
+          <div class="row">
+            <label>Add a new category</label>
+            <input
+              id="et-newcategory"
+              type="text"
+              v-model="newcategory"
+              placeholder="Enter a new category"
+              :disabled="disabledinput"
+            />
+          </div>
           <br />
-          Date Due <input type="date" v-model.trim="updateddeadline.datedue" />
+
+          <div class="row">
+            <label>Date Due</label>
+            <input type="date" v-model.trim="updateddeadline.datedue" />
+          </div>
           <br />
-          Time Due
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="updateddeadline.timedue.hh"
-            format="HH"
-          ></vue-timepicker>
-          hr
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="updateddeadline.timedue.mm"
-            format="mm"
-          ></vue-timepicker>
-          min
+
+          <div class="row">
+            <label> Date Due </label>
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="updateddeadline.timedue.hh"
+              format="HH"
+            ></vue-timepicker>
+            hr
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="updateddeadline.timedue.mm"
+              format="mm"
+            ></vue-timepicker>
+            min
+          </div>
           <br />
-          Show Deadline <input v-model="updateddeadline.showInAdvance" /> days
-          in advance
+
+          <div class="row">
+            <label>Show Deadline</label>
+            <input v-model="updateddeadline.showInAdvance" />
+            <p class="days">days in advance</p>
+          </div>
         </form>
       </template>
 
       <template v-slot:footer>
-        <button @click.prevent="updateDeadline">
-          Update
-        </button>
+        <button @click.prevent="updateDeadline">Update</button>
       </template>
     </Modal>
   </div>
 </template>
 
 <script>
-  import Modal from "./Modal";
-  import VueTimepicker from "vue2-timepicker";
-  import "vue2-timepicker/dist/VueTimepicker.css";
-  import fb from "../firebase";
+import Modal from "./Modal";
+import VueTimepicker from "vue2-timepicker";
+import "vue2-timepicker/dist/VueTimepicker.css";
+import fb from "../firebase";
 
-  export default {
-    name: "App",
-    components: {
-      Modal,
-      VueTimepicker,
-    },
-    props: {
-      idname: String,
-    },
-    data() {
-      return {
-        isModalVisible: false,
-        updateddeadline: {
-          category: "",
-          title: "",
-          status: "Incomplete",
-          timedue: {
-            hh: "",
-            mm: "",
-          },
-          datedue: null,
-          showInAdvance: 0,
+export default {
+  name: "App",
+  components: {
+    Modal,
+    VueTimepicker,
+  },
+  props: {
+    idname: String,
+  },
+  data() {
+    return {
+      isModalVisible: false,
+      updateddeadline: {
+        category: "",
+        title: "",
+        status: "Incomplete",
+        timedue: {
+          hh: "",
+          mm: "",
         },
-        newcategory: "",
-        disabledselect: false,
-        disabledinput: false,
-        user: fb.auth().currentUser.uid,
-        categoryList: [],
-        currentDeadline: [],
-      };
+        datedue: null,
+        showInAdvance: 0,
+      },
+      newcategory: "",
+      disabledselect: false,
+      disabledinput: false,
+      user: fb.auth().currentUser.uid,
+      categoryList: [],
+      currentDeadline: [],
+    };
+  },
+  methods: {
+    fetchCategoryList: function () {
+      fb.firestore()
+        .collection("users")
+        .doc(this.user)
+        .get()
+        .then((doc) => {
+          this.categoryList = doc.data().categoryList;
+        });
     },
-    methods: {
-      fetchCategoryList: function() {
-        fb.firestore()
-          .collection("users")
-          .doc(this.user)
-          .get()
-          .then((doc) => {
-            this.categoryList = doc.data().categoryList;
-          });
-      },
-      fetchToBeEdited: function() {
-        fb.firestore()
-          .collection("tasks")
-          .doc(this.user)
-          .collection("deadlinesList")
-          .doc(this.idname)
-          .get()
-          .then((doc) => {
-            this.currentDeadline = doc.data();
-            this.updateddeadline = doc.data();
-          });
-      },
-      showModal() {
-        this.isModalVisible = true;
-      },
-      closeModal() {
-        this.isModalVisible = false;
-      },
-      updateDeadline() {
-        //managing newcategories
-        if (this.newcategory != "") {
-          this.categoryList.push(this.newcategory);
-
-          this.updateddeadline.category = this.newcategory;
-
-          fb.firestore()
-            .collection("users")
-            .doc(this.user)
-            .update({
-              categoryList: this.categoryList,
-            });
-        } else;
-
-        //updating task to tasksList
-        fb.firestore()
-          .collection("tasks")
-          .doc(this.user)
-          .collection("deadlinesList")
-          .doc(this.idname)
-          .update(this.updateddeadline)
-          .then(() => {
-            this.isModalVisible = false;
-            location.reload();
-          });
-
-        //reset values
-        (this.updateddeadline = {
-          category: "",
-          title: "",
-          status: "Incomplete",
-          duration: {
-            hh: "",
-            mm: "",
-          },
-        }),
-          (this.newcategory = "");
-        // this.isModalVisible = false;
-        document.getElementById("edit-deadline-form").reset();
-        console.log("this method works");
-      },
+    fetchToBeEdited: function () {
+      fb.firestore()
+        .collection("tasks")
+        .doc(this.user)
+        .collection("deadlinesList")
+        .doc(this.idname)
+        .get()
+        .then((doc) => {
+          this.currentDeadline = doc.data();
+          this.updateddeadline = doc.data();
+        });
     },
-    watch: {
-      newcategory: function(val) {
-        if (val == "") {
-          this.disabledselect = false;
-        } else {
-          this.disabledselect = true;
-        }
-      },
-      "updateddeadline.category": function(val) {
-        if (val == "") {
-          this.disabledinput = false;
-        } else {
-          this.disabledinput = true;
-        }
-      },
+    showModal() {
+      this.isModalVisible = true;
     },
-    created() {
-      this.fetchCategoryList();
-      this.fetchToBeEdited();
+    closeModal() {
+      this.isModalVisible = false;
     },
-  };
+    updateDeadline() {
+      //managing newcategories
+      if (this.newcategory != "") {
+        this.categoryList.push(this.newcategory);
+
+        this.updateddeadline.category = this.newcategory;
+
+        fb.firestore().collection("users").doc(this.user).update({
+          categoryList: this.categoryList,
+        });
+      } else;
+
+      //updating task to tasksList
+      fb.firestore()
+        .collection("tasks")
+        .doc(this.user)
+        .collection("deadlinesList")
+        .doc(this.idname)
+        .update(this.updateddeadline)
+        .then(() => {
+          this.isModalVisible = false;
+          location.reload();
+        });
+
+      //reset values
+      (this.updateddeadline = {
+        category: "",
+        title: "",
+        status: "Incomplete",
+        duration: {
+          hh: "",
+          mm: "",
+        },
+      }),
+        (this.newcategory = "");
+      // this.isModalVisible = false;
+      document.getElementById("edit-deadline-form").reset();
+      console.log("this method works");
+    },
+  },
+  watch: {
+    newcategory: function (val) {
+      if (val == "") {
+        this.disabledselect = false;
+      } else {
+        this.disabledselect = true;
+      }
+    },
+    "updateddeadline.category": function (val) {
+      if (val == "") {
+        this.disabledinput = false;
+      } else {
+        this.disabledinput = true;
+      }
+    },
+  },
+  created() {
+    this.fetchCategoryList();
+    this.fetchToBeEdited();
+  },
+};
 </script>
 
 <style scoped>
-  img {
-    height: 28px;
-    width: auto;
-    margin: 2px;
-    text-align: center;
-  }
+* {
+  font-family: Roboto;
+  font-size: 10px;
+}
+img {
+  height: 28px;
+  width: auto;
+  margin: 2px;
+  text-align: center;
+}
+button {
+  font-family: Lora;
+  font-size: 12px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  width: 100px;
+  padding: 5px 12px 5px 12px;
+  margin: 8px;
+}
+button:hover {
+  background-color: #ffffff;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+button:active,
+button:focus {
+  background-color: #fff;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  transform: translateY(2px);
+  outline: none;
+}
+label {
+  font-family: Lora;
+  font-size: 12px;
+  padding-right: 10px;
+}
+.row {
+  display: flex;
+  padding: 3px;
+  align-items: center;
+}
+input,
+select {
+  height: 30px;
+  padding-left: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  flex-grow: 1;
+  color: rgb(110, 110, 110);
+}
+::placeholder {
+  color: rgb(110, 110, 110);
+}
+.time-picker {
+  margin: 5px;
+}
+.days {
+  padding-left: 6px;
+}
 </style>
