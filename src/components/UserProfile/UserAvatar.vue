@@ -63,7 +63,6 @@
         user: {
           name: "",
           email: "",
-          password: "",
           DOB: "",
           imageIdx: 0,
           coins: 0,
@@ -117,7 +116,6 @@
           .get()
           .then((doc) => {
             this.user.name = doc.data().user.name;
-            this.user.password = doc.data().user.password;
             this.user.DOB = doc.data().user.DOB;
             this.user.email = doc.data().user.email;
             this.user.coins = doc.data().user.coins;
