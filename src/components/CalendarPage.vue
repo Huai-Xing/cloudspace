@@ -87,20 +87,17 @@ export default {
 <style scoped>
 .cal {
   position: fixed;
-  margin-top: 0px;
-  margin-left: 240px;
-  margin-right: 80px;
-  z-index: 0;
+  top: 70px;
+  left: 240px;
+  width: 1001px;
 }
 ul {
-  flex-wrap: wrap;
   list-style-type: none;
   padding: 0;
   margin: 0;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(5, 1fr);
-  row-gap: 0px;
 }
 .coinBox {
   display:flex;

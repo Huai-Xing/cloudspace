@@ -58,7 +58,6 @@ h2 {
   display: inline-block;
   text-align: center;
   width: 180px;
-  margin-top: -100px;
 }
 .arrow {
   border: solid black;
