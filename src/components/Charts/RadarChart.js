@@ -16,7 +16,7 @@ export default {
         labels: [],
         datasets: [
           {
-            label: 'Actual Time (sec)',
+            label: 'Avg Actual Time (sec)',
             backgroundColor: [
               'rgba(64, 191, 128, 0.45)',
             ],
@@ -122,6 +122,7 @@ export default {
     fetchItems: function () {
       console.log("currentUser: ", this.user);
 
+      let allCat = [];
       let uniqueCat = [];
       fb.firestore().collection('tasks').doc(this.user).collection('tasksList').get().then(snapshot => {
         snapshot.docs.forEach(doc => {
@@ -131,8 +132,9 @@ export default {
           //console.log(doc.data().category);
 
           // To push in the unique task category into labels array
-          uniqueCat.push(doc.data().category);
-          uniqueCat = uniqueCat.filter((item, index, arrRef) => arrRef.indexOf(item) == index);
+          allCat.push(doc.data().category);
+          //console.log(allCat);
+          uniqueCat = allCat.filter((item, index, arrRef) => arrRef.indexOf(item) == index);
           //console.log(uniqueCat);
         });
         for (let i = 0; i < uniqueCat.length; i++) {
@@ -156,7 +158,7 @@ export default {
 
         snapshot.docs.forEach(doc => {
           let currCategory = doc.data().category;
-          console.log(currCategory);
+          //console.log(currCategory);
 
           for (let i = 0; i < doc.data().category.length; i++) {
             //console.log('task category: ', doc.data().category,
@@ -171,7 +173,14 @@ export default {
           }
         });
 
-        for (let i = 0; i < timeArr.length; i++) {
+        // To keep track of the appearance of each category
+        let catCount = Array.from(new Set(allCat)).map(val => allCat.filter(v => v === val).length);
+
+        for (let i = 0; i < timeArr.length; i++) { // the catCount is the same length as the timeArr
+          console.log(catCount[i], ",", timeArr[i]);
+          //console.log(timeArr[i] / catCount[i]);
+
+          timeArr[i] = parseFloat(timeArr[i] / catCount[i]).toFixed(3); // to 3 dec place
           console.log(timeArr[i]);
           this.chartdata.datasets[0].data.push(timeArr[i]);
         }
