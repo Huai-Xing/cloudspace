@@ -1,8 +1,8 @@
 <template>
-  <div class="chart">
-    <h3> Average Time Spent on Each Task Category: </h3>
-    <radar-chart></radar-chart>
-  </div>
+<div class="chart">
+  <h3> Actual Time Spent on Each Task Category: </h3>
+  <radar-chart></radar-chart>
+</div>
 </template>
 
 
