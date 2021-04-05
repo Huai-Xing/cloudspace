@@ -1,28 +1,19 @@
 /* jshint esversion: 6 */
 
-import { Line } from "vue-chartjs";
-import fb from "../../firebase.js"; //Import database
+import { Line, mixins } from "vue-chartjs";
+//import fb from "../../firebase.js";
+const { reactiveProp } = mixins;
 
 export default {
   extends: Line,
-  data: function() {
-    return {
-      datacollection: {
-        labels: [],
-        datasets: [{}],
-      },
-
-      options: {},
-    };
+  mixins: [reactiveProp],
+  props: {
+    options: {
+      type: Object,
+      default: null
+    }
   },
-
-  methods: {
-    fetchItems: function() {
-      this.renderChart(this.datacollection, this.options); // render the chart
-    },
-  },
-
-  created() {
-    this.fetchItems();
+  mounted () {
+    this.renderChart(this.chartData, this.options)
   },
 };
