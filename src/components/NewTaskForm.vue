@@ -11,46 +11,60 @@
         <form id="new-task-form">
           <label for="tasktitle">Title</label>
           <input
-            v-model.trim="newtask.title"
+            v-model="$v.newtask.title.$model"
             type="text"
             id="tasktitle"
             placeholder="Give your task a name"
           />
-          <div v-if="!$v.newtask.title.required">
-            Field is required
+          <div v-if="$v.newtask.title.$dirty">
+            <div v-if="!$v.newtask.title.required" class="error">
+              Title is required
+            </div>
           </div>
 
           <br />
-          <label for="new-task-category">Category</label>
-          <select
-            v-model="newtask.category"
-            :disabled="disabledselect"
-            id="new-task-category"
-          >
-            <option disabled value=""
-              >Please select a category for your task</option
-            >
-            <option
-              v-for="option in categoryList"
-              v-bind:value="option"
-              v-bind:key="option"
-            >
-              {{ option }}
-              <img
-                src="../assets/task/trash_btn.png"
-                v-on:click="deleteCategory($event)"
-              />
-            </option>
-          </select>
-          <br />
-          Add a new category
-          <input
-            id="nt-newcategory"
-            type="text"
-            v-model="newcategory"
-            placeholder="Enter a new category"
-            :disabled="disabledinput"
-          />
+          <div v-if="!addNewCat">
+            <label for="new-task-category">Category</label>
+            <select v-model="newtask.category" id="new-task-category">
+              <option disabled value="">Choose an existing category</option>
+              <option
+                v-for="option in categoryList"
+                v-bind:value="option"
+                v-bind:key="option"
+              >
+                {{ option }}
+                <img
+                  src="../assets/task/trash_btn.png"
+                  v-on:click="deleteCategory($event)"
+                />
+              </option>
+            </select>
+          </div>
+
+          <div v-if="addNewCat">
+            Category
+            <input
+              id="nt-newcategory"
+              type="text"
+              v-model="newtask.category"
+              placeholder="Enter a new category"
+            />
+          </div>
+          <div v-if="$v.newtask.category.$dirty && !addNewCat">
+            <div v-if="!$v.newtask.category.required" class="error">
+              Category is required
+            </div>
+          </div>
+          <div v-if="$v.newtask.category.$dirty && addNewCat">
+            <div v-if="!$v.newtask.category.required" class="error">
+              Category is required
+            </div>
+            <div v-if="!$v.newtask.category.doesNotExist" class="error">
+              This category already exists!
+            </div>
+          </div>
+          <toggle-button id="switch" @change="addNewCategory"></toggle-button>
+
           <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
           <br />
           Duration
@@ -86,12 +100,18 @@
   import "vue2-timepicker/dist/VueTimepicker.css";
   import fb from "../firebase";
   import { required } from "vuelidate/lib/validators";
+  import ToggleButton from "./ToggleButton";
+
+  function doesNotExist(value) {
+    return !this.categoryList.includes(value);
+  }
 
   export default {
     name: "App",
     components: {
       Modal,
       VueTimepicker,
+      ToggleButton,
     },
     props: {
       taskDate: Object,
@@ -112,15 +132,11 @@
           coinsEarned: 0,
           date: this.taskDate.toDate(),
         },
-        newcategory: "",
-        disabledselect: false,
-        disabledinput: false,
+
         user: fb.auth().currentUser.uid,
         categoryList: [],
-        errors: {
-          title: "",
-          category: "",
-        },
+        //toggle showing add new category
+        addNewCat: false,
       };
     },
     methods: {
@@ -133,12 +149,13 @@
           .then((doc) => {
             this.categoryList = doc.data().categoryList;
           });
+        console.log(this.categoryList);
       },
       showModal() {
-        this.resetForm();
         this.isModalVisible = true;
       },
       closeModal() {
+        this.resetForm();
         this.isModalVisible = false;
       },
       resetForm() {
@@ -155,16 +172,20 @@
           coinsEarned: 0,
           date: this.taskDate.toDate(),
         }),
-          (this.newcategory = "");
+          (this.addNewCat = false);
         document.getElementById("new-task-form").reset();
+        //resetting validation
+        this.$v.$reset();
       },
       sendTask() {
-        //managing newcategories
-        if (this.newcategory != "") {
-          if (!this.categoryList.includes(this.newcategory)) {
-            this.categoryList.push(this.newcategory);
+        this.$v.$touch();
+
+        if (!this.$v.$invalid) {
+          //managing newcategories
+          if (this.addNewCat) {
+            // if (!this.categoryList.includes(this.newcategory)) {
+            this.categoryList.push(this.newtask.category);
             console.log(this.categoryList);
-            this.newtask.category = this.newcategory;
 
             fb.firestore()
               .collection("users")
@@ -172,26 +193,27 @@
               .update({
                 categoryList: this.categoryList,
               });
-          } else {
-            // this.errors.category = "Category already exists";
-            alert("Error - this category already exists!");
-            event.preventdefault();
-          }
-        } else;
-        console.log(this.newtask);
+          } else;
+          console.log("test");
+          console.log(this.newtask);
 
-        //adding task to tasksList
-        fb.firestore()
-          .collection("tasks")
-          .doc(this.user)
-          .collection("tasksList")
-          .add(this.newtask)
-          .then(() => location.reload());
+          //adding task to tasksList
+          fb.firestore()
+            .collection("tasks")
+            .doc(this.user)
+            .collection("tasksList")
+            .add(this.newtask)
+            .then(() => location.reload());
 
-        //reset values
-        this.isModalVisible = false;
-        document.getElementById("new-task-form").reset();
-        this.resetForm();
+          //close modal and reset values
+          this.closeModal();
+        } else {
+          event.preventDefault();
+        }
+      },
+      addNewCategory: function(value) {
+        console.log(value);
+        this.addNewCat = value;
       },
     },
     validations: {
@@ -199,24 +221,13 @@
         title: {
           required,
         },
+        category: {
+          required,
+          doesNotExist,
+        },
       },
     },
-    watch: {
-      newcategory: function(val) {
-        if (val == "") {
-          this.disabledselect = false;
-        } else {
-          this.disabledselect = true;
-        }
-      },
-      "newtask.category": function(val) {
-        if (val == "") {
-          this.disabledinput = false;
-        } else {
-          this.disabledinput = true;
-        }
-      },
-    },
+
     created() {
       this.fetchCategoryList();
     },
@@ -230,12 +241,15 @@
   }
   button {
     font-family: Lora;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
-  border: none;
-  cursor: pointer;
-  width: 100px;
-  padding: 5px 12px 5px 12px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    padding: 5px 12px 5px 12px;
+  }
+  .error {
+    color: red;
   }
 </style>
