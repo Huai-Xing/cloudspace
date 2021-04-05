@@ -53,7 +53,9 @@ export default {
           ],
         },
         layout: {
-          padding: 10,
+          padding: {
+            left: 10,
+          },
         },
         legend: {
           position: "bottom",

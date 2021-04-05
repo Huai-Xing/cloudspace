@@ -1,7 +1,6 @@
 <template>
 <div class="chart">
-  <h3> Average of Actual Time Spent on Each Task Category: </h3>
-  <radar-chart></radar-chart>
+  <radar-chart id="radar"></radar-chart>
 </div>
 </template>
 
@@ -18,4 +17,9 @@ export default {
 
 
 <style scoped>
+#radar {
+  position: relative;
+  height: 40vh;
+  width: 35vw;
+}
 </style>

@@ -32,26 +32,20 @@
         v-on:drillDown="drillDown"
       ></line-chart>
     </div>
-    <div class="content-item-bar">
-      <p>{{ barTitle }}</p>
-      <bar-chart v-bind:datacollection="datacollectionBar"></bar-chart>
-    </div>
-    <br />
-
-    <div class="content-item">
-      <div class="bottom-row" id="chart">
-        <div class="column">
-          <!-- uncomment below when the radarChart-component is done -->
-          <radar-chart></radar-chart>
-        </div>
-
-        <div class="column">
-          <!-- the tree summary component here -->
-          <h3>Number of trees planted in total:</h3>
-          <div class="tree-summary-circle">
-            <!-- to replace this text to the bind data variable here -->
-            <div class="summary-stat">3</div>
-          </div>
+    <div class="bottom">
+      <div class="content-item-bar">
+        <p class="bottom-title">{{ barTitle }}</p>
+        <bar-chart v-bind:datacollection="datacollectionBar"></bar-chart>
+      </div>
+      <div class="content-item-radar">
+        <p class="bottom-title">{{ barTitle }}</p>
+        <radar-chart></radar-chart>
+      </div>
+      <div class="content-item-circle">
+        <p class="bottom-title">Number of trees planted</p>
+        <div class="tree-summary-circle">
+          <!-- to replace this text to the bind data variable here -->
+          <div class="summary-stat">3</div>
         </div>
       </div>
     </div>
@@ -326,44 +320,42 @@ label {
 #customTo {
   margin-right: 5px;
 }
-.content-item-bar {
+.bottom {
   border: 1px solid black;
   margin-left: 12%;
-  display: block;
+  display: flex;
   width: 88%;
 }
-.content-item-bar > p {
+.content-item-bar {
+  border: 1px solid black;
+  display: block;
+  width: 42%;
+}
+.bottom-title {
   border: 1px solid black;
   margin: 0;
   margin-top: 1%;
+  margin-bottom: 2%;
   padding: 0;
-  width: 40%;
   text-align: center;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 600;
   text-decoration: underline;
 }
-.column {
-  float: left;
-  margin: 0 1.5%;
-
-  width: 40%;
-  padding: 10px;
-  height: 400px; /* Should be removed. Only for demonstration */
+.content-item-radar {
+  border: 1px solid black;
+  display: block;
+  width: 35%;
 }
-
-/* Clear floats after the columns */
-.bottom-row:after {
-  content: "";
-  display: table;
-  clear: both;
+.content-item-circle {
+  border: 1px solid black;
+  display: block;
+  width: 23%;
 }
-
 /** Styling for the circle **/
 .tree-summary-circle {
   /* (A) PERCENTAGE WIDTH & BORDER RADIUS */
-  width: 30%;
-  border-radius: 50%;
+  border-radius: 100%;
 
   /* (B) BACKGROUND COLOR */
   background: #bedaae;
@@ -371,11 +363,7 @@ label {
   /* (C) NECESSARY TO POSITION TEXT BLOCK */
   line-height: 0;
   position: relative;
-
-  /* I was trying to make the entire circle to be in the middle, but idk why the styling dont work */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 15%;
 }
 
 /* (D) MATCH HEIGHT */
@@ -392,9 +380,6 @@ label {
   bottom: 50%;
   width: 100%;
   text-align: center;
-
-  /* (E2) THE FONT */
-  /*font-weight: bold; */
   font-size: 100px;
   color: #fff;
 }

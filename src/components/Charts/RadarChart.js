@@ -84,8 +84,13 @@ export default {
       options: {
         legend: {
           position: 'top',
+          display: false,
         },
-
+        layout: {
+          padding: {
+            left: -30,
+          },
+        },
         scale: {
           ticks: {
             beginAtZero: true,
