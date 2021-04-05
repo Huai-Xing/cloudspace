@@ -38,8 +38,8 @@
         <bar-chart v-bind:datacollection="datacollectionBar"></bar-chart>
       </div>
       <div class="content-item-radar">
-        <p class="bottom-title">{{ barTitle }}</p>
-        <radar-chart></radar-chart>
+        <p class="bottom-title">{{ radarTitle }}</p>
+        <radar-chart v-bind:datacollection="datacollectionRadar"></radar-chart>
       </div>
       <div class="content-item-circle">
         <p class="bottom-title">Number of trees planted</p>
@@ -81,9 +81,11 @@ export default {
       dateToInput: "",
       dateQuery: new Date(),
       barTitle: "",
+      radarTitle: "",
       taskList: [],
       datacollectionLine: null,
       datacollectionBar: null,
+      datacollectionRadar: null,
     };
   },
   methods: {
@@ -132,6 +134,15 @@ export default {
         this.dateFrom =
           (Date.parse(this.dateToInput) - Date.parse(this.dateFromInput)) /
           (24 * 3600 * 1000);
+        const from = new Date(this.dateTo); //new Date();
+        from.setDate(from.getDate() - this.dateFrom);
+        from.setHours(0, 0, 0, 0);
+        const to = new Date(this.dateTo); //new Date();
+        to.setDate(to.getDate());
+        to.setHours(23, 59, 0, 0);
+        if (!(this.dateQuery >= from && this.dateQuery <= to)) {
+          this.dateQuery = null;
+        }
       }
       this.fetchItems();
     },
@@ -167,14 +178,62 @@ export default {
           this.taskList = taskList;
           this.generateLineData(taskList);
           this.generateBarData(taskList);
-          console.log(this.datacollectionBar);
+          this.generateRadarData(taskList);
         });
+    },
+    generateRadarData: function (taskList) {
+      var actual = [];
+      var catList = [];
+      var actCounter = [];
+      for (var i = 0; i < taskList.length; i++) {
+        catList.push(taskList[i].category);
+      }
+      var labels = catList.filter(this.getUnqiue);
+      for (var k = 0; k < labels.length; k++) {
+        actual.push(0);
+        actCounter.push(0);
+      }
+      for (var j = 0; j < taskList.length; j++) {
+        var catIdx = labels.indexOf(taskList[j].category);
+        var currentVal = actual[catIdx];
+        var currentCount = actCounter[catIdx];
+        actual[catIdx] = currentVal + taskList[j].actualTime;
+        actCounter[catIdx] = currentCount + 1;
+      }
+      for (var l = 0; l < taskList.length; l++) {
+        actual[l] = actual[l] / actCounter[l];
+      }
+      this.datacollectionRadar = {
+        labels: labels,
+        datasets: [
+          {
+            label: "Avg Actual Time",
+            backgroundColor: ["rgba(64, 191, 128, 0.45)"],
+            borderColor: "rgba(64, 191, 128, 0.45)",
+            radius: 4,
+            pointRadius: 4, //The size of the plotted points
+            pointBorderWidth: 2,
+            pointBackgroundColor: "limegreen",
+            pointBorderColor: "rgba(64, 191, 128, 0.6)",
+            pointHoverRadius: 7,
+            data: actual,
+          },
+        ],
+      };
+      const from = new Date(this.dateTo); //new Date();
+      from.setDate(from.getDate() - this.dateFrom);
+      const to = new Date(this.dateTo); //new Date();
+      to.setDate(to.getDate());
+      this.radarTitle = "Average actual time taken per category for period " + this.formatDate(from) + " - " + this.formatDate(to);
     },
     generateBarData: function (taskList) {
       var actual = [];
       var schedule = [];
       var breakTime = [];
       var labels = [];
+      if (this.dateQuery == null) {
+        this.dateQuery = taskList[0].date.toDate();
+      }
       for (var i = 0; i < taskList.length; i++) {
         if (this.compareDate(this.dateQuery, taskList[i].date.toDate())) {
           var title = taskList[i].category + ": " + taskList[i].title;
@@ -288,6 +347,9 @@ export default {
     checkStatus: function (data) {
       return data.status == "Completed";
     },
+    getUnqiue: function (value, index, self) {
+      return self.indexOf(value) === index;
+    },
   },
   created() {
     this.fetchNumOfTrees();
@@ -301,7 +363,7 @@ export default {
   box-sizing: border-box;
 }
 .content-item-line {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   margin-left: 12%;
   display: block;
   width: 88%;
@@ -321,18 +383,18 @@ label {
   margin-right: 5px;
 }
 .bottom {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   margin-left: 12%;
   display: flex;
   width: 88%;
 }
 .content-item-bar {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: block;
   width: 42%;
 }
 .bottom-title {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   margin: 0;
   margin-top: 1%;
   margin-bottom: 2%;
@@ -343,12 +405,12 @@ label {
   text-decoration: underline;
 }
 .content-item-radar {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: block;
   width: 35%;
 }
 .content-item-circle {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: block;
   width: 23%;
 }
