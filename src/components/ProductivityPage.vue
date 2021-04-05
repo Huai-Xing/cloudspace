@@ -27,9 +27,15 @@
       />
       <button v-show="custom" v-on:click="changeView(3)">View Range</button>
       {{ dataInfo }}
-      <line-chart v-bind:datacollection="datacollectionLine" v-on:drillDown="drillDown"></line-chart>
+      <line-chart
+        v-bind:datacollection="datacollectionLine"
+        v-on:drillDown="drillDown"
+      ></line-chart>
     </div>
-
+    <div class="content-item-bar">
+      <p>{{ barTitle }}</p>
+      <bar-chart v-bind:datacollection="datacollectionBar"></bar-chart>
+    </div>
     <br />
 
     <div class="content-item">
@@ -57,6 +63,7 @@ import MainNavigation from "./MainNavigation.vue";
 
 // Importing the Chart Components
 import LineChart from "./Charts/LineChart.vue";
+import BarChart from "./Charts/BarChart.vue";
 import RadarChart from "./Charts/RadarChart.vue";
 import fb from "../firebase";
 
@@ -65,6 +72,7 @@ export default {
   components: {
     appNav: MainNavigation,
     LineChart,
+    BarChart,
     RadarChart,
   },
   data() {
@@ -77,7 +85,11 @@ export default {
       dateTo: new Date(),
       dateFromInput: "",
       dateToInput: "",
+      dateQuery: new Date(),
+      barTitle: "",
+      taskList: [],
       datacollectionLine: null,
+      datacollectionBar: null,
     };
   },
   methods: {
@@ -94,7 +106,12 @@ export default {
     drillDown: function (x, bool) {
       console.log("WORKS");
       console.log(x);
-      console.log(bool);
+      if (bool) {
+        this.dateQuery = new Date(x);
+      } else {
+        this.dateQuery = new Date();
+      }
+      this.generateBarData(this.taskList);
     },
     viewCustom: function () {
       this.custom = !this.custom;
@@ -153,61 +170,107 @@ export default {
           } else {
             this.dataInfo = "";
           }
-          var actual = 0;
-          var breakTime = 0;
-          var scheduled = 0;
-          var currentDate = taskList[0].date.toDate();
-          var actualList = [];
-          var breakTimeList = [];
-          var scheduledList = [];
-          var labelList = [];
-          for (var i = 0; i < taskList.length; i++) {
-            if (this.compareDate(currentDate, taskList[i].date.toDate())) {
-              actual += taskList[i].actualTime;
-              breakTime += taskList[i].breakTime;
-              scheduled += this.convertToSecond(taskList[i].duration);
-            } else {
-              actualList.push(actual); //Actual
-              breakTimeList.push(scheduled); //Scheduled
-              scheduledList.push(breakTime); //Break
-              labelList.push(this.formatDate(currentDate)); //Time
-              actual = taskList[i].actualTime;
-              breakTime = taskList[i].breakTime;
-              scheduled = this.convertToSecond(taskList[i].duration);
-              currentDate = taskList[i].date.toDate();
-            }
-          }
+          this.taskList = taskList;
+          this.generateLineData(taskList);
+          this.generateBarData(taskList);
+          console.log(this.datacollectionBar);
+        });
+    },
+    generateBarData: function (taskList) {
+      var actual = [];
+      var schedule = [];
+      var breakTime = [];
+      var labels = [];
+      for (var i = 0; i < taskList.length; i++) {
+        if (this.compareDate(this.dateQuery, taskList[i].date.toDate())) {
+          var title = taskList[i].category + ": " + taskList[i].title;
+          actual.push(taskList[i].actualTime);
+          breakTime.push(taskList[i].breakTime);
+          schedule.push(this.convertToSecond(taskList[i].duration));
+          labels.push(title); //Time
+        }
+      }
+      this.datacollectionBar = {
+        labels: labels,
+        datasets: [
+          {
+            label: "Actual Time Taken",
+            data: actual,
+            borderColor: "#3e95cd",
+            backgroundColor: "#3e95cd",
+          },
+          {
+            label: "Total Break Time",
+            data: breakTime,
+            borderColor: "#3cba9f",
+            backgroundColor: "#3cba9f",
+          },
+          {
+            label: "Scheduled Time",
+            data: schedule,
+            borderColor: "#8e5ea2",
+            backgroundColor: "#8e5ea2",
+          },
+        ],
+      };
+      this.barTitle =
+        "Breakdown of tasks for " + this.formatDate(this.dateQuery);
+    },
+    generateLineData: function (taskList) {
+      var actual = 0;
+      var breakTime = 0;
+      var scheduled = 0;
+      var currentDate = taskList[0].date.toDate();
+      var actualList = [];
+      var breakTimeList = [];
+      var scheduledList = [];
+      var labelList = [];
+      for (var i = 0; i < taskList.length; i++) {
+        if (this.compareDate(currentDate, taskList[i].date.toDate())) {
+          actual += taskList[i].actualTime;
+          breakTime += taskList[i].breakTime;
+          scheduled += this.convertToSecond(taskList[i].duration);
+        } else {
           actualList.push(actual); //Actual
           breakTimeList.push(scheduled); //Scheduled
           scheduledList.push(breakTime); //Break
           labelList.push(this.formatDate(currentDate)); //Time
-          this.datacollectionLine = {
-            labels: labelList,
-            datasets: [
-              {
-                label: "Actual Time Taken",
-                data: actualList,
-                borderColor: "#3e95cd",
-                backgroundColor: "#3e95cd",
-                fill: false,
-              },
-              {
-                label: "Total Break Time",
-                data: breakTimeList,
-                borderColor: "#3cba9f",
-                backgroundColor: "#3cba9f",
-                fill: false,
-              },
-              {
-                label: "Scheduled Time",
-                data: scheduledList,
-                borderColor: "#8e5ea2",
-                backgroundColor: "#8e5ea2",
-                fill: false,
-              },
-            ],
-          };
-        });
+          actual = taskList[i].actualTime;
+          breakTime = taskList[i].breakTime;
+          scheduled = this.convertToSecond(taskList[i].duration);
+          currentDate = taskList[i].date.toDate();
+        }
+      }
+      actualList.push(actual); //Actual
+      breakTimeList.push(scheduled); //Scheduled
+      scheduledList.push(breakTime); //Break
+      labelList.push(this.formatDate(currentDate)); //Time
+      this.datacollectionLine = {
+        labels: labelList,
+        datasets: [
+          {
+            label: "Actual Time Taken",
+            data: actualList,
+            borderColor: "#3e95cd",
+            backgroundColor: "#3e95cd",
+            fill: false,
+          },
+          {
+            label: "Total Break Time",
+            data: breakTimeList,
+            borderColor: "#3cba9f",
+            backgroundColor: "#3cba9f",
+            fill: false,
+          },
+          {
+            label: "Scheduled Time",
+            data: scheduledList,
+            borderColor: "#8e5ea2",
+            backgroundColor: "#8e5ea2",
+            fill: false,
+          },
+        ],
+      };
     },
     compareDate: function (x, y) {
       if (x.getFullYear() == y.getFullYear()) {
@@ -245,9 +308,9 @@ export default {
 }
 .content-item-line {
   border: 1px solid black;
-  margin-left: 14%;
+  margin-left: 12%;
   display: block;
-  width: 83%;
+  width: 88%;
 }
 span {
   font-weight: 700;
@@ -262,6 +325,23 @@ label {
 }
 #customTo {
   margin-right: 5px;
+}
+.content-item-bar {
+  border: 1px solid black;
+  margin-left: 12%;
+  display: block;
+  width: 88%;
+}
+.content-item-bar > p {
+   border: 1px solid black;
+  margin: 0;
+  margin-top: 1%;
+  padding: 0;
+  width: 40%;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: underline;
 }
 .column {
   float: left;

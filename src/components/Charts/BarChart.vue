@@ -1,75 +1,41 @@
 <template>
   <div class="chart">
-    <line-chart
-      id="line"
+    <bar-chart
+      id="bar"
       :chart-data="datacollection"
       :options="options"
-    ></line-chart>
+    ></bar-chart>
   </div>
 </template>
 
 <script>
-import LineChart from "./LineChart.js";
+import BarChart from "./BarChart.js";
 
 export default {
   components: {
-    LineChart,
+    BarChart,
   },
   props: {
     datacollection: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   data: function () {
     return {
       options: {
-        //Remove if want curve lines
-        elements: {
-          line: {
-            tension: 0,
-          },
-        },
-        onClick: (event, data) => {
-          try {
-            var a = data[0]._index; // index of data for time taken
-            console.log(a);
-            console.log(this.datacollection.labels[a]);
-            var selected = this.datacollection.labels[a];
-            var idx = selected.indexOf("/");
-            var day = selected.substring(0, idx);
-            selected = selected.substring(idx + 1, selected.length);
-            idx = selected.indexOf("/");
-            var month = selected.substring(0, idx);
-            var year = selected.substring(idx + 1, selected.length);
-            console.log(day + " " + month + " " + year);
-            var dateString = year + "-" + month + "-" + day;
-            console.log(new Date(dateString));
-            this.callEmit(dateString, true);
-          } catch (err) {
-            console.log(err);
-            this.callEmit("", false);
-          }
-        },
-        //console.log("CLICK: " + tooltipItem + " IT  " + Object.keys(array[0]) + "month " + array[0]._datasetIndex + "data " + array[0]._index );
-        layout: {
-          padding: 10,
-        },
-        legend: {
-          position: "right",
-          labels: {
-            fontSize: 10,
-            boxWidth: 20,
-          },
-        },
         scales: {
           yAxes: [
             {
               ticks: {
                 min: 0,
                 stepSize: 1800,
+                fontSize: 10,
+                callback: function (value) {
+                  return (value / 1800) * 30 + " min";
+                },
               },
-              display: false,
+              display: true,
               gridLines: {
                 display: false,
               },
@@ -78,16 +44,33 @@ export default {
           xAxes: [
             {
               gridLines: {
-                display: false,
+                display: true,
+              },
+              ticks: {
+                fontSize: 10,
               },
             },
           ],
+        },
+        layout: {
+          padding: 10,
+        },
+        legend: {
+          position: "bottom",
+          labels: {
+            fontSize: 10,
+            boxWidth: 20,
+          },
+        },
+        title: {
+          display: true,
+          text: "",
         },
         tooltips: {
           // When hovering over the points, show the tooltip label
           callbacks: {
             title: function (tooltipItem, data) {
-              return "Date: " + data.labels[tooltipItem[0].index];
+              return data.labels[tooltipItem[0].index];
             },
             label: function (tooltipItem, data) {
               var label = data.datasets[tooltipItem.datasetIndex].label;
@@ -118,17 +101,13 @@ export default {
       },
     };
   },
-  methods: {
-    callEmit: function (x, bool) {
-      this.$emit("drillDown", x, bool);
-    },
-  },
 };
 </script>
 
 <style scoped>
-#line {
+#bar {
   position: relative;
-  height: 30vh;
+  height: 40vh;
+  width: 35vw;
 }
 </style>
