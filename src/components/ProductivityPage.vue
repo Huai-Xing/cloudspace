@@ -333,7 +333,7 @@ label {
   width: 88%;
 }
 .content-item-bar > p {
-   border: 1px solid black;
+  border: 1px solid black;
   margin: 0;
   margin-top: 1%;
   padding: 0;
