@@ -13,45 +13,58 @@
           <div class="row">
             <label for="title">Title</label>
             <input
-              v-model="updatedtask.title"
+              v-model="$v.updatedtask.title.$model"
               type="text"
               id="title"
               v-bind:placeholder="currentTask.title"
             />
           </div>
-          <br />
+          <div v-if="$v.updatedtask.title.$dirty">
+            <div v-if="!$v.updatedtask.title.required" class="error">
+              Title is required
+            </div>
+          </div>
 
+          <br />
           <div class="row">
-            <label for="edit-task-category">Category</label>
-            <select
-              v-model="updatedtask.category"
-              :disabled="disabledselect"
-              id="edit-task-category"
-            >
-              <option disabled value="">
-                Please select a new catergory for your task
-              </option>
-              <option
-                v-for="option in categoryList"
-                v-bind:value="option"
-                v-bind:key="option"
+            <div v-if="!addNewCat">
+              <label for="edit-task-category">Category</label>
+              <v-select
+                v-model="updatedtask.category"
+                :disabled="disabledselect"
+                id="edit-task-category"
+                :options="categoryList"
               >
-                {{ option }}
-              </option>
-            </select>
+              </v-select>
+            </div>
+            <div v-if="addNewCat">
+              Category
+              <input
+                id="et-newcategory"
+                type="text"
+                v-model="updatedtask.category"
+                placeholder="Enter a new category"
+              />
+            </div>
           </div>
-          <br />
+          <div v-if="$v.updatedtask.category.$dirty && !addNewCat">
+            <div v-if="!$v.updatedtask.category.required" class="error">
+              Category is required
+            </div>
+          </div>
+          <div v-if="$v.updatedtask.category.$dirty && addNewCat">
+            <div v-if="!$v.updatedtask.category.required" class="error">
+              Category is required
+            </div>
+            <div v-if="!$v.updatedtask.category.doesNotExist" class="error">
+              This category already exists!
+            </div>
+          </div>
 
-          <div class="row">
-            <label>Add a new category</label>
-            <input
-              id="et-newcategory"
-              type="text"
-              v-model="newcategory"
-              placeholder="Enter a new category"
-              :disabled="disabledinput"
-            />
-          </div>
+          <toggle-button
+            id="switch2"
+            v-on:change="addNewCategory"
+          ></toggle-button>
           <br />
 
           <div class="row">
@@ -86,15 +99,38 @@ import Modal from "./Modal";
 import VueTimepicker from "vue2-timepicker";
 import "vue2-timepicker/dist/VueTimepicker.css";
 import fb from "../firebase";
+import { required } from "vuelidate/lib/validators";
+import ToggleButton from "./ToggleButton";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+
+function doesNotExist(value) {
+  if (this.addNewCat) {
+    return !this.categoryList.includes(value);
+  } else {
+    return true;
+  }
+}
 
 export default {
   name: "App",
   components: {
     Modal,
     VueTimepicker,
+    ToggleButton,
+    vSelect,
   },
-  props: {
-    idname: String,
+  fetchToBeEdited: function () {
+    fb.firestore()
+      .collection("tasks")
+      .doc(this.user)
+      .collection("tasksList")
+      .doc(this.idname)
+      .get()
+      .then((doc) => {
+        this.currentTask = doc.data();
+        this.updatedtask = doc.data();
+      });
   },
   data() {
     return {
@@ -116,6 +152,7 @@ export default {
       user: fb.auth().currentUser.uid,
       categoryList: [],
       currentTask: [],
+      addNewCat: false,
     };
   },
   methods: {
@@ -144,33 +181,45 @@ export default {
       this.isModalVisible = true;
     },
     closeModal() {
+      this.resetForm();
       this.isModalVisible = false;
     },
     updateTask() {
+      this.$v.$touch();
       //managing newcategories
-      if (this.newcategory != "") {
-        this.categoryList.push(this.newcategory);
+      if (!this.$v.$invalid) {
+        if (this.addNewCat) {
+          this.categoryList.push(this.updatedtask.category);
 
-        this.updatedtask.category = this.newcategory;
+          fb.firestore().collection("users").doc(this.user).update({
+            categoryList: this.categoryList,
+          });
+        } else;
 
-        fb.firestore().collection("users").doc(this.user).update({
-          categoryList: this.categoryList,
-        });
-      } else;
+        //updating task to tasksList
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .doc(this.idname)
+          .update(this.updatedtask)
+          .then(() => {
+            this.isModalVisible = false;
+            location.reload();
+          });
 
-      //updating task to tasksList
-      fb.firestore()
-        .collection("tasks")
-        .doc(this.user)
-        .collection("tasksList")
-        .doc(this.idname)
-        .update(this.updatedtask)
-        .then(() => {
-          this.isModalVisible = false;
-          location.reload();
-        });
-
-      //reset values
+        //close modal and reset values
+        this.closeModal();
+        console.log("this method works");
+      } else {
+        event.preventDefault();
+      }
+    },
+    addNewCategory: function (value) {
+      console.log(value);
+      this.addNewCat = value;
+    },
+    resetForm() {
       (this.updatedtask = {
         category: "",
         title: "",
@@ -183,28 +232,23 @@ export default {
         actualTime: 0,
         coinsEarned: 0,
       }),
-        (this.newcategory = "");
-      // this.isModalVisible = false;
-      document.getElementById("edit-task-form").reset();
-      console.log("this method works");
+        // this.isModalVisible = false;
+        document.getElementById("edit-task-form").reset();
+      this.$v.$reset();
     },
   },
-  watch: {
-    newcategory: function (val) {
-      if (val == "") {
-        this.disabledselect = false;
-      } else {
-        this.disabledselect = true;
-      }
-    },
-    "updatedtask.category": function (val) {
-      if (val == "") {
-        this.disabledinput = false;
-      } else {
-        this.disabledinput = true;
-      }
+  validations: {
+    updatedtask: {
+      title: {
+        required,
+      },
+      category: {
+        required,
+        doesNotExist,
+      },
     },
   },
+
   created() {
     this.fetchCategoryList();
     this.fetchToBeEdited();
@@ -277,5 +321,8 @@ select {
 }
 .time-picker {
   margin: 5px;
+}
+.error {
+  color: red;
 }
 </style>
