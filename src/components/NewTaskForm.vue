@@ -25,20 +25,25 @@
           <br />
           <div v-if="!addNewCat">
             <label for="new-task-category">Category</label>
-            <select v-model="newtask.category" id="new-task-category">
-              <option disabled value="">Choose an existing category</option>
+            <v-select
+              v-model="newtask.category"
+              id="new-task-category"
+              :options="categoryList"
+            >
+              <!-- <option disabled value="">Choose an existing category</option>
               <option
                 v-for="option in categoryList"
                 v-bind:value="option"
                 v-bind:key="option"
+                @contextmenu="handler($event)"
               >
                 {{ option }}
                 <img
                   src="../assets/task/trash_btn.png"
                   v-on:click="deleteCategory($event)"
                 />
-              </option>
-            </select>
+              </option> -->
+            </v-select>
           </div>
 
           <div v-if="addNewCat">
@@ -101,9 +106,15 @@
   import fb from "../firebase";
   import { required } from "vuelidate/lib/validators";
   import ToggleButton from "./ToggleButton";
+  import vSelect from "vue-select";
+  import "vue-select/dist/vue-select.css";
 
   function doesNotExist(value) {
-    return !this.categoryList.includes(value);
+    if (this.addNewCat) {
+      return !this.categoryList.includes(value);
+    } else {
+      return true;
+    }
   }
 
   export default {
@@ -112,6 +123,7 @@
       Modal,
       VueTimepicker,
       ToggleButton,
+      vSelect,
     },
     props: {
       taskDate: Object,
@@ -177,8 +189,15 @@
         //resetting validation
         this.$v.$reset();
       },
+      handler() {
+        event.preventDefault();
+        console.log("rightclick");
+      },
       sendTask() {
         this.$v.$touch();
+        console.log(this.$v.$invalid);
+        console.log(this.$v.newtask.category.doesNotExist);
+        console.log(this.addNewCat == true);
 
         if (!this.$v.$invalid) {
           //managing newcategories

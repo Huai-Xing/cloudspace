@@ -25,12 +25,13 @@
           <br />
           <div v-if="!addNewCat">
             <label for="edit-task-category">Category</label>
-            <select
+            <v-select
               v-model="updatedtask.category"
               :disabled="disabledselect"
               id="edit-task-category"
+              :options="categoryList"
             >
-              <option disabled value=""
+              <!-- <option disabled value=""
                 >Please select a new catergory for your task</option
               >
               <option
@@ -39,8 +40,8 @@
                 v-bind:key="option"
               >
                 {{ option }}
-              </option>
-            </select>
+              </option> -->
+            </v-select>
           </div>
           <div v-if="addNewCat">
             Category
@@ -104,9 +105,15 @@
   import fb from "../firebase";
   import { required } from "vuelidate/lib/validators";
   import ToggleButton from "./ToggleButton";
+  import vSelect from "vue-select";
+  import "vue-select/dist/vue-select.css";
 
   function doesNotExist(value) {
-    return !this.categoryList.includes(value);
+    if (this.addNewCat) {
+      return !this.categoryList.includes(value);
+    } else {
+      return true;
+    }
   }
 
   export default {
@@ -115,6 +122,7 @@
       Modal,
       VueTimepicker,
       ToggleButton,
+      vSelect,
     },
     props: {
       idname: String,

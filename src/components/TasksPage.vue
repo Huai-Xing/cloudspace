@@ -87,8 +87,8 @@
                 <img
                   src="../assets/task/moreinfo_btn.png"
                   v-bind:idname="task[0]"
-                  v-on:click="showInfo($event)"
                 />
+
                 <img
                   src="../assets/task/trash_btn.png"
                   v-bind:idname="task[0]"
@@ -121,6 +121,7 @@
         tasks: [],
         deadlines: [],
         isToday: true,
+        moreInfoPacket: [],
       };
     },
     //Register Locally
@@ -265,6 +266,19 @@
             });
           });
       },
+      // showInfo: function(event) {
+      //   let doc_id = event.target.getAttribute("idname");
+      //   fb.firestore()
+      //     .collection("tasks")
+      //     .doc(this.user)
+      //     .collection("tasksList")
+      //     .doc(doc_id)
+      //     .get()
+      //     .then((doc) => {
+      //       this.moreInfoPacket = doc.data();
+      //       console.log(this.moreInfoPacket);
+      //     });
+      // },
     },
     created() {
       this.fetchTasks();

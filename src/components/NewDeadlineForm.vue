@@ -24,8 +24,12 @@
 
           <div v-if="!addNewCat">
             <label for="new-deadline-category">Category</label>
-            <select v-model="newdeadline.category" id="new-deadline-category">
-              <option disabled value=""
+            <v-select
+              v-model="newdeadline.category"
+              id="new-deadline-category"
+              :options="categoryList"
+            >
+              <!-- <option disabled value=""
                 >Please select a category for your deadline</option
               >
               <option
@@ -38,8 +42,8 @@
                   src="../assets/task/trash_btn.png"
                   v-on:click="deleteCategory($event)"
                 />
-              </option>
-            </select>
+              </option> -->
+            </v-select>
           </div>
           <div v-if="addNewCat">
             Category
@@ -106,9 +110,15 @@
   import fb from "../firebase";
   import { required } from "vuelidate/lib/validators";
   import ToggleButton from "./ToggleButton";
+  import vSelect from "vue-select";
+  import "vue-select/dist/vue-select.css";
 
   function doesNotExist(value) {
-    return !this.categoryList.includes(value);
+    if (this.addNewCat) {
+      return !this.categoryList.includes(value);
+    } else {
+      return true;
+    }
   }
 
   export default {
@@ -117,6 +127,7 @@
       Modal,
       VueTimepicker,
       ToggleButton,
+      vSelect,
     },
     props: {
       taskDate: Object,
