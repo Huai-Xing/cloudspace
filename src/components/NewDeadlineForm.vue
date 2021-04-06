@@ -10,49 +10,54 @@
           <div class="row">
             <label for="deadlinetitle">Title</label>
             <input
-              v-model="newdeadline.title"
+              v-model="$v.newdeadline.title.$model"
               type="text"
               id="deadlinetitle"
               placeholder="Give your deadline a name"
             />
           </div>
-          <br />
-
-          <div class="row">
-            <label for="new-deadline-category">Category</label>
-            <select
-              v-model="newdeadline.category"
-              :disabled="disabledselect"
-              id="new-deadline-category"
-            >
-              <option disabled value="">
-                Please select a category for your deadline
-              </option>
-              <option
-                v-for="option in categoryList"
-                v-bind:value="option"
-                v-bind:key="option"
+          <div v-if="$v.newdeadline.title.$dirty">
+            <div v-if="!$v.newdeadline.title.required" class="error">
+              Title is required
+            </div>
+          </div>
+          <div>
+            <div v-if="!addNewCat">
+              <label for="new-deadline-category">Category</label>
+              <v-select 
+                v-model="newdeadline.category"
+                id="new-deadline-category"
+                class="categoryDropdown"
+                :options="categoryList"
               >
-                {{ option }}
-                <img
-                  src="../assets/task/trash_btn.png"
-                  v-on:click="deleteCategory($event)"
-                />
-              </option>
-            </select>
+              </v-select>
+            </div>
+            <div v-if="addNewCat" class="row">
+              <label for="ndl-newcategory">Category</label>
+              <input
+                id="ndl-newcategory"
+                type="text"
+                v-model="newdeadline.category"
+                placeholder="Enter a new category"
+              />
+            </div>
           </div>
-          <br />
+          <div v-if="$v.newdeadline.category.$dirty && !addNewCat">
+            <div v-if="!$v.newdeadline.category.required" class="error">
+              Category is required
+            </div>
+          </div>
+          <div v-if="$v.newdeadline.category.$dirty && addNewCat">
+            <div v-if="!$v.newdeadline.category.required" class="error">
+              Category is required
+            </div>
+            <div v-if="!$v.newdeadline.category.doesNotExist" class="error">
+              This category already exists!
+            </div>
+          </div>
 
-          <div class="row">
-            <label> Add a new category </label>
-            <input
-              id="ndl-newcategory"
-              type="text"
-              v-model="newcategory"
-              placeholder="Enter a new category"
-              :disabled="disabledinput"
-            />
-          </div>
+          <toggle-button id="switch1" @change="addNewCategory"></toggle-button>
+
           <br />
 
           <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
@@ -102,15 +107,33 @@ import Modal from "./Modal";
 import VueTimepicker from "vue2-timepicker";
 import "vue2-timepicker/dist/VueTimepicker.css";
 import fb from "../firebase";
+import { required } from "vuelidate/lib/validators";
+import ToggleButton from "./ToggleButton";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+
+function doesNotExist(value) {
+  if (this.addNewCat) {
+    return !this.categoryList.includes(value);
+  } else {
+    return true;
+  }
+}
 
 export default {
   name: "App",
   components: {
     Modal,
     VueTimepicker,
+    ToggleButton,
+    vSelect,
   },
   props: {
     taskDate: Object,
+  },
+  showModal() {
+    this.resetForm();
+    this.isModalVisible = true;
   },
   data() {
     return {
@@ -127,15 +150,10 @@ export default {
         showInAdvance: 0,
         date: this.taskDate.toDate(),
       },
-      newcategory: "",
-      disabledselect: false,
-      disabledinput: false,
+
       user: fb.auth().currentUser.uid,
       categoryList: [],
-      errors: {
-        title: "",
-        category: "",
-      },
+      addNewCat: false,
     };
   },
   methods: {
@@ -150,10 +168,10 @@ export default {
         });
     },
     showModal() {
-      this.resetForm();
       this.isModalVisible = true;
     },
     closeModal() {
+      this.resetForm();
       this.isModalVisible = false;
     },
     resetForm() {
@@ -167,61 +185,56 @@ export default {
         },
         date: this.taskDate.toDate(),
       }),
-        (this.newcategory = "");
-      document.getElementById("new-deadline-form").reset();
+        document.getElementById("new-deadline-form").reset();
+      this.$v.$reset();
     },
     sendDeadline() {
-      this.newdeadline.date = new Date(this.newdeadline.datedue);
+      this.$v.$touch();
       //managing newcategories
-      if (this.newcategory != "") {
-        if (!this.categoryList.includes(this.newcategory)) {
-          this.categoryList.push(this.newcategory);
+      if (!this.$v.$invalid) {
+        if (this.addNewCat) {
+          this.categoryList.push(this.newdeadline.category);
           console.log(this.categoryList);
-          this.newdeadline.category = this.newcategory;
 
           fb.firestore().collection("users").doc(this.user).update({
             categoryList: this.categoryList,
           });
-        } else {
-          // this.errors.category = "Category already exists";
-          alert("Error - this category already exists!");
-          event.preventdefault();
-        }
-      } else;
-      console.log(this.newdeadline);
+        } else;
 
-      //adding task to tasksList
-      fb.firestore()
-        .collection("tasks")
-        .doc(this.user)
-        .collection("deadlinesList")
-        .add(this.newdeadline)
-        .then(() => location.reload());
+        console.log(this.newdeadline);
 
-      //reset values
-      this.isModalVisible = false;
-      document.getElementById("new-deadline-form").reset();
-      this.resetForm();
-    },
-  },
-  watch: {
-    newcategory: function (val) {
-      if (val == "") {
-        this.disabledselect = false;
+        //adding task to tasksList
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("deadlinesList")
+          .add(this.newdeadline)
+          .then(() => location.reload());
+
+        //close modal and reset values
+        this.closeModal();
       } else {
-        this.disabledselect = true;
+        event.preventDefault();
       }
     },
-    "newdeadline.category": function (val) {
-      if (val == "") {
-        this.disabledinput = false;
-      } else {
-        this.disabledinput = true;
-      }
+    addNewCategory: function (value) {
+      this.addNewCat = value;
     },
   },
+
   created() {
     this.fetchCategoryList();
+  },
+  validations: {
+    newdeadline: {
+      title: {
+        required,
+      },
+      category: {
+        required,
+        doesNotExist,
+      },
+    },
   },
 };
 </script>
@@ -286,6 +299,11 @@ select {
   flex-grow: 1;
   color: rgb(110, 110, 110);
 }
+.v-select {
+  /* border: none; */
+  height: 30px;
+  margin-top: 3px;
+}
 ::placeholder {
   color: rgb(110, 110, 110);
 }
@@ -294,5 +312,8 @@ select {
 }
 .days {
   padding-left: 6px;
+}
+.error {
+  color: red;
 }
 </style>
