@@ -10,46 +10,42 @@
 
       <template v-slot:body>
         <form id="edit-task-form">
-          <label for="title">Title</label>
-          <input
-            v-model="$v.updatedtask.title.$model"
-            type="text"
-            id="title"
-            v-bind:placeholder="currentTask.title"
-          />
+          <div class="row">
+            <label for="title">Title</label>
+            <input
+              v-model="$v.updatedtask.title.$model"
+              type="text"
+              id="title"
+              v-bind:placeholder="currentTask.title"
+            />
+          </div>
           <div v-if="$v.updatedtask.title.$dirty">
             <div v-if="!$v.updatedtask.title.required" class="error">
               Title is required
             </div>
           </div>
+
           <br />
-          <div v-if="!addNewCat">
-            <label for="edit-task-category">Category</label>
-            <select
-              v-model="updatedtask.category"
-              :disabled="disabledselect"
-              id="edit-task-category"
-            >
-              <option disabled value=""
-                >Please select a new catergory for your task</option
+          <div class="row">
+            <div v-if="!addNewCat">
+              <label for="edit-task-category">Category</label>
+              <v-select
+                v-model="updatedtask.category"
+                :disabled="disabledselect"
+                id="edit-task-category"
+                :options="categoryList"
               >
-              <option
-                v-for="option in categoryList"
-                v-bind:value="option"
-                v-bind:key="option"
-              >
-                {{ option }}
-              </option>
-            </select>
-          </div>
-          <div v-if="addNewCat">
-            Category
-            <input
-              id="et-newcategory"
-              type="text"
-              v-model="updatedtask.category"
-              placeholder="Enter a new category"
-            />
+              </v-select>
+            </div>
+            <div v-if="addNewCat">
+              Category
+              <input
+                id="et-newcategory"
+                type="text"
+                v-model="updatedtask.category"
+                placeholder="Enter a new category"
+              />
+            </div>
           </div>
           <div v-if="$v.updatedtask.category.$dirty && !addNewCat">
             <div v-if="!$v.updatedtask.category.required" class="error">

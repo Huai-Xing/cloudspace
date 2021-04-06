@@ -9,13 +9,15 @@
 
       <template v-slot:body>
         <form id="new-task-form">
-          <label for="tasktitle">Title</label>
-          <input
-            v-model="$v.newtask.title.$model"
-            type="text"
-            id="tasktitle"
-            placeholder="Give your task a name"
-          />
+          <div class="row">
+            <label for="tasktitle">Title</label>
+            <input
+              v-model="$v.newtask.title.$model"
+              type="text"
+              id="tasktitle"
+              placeholder="Give your task a name"
+            />
+          </div>
           <div v-if="$v.newtask.title.$dirty">
             <div v-if="!$v.newtask.title.required" class="error">
               Title is required
@@ -23,32 +25,26 @@
           </div>
 
           <br />
-          <div v-if="!addNewCat">
-            <label for="new-task-category">Category</label>
-            <select v-model="newtask.category" id="new-task-category">
-              <option disabled value="">Choose an existing category</option>
-              <option
-                v-for="option in categoryList"
-                v-bind:value="option"
-                v-bind:key="option"
+          <div class="row">
+            <div v-if="!addNewCat">
+              <label for="new-task-category">Category</label>
+              <v-select
+                v-model="newtask.category"
+                id="new-task-category"
+                :options="categoryList"
               >
-                {{ option }}
-                <img
-                  src="../assets/task/trash_btn.png"
-                  v-on:click="deleteCategory($event)"
-                />
-              </option>
-            </select>
-          </div>
+              </v-select>
+            </div>
 
-          <div v-if="addNewCat">
-            Category
-            <input
-              id="nt-newcategory"
-              type="text"
-              v-model="newtask.category"
-              placeholder="Enter a new category"
-            />
+            <div v-if="addNewCat">
+              Category
+              <input
+                id="nt-newcategory"
+                type="text"
+                v-model="newtask.category"
+                placeholder="Enter a new category"
+              />
+            </div>
           </div>
           <div v-if="$v.newtask.category.$dirty && !addNewCat">
             <div v-if="!$v.newtask.category.required" class="error">
@@ -65,7 +61,6 @@
           </div>
           <toggle-button id="switch" @change="addNewCategory"></toggle-button>
 
-          <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
           <br />
           Duration
           <vue-timepicker

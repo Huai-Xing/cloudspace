@@ -9,46 +9,39 @@
 
       <template v-slot:body>
         <form id="new-deadline-form">
-          <label for="deadlinetitle">Title</label>
-          <input
-            v-model="$v.newdeadline.title.$model"
-            type="text"
-            id="deadlinetitle"
-            placeholder="Give your deadline a name"
-          />
+          <div class="row">
+            <label for="deadlinetitle">Title</label>
+            <input
+              v-model="$v.newdeadline.title.$model"
+              type="text"
+              id="deadlinetitle"
+              placeholder="Give your deadline a name"
+            />
+          </div>
           <div v-if="$v.newdeadline.title.$dirty">
             <div v-if="!$v.newdeadline.title.required" class="error">
               Title is required
             </div>
           </div>
-
-          <div v-if="!addNewCat">
-            <label for="new-deadline-category">Category</label>
-            <select v-model="newdeadline.category" id="new-deadline-category">
-              <option disabled value=""
-                >Please select a category for your deadline</option
+          <div class="row">
+            <div v-if="!addNewCat">
+              <label for="new-deadline-category">Category</label>
+              <v-select
+                v-model="newdeadline.category"
+                id="new-deadline-category"
+                :options="categoryList"
               >
-              <option
-                v-for="option in categoryList"
-                v-bind:value="option"
-                v-bind:key="option"
-              >
-                {{ option }}
-                <img
-                  src="../assets/task/trash_btn.png"
-                  v-on:click="deleteCategory($event)"
-                />
-              </option>
-            </select>
-          </div>
-          <div v-if="addNewCat">
-            Category
-            <input
-              id="ndl-newcategory"
-              type="text"
-              v-model="newdeadline.category"
-              placeholder="Enter a new category"
-            />
+              </v-select>
+            </div>
+            <div v-if="addNewCat">
+              Category
+              <input
+                id="ndl-newcategory"
+                type="text"
+                v-model="newdeadline.category"
+                placeholder="Enter a new category"
+              />
+            </div>
           </div>
           <div v-if="$v.newdeadline.category.$dirty && !addNewCat">
             <div v-if="!$v.newdeadline.category.required" class="error">
@@ -65,7 +58,7 @@
           </div>
 
           <toggle-button id="switch1" @change="addNewCategory"></toggle-button>
-          <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
+
           <br />
           Date Due <input type="date" v-model.trim="newdeadline.datedue" />
           <br />
@@ -229,14 +222,6 @@
 </script>
 
 <style scoped>
-  /* .btn {
-    padding: 2px 2px 2px 2px;
-  }
-  .btn > img {
-    height: 20px;
-    width: 20px;
-    vertical-align: middle;
-  } */
   img {
     width: 38px;
     height: 38px;
