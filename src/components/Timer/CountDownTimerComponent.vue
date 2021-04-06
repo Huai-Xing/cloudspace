@@ -287,11 +287,11 @@
     width: 12px;
     height: 12px;
     text-align: center;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
     font-style: italic;
     display: block;
-    padding: None;
+    padding: 0px 1px 1px 0px;
     margin-left: 10px;
   }
 
@@ -302,7 +302,7 @@
     left: 370%;
     width: 290px;
     height: auto;
-    padding: 10px;
+    padding: 15px;
     font-size: 11px;
     font-style: normal;
     font-weight: 300;

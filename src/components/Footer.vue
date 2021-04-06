@@ -24,5 +24,6 @@ footer {
   right: 0;
   bottom: 0;
   height: 100px;
+  z-index: -1000;
 }
 </style>

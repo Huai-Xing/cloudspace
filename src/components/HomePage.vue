@@ -177,23 +177,25 @@
     display: inline-block;
     width: 50%;
     height: 15vw;
-    border: 5px solid #81b762;
-    border-radius: 20px;
   }
   .overviewHead {
     text-decoration: underline;
     background-color: #81b762;
-    border-radius: 10px 10px 0 0;
+    border-radius: 20px 20px 0 0;
     font-size: 16px;
     color: white;
     font-weight: 550;
     margin: 0;
     padding: 2%;
+    padding-left: 3%;
   }
   .overview > div {
     position: relative;
+    height: inherit;
     max-height: 80%;
     overflow: auto;
+    border: 5px solid #81b762;
+    border-radius: 0 0 20px 20px;
   }
   #task {
     margin-right: 5%;

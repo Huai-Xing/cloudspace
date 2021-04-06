@@ -10,47 +10,42 @@
 
       <template v-slot:body>
         <form id="edit-task-form">
-          <label for="title">Title</label>
-          <input
-            v-model="$v.updatedtask.title.$model"
-            type="text"
-            id="title"
-            v-bind:placeholder="currentTask.title"
-          />
-          <div v-if="$v.updatedtask.title.$dirty">
-            <div v-if="!$v.updatedtask.title.required" class="error">
-              Title is required
+          <div class="row">
+            <label for="title">Title</label>
+            <input
+              v-model="$v.updatedtask.title.$model"
+              type="text"
+              id="title"
+              v-bind:placeholder="currentTask.title"
+            />
+            <div v-if="$v.updatedtask.title.$dirty">
+              <div v-if="!$v.updatedtask.title.required" class="error">
+                Title is required
+              </div>
             </div>
           </div>
           <br />
-          <div v-if="!addNewCat">
-            <label for="edit-task-category">Category</label>
-            <v-select
-              v-model="updatedtask.category"
-              :disabled="disabledselect"
-              id="edit-task-category"
-              :options="categoryList"
-            >
-              <!-- <option disabled value=""
-                >Please select a new catergory for your task</option
+          <div class="row">
+            <div v-if="!addNewCat">
+              <label for="edit-task-category">Category</label>
+              <v-select
+                v-model="updatedtask.category"
+                :disabled="disabledselect"
+                id="edit-task-category"
+                :options="categoryList"
               >
-              <option
-                v-for="option in categoryList"
-                v-bind:value="option"
-                v-bind:key="option"
-              >
-                {{ option }}
-              </option> -->
-            </v-select>
-          </div>
-          <div v-if="addNewCat">
-            Category
-            <input
-              id="et-newcategory"
-              type="text"
-              v-model="updatedtask.category"
-              placeholder="Enter a new category"
-            />
+              </v-select>
+            </div>
+
+            <div v-if="addNewCat">
+              Category
+              <input
+                id="et-newcategory"
+                type="text"
+                v-model="updatedtask.category"
+                placeholder="Enter a new category"
+              />
+            </div>
           </div>
           <div v-if="$v.updatedtask.category.$dirty && !addNewCat">
             <div v-if="!$v.updatedtask.category.required" class="error">
@@ -71,28 +66,29 @@
             v-on:change="addNewCategory"
           ></toggle-button>
           <br />
-          Duration
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="updatedtask.duration.hh"
-            format="HH"
-          ></vue-timepicker>
-          hr
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="updatedtask.duration.mm"
-            format="mm"
-          ></vue-timepicker>
-          min
+
+          <div class="row">
+            <label>Duration</label>
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="updatedtask.duration.hh"
+              format="HH"
+            ></vue-timepicker>
+            hr
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="updatedtask.duration.mm"
+              format="mm"
+            ></vue-timepicker>
+            min
+          </div>
         </form>
       </template>
 
       <template v-slot:footer>
-        <button @click.prevent="updateTask">
-          Update
-        </button>
+        <button @click.prevent="updateTask">Update</button>
       </template>
     </Modal>
   </div>
@@ -124,9 +120,7 @@
       ToggleButton,
       vSelect,
     },
-    props: {
-      idname: String,
-    },
+
     data() {
       return {
         isModalVisible: false,
@@ -263,5 +257,70 @@
   }
   .error {
     color: red;
+  }
+  * {
+    font-family: Roboto;
+    font-size: 10px;
+  }
+  img {
+    height: 28px;
+    width: auto;
+    margin: 2px;
+    text-align: center;
+  }
+  button {
+    font-family: Lora;
+    font-size: 12px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    padding: 5px 12px 5px 12px;
+    margin: 8px;
+  }
+  button:hover {
+    background-color: #ffffff;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  button:active,
+  button:focus {
+    background-color: #fff;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    transform: translateY(2px);
+    outline: none;
+  }
+  label {
+    font-family: Lora;
+    font-size: 12px;
+    padding-right: 10px;
+  }
+  .row {
+    display: flex;
+    padding: 3px;
+    align-items: center;
+  }
+  .required {
+    font-family: lora;
+    font-size: 10px;
+    padding: 10px;
+    color: rgb(255, 96, 96);
+  }
+  input,
+  select {
+    height: 30px;
+    padding-left: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    flex-grow: 1;
+    color: rgb(110, 110, 110);
+  }
+  ::placeholder {
+    color: rgb(110, 110, 110);
+  }
+  .time-picker {
+    margin: 5px;
   }
 </style>

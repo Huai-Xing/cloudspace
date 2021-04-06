@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <li
       class="cell"
       :class="{
@@ -8,16 +8,26 @@
       }"
     >
       <div class="cellItems">
-        <li
-          class="day"
-          :class="{
-            dayToday: isToday,
-          }"
-          v-on:click="goToTaskPage"
-        >
-          {{ date.get('date') }}
-        </li>
+        <div class="day">
+          <li
+            :class="{
+              dayToday: isToday,
+            }"
+            v-on:click="goToTaskPage"
+          >
+            {{ date.get('date') }}
+          </li>
+        </div>
         <div>
+          <li class="deadlines" 
+          v-for="item in deadlinesToday"  
+          v-bind:key="item.title"
+          :class="{ itemsEmpty: isNotCurrentMonth }" 
+          v-on:click="goToTaskPage"
+          >
+            {{ item.title }}
+          </li>
+
           <li class="items" 
           v-for="item in tasksToday"  
           v-bind:key="item.title"
@@ -49,17 +59,31 @@ export default {
       isToday: dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
       todayDate: dayjs(),
       data: [
-        //"BT3103 Assignment 2", 
-        //"Meeting with Group", 
-        //"Take a short break :)", 
-        //"Very very very very very very very very very very very long task"
+        // "BT3103 Assignment 2", 
+        // "Meeting with Group", 
+        // "Take a short break :)", 
+        // "Very very very very very very very very very very very long task"
       ],
-      tasksToday: []
+      tasksToday: [],
+      deadlinesToday: [],
     };
   },
   methods: {
     fetchData: function () {
       var uid = firebase.auth().currentUser.uid;
+      firebase.firestore()
+        .collection("tasks")
+        .doc(uid)
+        .collection("deadlinesList")
+        .get()
+        .then((snap) =>
+          snap.forEach((doc) => {
+            if (this.compareDate(doc.data().date.toDate(), this.date)) {
+              this.deadlinesToday.push(doc.data());
+            }
+          })
+        );
+
       firebase.firestore()
         .collection("tasks")
         .doc(uid)
@@ -96,16 +120,21 @@ export default {
 
 
 <style scoped>
+.container {
+  margin: 0;
+  height: 90px;
+}
 .cell {
   list-style-type: None;
   display: inline-block;
   border: 2px solid rgb(230, 230, 230);
+  border-top: 0px;
   position: relative;
-  min-height: 94px;
-  max-height: 94px;
-  min-width: 147px;
+  min-height: 82px;
+  max-height: 82px;
+  min-width: 133px;
   padding: 3px;
-  overflow: scroll;
+  overflow: auto;
 }
 .dayCurrentMonth {
   background-color: rgb(220, 220, 220);
@@ -121,19 +150,20 @@ export default {
 .day {
   font-family: montserrat;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 11px;
   color: #26818f;
   list-style-type: None;
   display: block;
-  height: 20px;
-  width: 20px;
+  height: 16px;
   /*border: 1px solid black;
   border-radius: 100%;*/
-  text-align: right;
+  /* text-align: right; */
+  display: flex;
+  justify-content: flex-end;
   position: sticky;
-  top: 3px;
-  left: 80%;
-  margin-bottom: 8px;
+  padding-top: 3px;
+  padding-right: 3px;
+  margin-bottom: 3px;
   cursor: pointer;
 }
 .day:hover, .day:focus {
@@ -142,31 +172,33 @@ export default {
 .dayToday {
   background-color: #26818f;
   color: white;
-  font-weight: 700;
   border-radius: 100%;
-  height:22px;
-  width: 22px;
-  padding-top: 2px;
-  padding-left: 1px;
-  padding-right: 1px;
-  text-align: center;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
+  top: -3px;
+}
+.deadlines {
+  font-family: Roboto;
+  font-size: 10px;
+  color: rgb(209, 5, 5);
+  height: 10px;
+  padding: 4px 9px;
 }
 .items {
   font-family: roboto;
-  font-size: 10px;
+  font-size: 9px;
   text-align: left;
   list-style-type: None;
   display: block;
   border-radius: 4px;
   background-color: #ffe1bb;
-  padding-left: 9px;
-  padding-right: 9px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin: 3px;
-  min-width: 80px;
-  max-height: 10px;
+  padding: 4px 9px;
+  margin: 3px 3px 0px 3px;
+  height: 10px;
   white-space: normal;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -185,10 +217,10 @@ export default {
   width: 0px;
   height: 0px;
 }
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
   background: #ffffff; 
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #888; 
-}
+} */
 </style>
