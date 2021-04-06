@@ -10,48 +10,42 @@
 
       <template v-slot:body>
         <form id="edit-deadline-form">
-          <label for="title">Title</label>
-          <input
-            v-model="$v.updateddeadline.title.$model"
-            type="text"
-            id="title"
-            v-bind:placeholder="currentDeadline.title"
-          />
+          <div class="row">
+            <label for="title">Title</label>
+            <input
+              v-model="$v.updateddeadline.title.$model"
+              type="text"
+              id="title"
+              v-bind:placeholder="currentDeadline.title"
+            />
+          </div>
           <div v-if="$v.updateddeadline.title.$dirty">
             <div v-if="!$v.updateddeadline.title.required" class="error">
               Title is required
             </div>
           </div>
-          <div v-if="!addNewCat">
-            <label for="edit-task-category">Category</label>
-            <v-select
-              v-model="updateddeadline.category"
-              :disabled="disabledselect"
-              id="edit-deadline-category"
-              :options="categoryList"
-            >
-              <!-- <option disabled value=""
-                >Please select a new catergory for your deadline</option
+          <div class="row">
+            <div v-if="!addNewCat">
+              <label for="edit-task-category">Category</label>
+              <v-select
+                v-model="updateddeadline.category"
+                :disabled="disabledselect"
+                id="edit-deadline-category"
+                :options="categoryList"
               >
-              <option
-                v-for="option in categoryList"
-                v-bind:value="option"
-                v-bind:key="option"
-              >
-                {{ option }}
-              </option> -->
-            </v-select>
-          </div>
+              </v-select>
+            </div>
 
-          <div v-if="addNewCat">
-            Category
-            <input
-              id="et-newcategory"
-              type="text"
-              v-model="updateddeadline.category"
-              placeholder="Enter a new category"
-              :disabled="disabledinput"
-            />
+            <div v-if="addNewCat">
+              Category
+              <input
+                id="et-newcategory"
+                type="text"
+                v-model="updateddeadline.category"
+                placeholder="Enter a new category"
+                :disabled="disabledinput"
+              />
+            </div>
           </div>
           <div v-if="$v.updateddeadline.category.$dirty && !addNewCat">
             <div v-if="!$v.updateddeadline.category.required" class="error">
