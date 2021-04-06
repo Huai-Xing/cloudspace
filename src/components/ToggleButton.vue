@@ -80,6 +80,9 @@
 </script>
 
 <style scoped>
+.toggle__label {
+  font-size: 9px;
+}
   .toggle__button {
     vertical-align: middle;
     user-select: none;
@@ -93,9 +96,9 @@
   }
   .toggle__button .toggle__switch {
     display: inline-block;
-    height: 12px;
+    height: 10px;
     border-radius: 6px;
-    width: 40px;
+    width: 36px;
     background: #bfcbd9;
     box-shadow: inset 0 0 1px #bfcbd9;
     position: relative;
@@ -107,8 +110,8 @@
     content: "";
     position: absolute;
     display: block;
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
     border-radius: 50%;
     left: 0;
     top: -3px;

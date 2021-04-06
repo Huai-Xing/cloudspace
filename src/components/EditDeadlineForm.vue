@@ -24,7 +24,7 @@
               Title is required
             </div>
           </div>
-          <div class="row">
+          <div>
             <div v-if="!addNewCat">
               <label for="edit-task-category">Category</label>
               <v-select
@@ -36,7 +36,7 @@
               </v-select>
             </div>
 
-            <div v-if="addNewCat">
+            <div v-if="addNewCat" class="row">
               Category
               <input
                 id="et-newcategory"
@@ -311,6 +311,11 @@ select {
   border-radius: 6px;
   flex-grow: 1;
   color: rgb(110, 110, 110);
+}
+.v-select {
+  /* border: none; */
+  height: 30px;
+  margin-top: 3px;
 }
 ::placeholder {
   color: rgb(110, 110, 110);

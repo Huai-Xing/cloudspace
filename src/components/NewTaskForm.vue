@@ -22,8 +22,8 @@
             </div>
           </div>
           <br />
-          <div class="row">
-            <div v-if="!addNewCat">
+          <div>
+            <div v-if="!addNewCat" >
               <label for="new-task-category">Category</label>
               <v-select
                 v-model="newtask.category"
@@ -33,8 +33,8 @@
               </v-select>
             </div>
 
-            <div v-if="addNewCat">
-              Category
+            <div v-if="addNewCat" class="row">
+              <label for="nt-newcategory">Category</label>
               <input
                 id="nt-newcategory"
                 type="text"
@@ -56,7 +56,7 @@
               This category already exists!
             </div>
           </div>
-          <toggle-button id="switch" @change="addNewCategory"></toggle-button>
+          <toggle-button id="switch" v-on:change="addNewCategory"></toggle-button>
 
           <br />
           <!-- <p v-show="errors.category.length">{{ errors.category }}</p> -->
@@ -116,6 +116,9 @@ export default {
     VueTimepicker,
     ToggleButton,
     vSelect,
+  },
+  props: {
+    taskDate: Object,
   },
   showModal() {
     this.resetForm();
@@ -300,6 +303,11 @@ select {
   border-radius: 6px;
   flex-grow: 1;
   color: rgb(110, 110, 110);
+}
+.v-select {
+  /* border: none; */
+  height: 30px;
+  margin-top: 3px;
 }
 ::placeholder {
   color: rgb(110, 110, 110);

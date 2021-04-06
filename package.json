@@ -17,6 +17,7 @@
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",
     "vue-router": "^3.5.1",
+    "vue-select": "^3.11.2",
     "vue2-timepicker": "^1.1.6",
     "vuelidate": "^0.7.6"
   },

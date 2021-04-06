@@ -21,18 +21,19 @@
               Title is required
             </div>
           </div>
-          <div class="row">
+          <div>
             <div v-if="!addNewCat">
               <label for="new-deadline-category">Category</label>
-              <v-select
+              <v-select 
                 v-model="newdeadline.category"
                 id="new-deadline-category"
+                class="categoryDropdown"
                 :options="categoryList"
               >
               </v-select>
             </div>
-            <div v-if="addNewCat">
-              Category
+            <div v-if="addNewCat" class="row">
+              <label for="ndl-newcategory">Category</label>
               <input
                 id="ndl-newcategory"
                 type="text"
@@ -126,6 +127,9 @@ export default {
     VueTimepicker,
     ToggleButton,
     vSelect,
+  },
+  props: {
+    taskDate: Object,
   },
   showModal() {
     this.resetForm();
@@ -294,6 +298,11 @@ select {
   border-radius: 6px;
   flex-grow: 1;
   color: rgb(110, 110, 110);
+}
+.v-select {
+  /* border: none; */
+  height: 30px;
+  margin-top: 3px;
 }
 ::placeholder {
   color: rgb(110, 110, 110);
