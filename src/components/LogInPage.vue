@@ -29,6 +29,11 @@
       <!-- testing for the form-password hiding and showing -->
       <form-password-container onlyunder type="text" id="password" name="password" placeholder="Enter your password" required v-model="user.password" /><br />
 
+      <div class = "forgetPwd">
+        <a class="forgetPwd" v-on:click.prevent="forgetPwdResetEmail"> Forgotten Password? </a><br><br> <!-- Added this line -->
+      </div>
+
+
       <input type="checkbox" id="checkbox" />
       <label for="checkbox" id="cblabel">Keep me logged in</label><br />
 
@@ -92,6 +97,21 @@ export default {
       this.user.password = "";
       event.target.reset();
     },
+
+    // Added this mtd to send a password reset email to a user
+    forgetPwdResetEmail: function() {
+      var auth = fb.auth();
+      var emailAddress = "user@example.com";
+
+      auth.sendPasswordResetEmail(emailAddress).then(() => {
+        // Email sent.
+        console.log('Password reset email sent.');
+      }).catch((error) => {
+        // An error happened.
+        console.log(error);
+      });
+    },
+
   },
 
   // Fn to push the user to '/login/calendar' once the Let's go button is clicked
@@ -226,5 +246,16 @@ input {
   font-family: Lora;
   border: none;
   background-color: #bedaae;
+}
+
+/* Added styling for forgetPwd */
+.forgetPwd {
+  font-style: italic;
+  text-decoration: underline;
+  color: #574a28;
+
+  position: relative;
+  top: -8px;
+  left: 80px;
 }
 </style>
