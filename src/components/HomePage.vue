@@ -8,7 +8,7 @@
       <quote></quote>
       <div class="dashboard">
         <div id="task" class="overview">
-          <p class="overviewHead">Today's Tasks</p>
+          <p class="overviewHead">Today's tasks</p>
           <div>
             <ul>
               <p v-show="taskEmpty">
@@ -23,7 +23,7 @@
           </div>
         </div>
         <div id="deadline" class="overview">
-          <p class="overviewHead">Upcoming Deadlines for the week</p>
+          <p class="overviewHead">Upcoming deadlines for the week</p>
           <div>
             <ul>
               <p v-show="deadlineEmpty">Hurray! No deadlines for this week!</p>
@@ -213,7 +213,7 @@
     background-color: rgba(209, 209, 209, 0.5);
     padding: 2% 15px;
     margin-bottom: 1%;
-    min-width: 67%;
+    min-width: 65%;
     height: 15px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -241,7 +241,7 @@
     background-color: rgba(209, 209, 209, 0.5);
     padding: 2% 15px;
     margin-bottom: 1%;
-    min-width: 60%;
+    min-width: 53%;
     height: 15px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -255,7 +255,7 @@
     margin-bottom: 1%;
     margin-left: 0;
     height: 15px;
-    min-width: 30%;
+    min-width: 35%;
     text-overflow: ellipsis;
     cursor: pointer;
   }

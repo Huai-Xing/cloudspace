@@ -34,10 +34,10 @@ export default {
           ticks: {
             beginAtZero: true,
             min: 0,
-            stepSize: 600,
+            stepSize: 900,
             fontSize: 10,
             callback: function (value) {
-              return (value / 600) * 10 + " min";
+              return (value / 900) * 15 + " min";
             },
           },
 

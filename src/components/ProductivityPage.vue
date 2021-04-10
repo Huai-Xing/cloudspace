@@ -224,7 +224,11 @@ export default {
       from.setDate(from.getDate() - this.dateFrom);
       const to = new Date(this.dateTo); //new Date();
       to.setDate(to.getDate());
-      this.radarTitle = "Average actual time taken per category for period " + this.formatDate(from) + " - " + this.formatDate(to);
+      this.radarTitle =
+        "Average actual time taken per category for period " +
+        this.formatDate(from) +
+        " - " +
+        this.formatDate(to);
     },
     generateBarData: function (taskList) {
       var actual = [];
@@ -374,6 +378,23 @@ span {
 button,
 label {
   margin: 3px;
+}
+button {
+  height: 18px;
+  width: auto;
+  padding-left: 5px;
+  padding-bottom: 3px;
+  vertical-align: middle;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+}
+button:focus {
+  box-shadow: inset 0px 0px 4px #c1c1c1;
+  transform: translateY(1px);
+  outline: none;
 }
 label {
   margin-left: 12px;
