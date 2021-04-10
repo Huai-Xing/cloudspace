@@ -37,7 +37,7 @@ export default {
             stepSize: 900,
             fontSize: 10,
             callback: function (value) {
-              return (value / 900) * 15 + " min";
+              return (value / 900) * 15  + " min";
             },
           },
 
