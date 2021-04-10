@@ -18,8 +18,8 @@ export default {
   props: {
     datacollection: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   data: function () {
     return {
@@ -28,6 +28,13 @@ export default {
         elements: {
           line: {
             tension: 0,
+          },
+        },
+        hover: {
+          onHover: function (e) {
+            var point = this.getElementAtEvent(e);
+            if (point.length) e.target.style.cursor = "pointer";
+            else e.target.style.cursor = "default";
           },
         },
         onClick: (event, data) => {
@@ -129,6 +136,6 @@ export default {
 <style scoped>
 #line {
   position: relative;
-  height: 30vh;
+  height: 32vh;
 }
 </style>

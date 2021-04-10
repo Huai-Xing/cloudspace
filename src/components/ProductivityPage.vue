@@ -364,9 +364,9 @@ export default {
 }
 .content-item-line {
   /* border: 1px solid black; */
-  margin-left: 12%;
+  margin-left: 14%;
   display: block;
-  width: 88%;
+  width: 85%;
 }
 span {
   font-weight: 700;
@@ -384,9 +384,9 @@ label {
 }
 .bottom {
   /* border: 1px solid black; */
-  margin-left: 12%;
+  margin-left: 14%;
   display: flex;
-  width: 88%;
+  width: 85%;
 }
 .content-item-bar {
   /* border: 1px solid black; */
@@ -400,7 +400,7 @@ label {
   margin-bottom: 2%;
   padding: 0;
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   text-decoration: underline;
 }
