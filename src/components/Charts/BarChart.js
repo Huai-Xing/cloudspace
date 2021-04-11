@@ -1,10 +1,10 @@
 /* jshint esversion: 6 */
 
-import { Radar, mixins } from 'vue-chartjs';
+import { Bar, mixins } from 'vue-chartjs';
 const { reactiveProp } = mixins;
 
 export default {
-  extends: Radar,
+  extends: Bar,
   mixins: [reactiveProp],
   props: {
     options: {
