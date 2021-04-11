@@ -23,18 +23,19 @@
               Title is required
             </div>
           </div>
-          <div class="row">
+          <div>
             <div v-if="!addNewCat">
               <label for="new-deadline-category">Category</label>
               <v-select
                 v-model="newdeadline.category"
                 id="new-deadline-category"
+                class="categoryDropdown"
                 :options="categoryList"
               >
               </v-select>
             </div>
-            <div v-if="addNewCat">
-              Category
+            <div v-if="addNewCat" class="row">
+              <label for="ndl-newcategory">Category</label>
               <input
                 id="ndl-newcategory"
                 type="text"
@@ -99,9 +100,15 @@
   import fb from "../firebase";
   import { required } from "vuelidate/lib/validators";
   import ToggleButton from "./ToggleButton";
+  import vSelect from "vue-select";
+  import "vue-select/dist/vue-select.css";
 
   function doesNotExist(value) {
-    return !this.categoryList.includes(value);
+    if (this.addNewCat) {
+      return !this.categoryList.includes(value);
+    } else {
+      return true;
+    }
   }
 
   export default {
@@ -110,9 +117,14 @@
       Modal,
       VueTimepicker,
       ToggleButton,
+      vSelect,
     },
     props: {
       taskDate: Object,
+    },
+    showModal() {
+      this.resetForm();
+      this.isModalVisible = true;
     },
     data() {
       return {
@@ -222,9 +234,78 @@
 </script>
 
 <style scoped>
+  /* .btn {
+    padding: 2px 2px 2px 2px;
+  }
+  .btn > img {
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+  } */
+  * {
+    font-family: Roboto;
+    font-size: 10px;
+  }
   img {
     width: 38px;
     height: 38px;
+  }
+  button {
+    font-family: Lora;
+    font-size: 12px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    padding: 5px 12px 5px 12px;
+    margin: 8px;
+  }
+  button:hover {
+    background-color: #ffffff;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  button:active,
+  button:focus {
+    background-color: #fff;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    transform: translateY(2px);
+    outline: none;
+  }
+  label {
+    font-family: Lora;
+    font-size: 12px;
+    padding-right: 10px;
+  }
+  .row {
+    display: flex;
+    padding: 3px;
+    align-items: center;
+  }
+  input,
+  select {
+    height: 30px;
+    padding-left: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    flex-grow: 1;
+    color: rgb(110, 110, 110);
+  }
+  .v-select {
+    /* border: none; */
+    height: 30px;
+    margin-top: 3px;
+  }
+  ::placeholder {
+    color: rgb(110, 110, 110);
+  }
+  .time-picker {
+    margin: 5px;
+  }
+  .days {
+    padding-left: 6px;
   }
   .error {
     color: red;
