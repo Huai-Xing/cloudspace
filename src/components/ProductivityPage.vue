@@ -45,7 +45,7 @@
         <p class="bottom-title">Number of trees planted</p>
         <div class="tree-summary-circle">
           <!-- to replace this text to the bind data variable here -->
-          <div class="summary-stat">3</div>
+          <div class="summary-stat">{{trees}}</div>
         </div>
       </div>
     </div>
@@ -95,13 +95,15 @@ export default {
         .doc(this.user)
         .get()
         .then((doc) => {
-          console.log(doc.data().user.trees);
+          //console.log(doc.data().user.trees);
           this.trees = doc.data().user.trees;
+          if (!this.trees) {
+            this.trees = 0;
+          }
         });
     },
     drillDown: function (x, bool) {
-      console.log("WORKS");
-      console.log(x);
+      //console.log(x);
       if (bool) {
         this.dateQuery = new Date(x);
       } else {

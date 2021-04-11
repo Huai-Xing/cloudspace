@@ -40,8 +40,8 @@ export default {
         onClick: (event, data) => {
           try {
             var a = data[0]._index; // index of data for time taken
-            console.log(a);
-            console.log(this.datacollection.labels[a]);
+            //console.log(a);
+            //console.log(this.datacollection.labels[a]);
             var selected = this.datacollection.labels[a];
             var idx = selected.indexOf("/");
             var day = selected.substring(0, idx);
@@ -49,12 +49,12 @@ export default {
             idx = selected.indexOf("/");
             var month = selected.substring(0, idx);
             var year = selected.substring(idx + 1, selected.length);
-            console.log(day + " " + month + " " + year);
+            //console.log(day + " " + month + " " + year);
             var dateString = year + "-" + month + "-" + day;
-            console.log(new Date(dateString));
+            //console.log(new Date(dateString));
             this.callEmit(dateString, true);
           } catch (err) {
-            console.log(err);
+            //console.log(err);
             this.callEmit("", false);
           }
         },

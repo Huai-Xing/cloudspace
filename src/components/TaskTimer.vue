@@ -69,15 +69,15 @@
       endTimer: function(x, y, z) {
         //y is amount of time taken to end task after timer is up
         //z is coins
-        console.log("complete " + x);
-        console.log("extra " + y);
+        //console.log("complete " + x);
+        //console.log("extra " + y);
         this.coin = z;
         this.coinPenalty(y);
         this.timerTimePassed = x + y;
         this.updateData("Completed");
       },
       cancelTimer: function() {
-        console.log("cancel");
+        //console.log("cancel");
         this.coin = 0;
         this.$router.push({
           name: "Tasks",
