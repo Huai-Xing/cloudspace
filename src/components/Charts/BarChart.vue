@@ -1,15 +1,19 @@
 <template>
   <div class="chart">
-    <radar id="radar" :chart-data="datacollection" :options="options"></radar>
+    <bar-chart
+      id="bar"
+      :chart-data="datacollection"
+      :options="options"
+    ></bar-chart>
   </div>
 </template>
 
 <script>
-import Radar from "./RadarChart.js";
+import BarChart from "./BarChart.js";
 
 export default {
   components: {
-    Radar,
+    BarChart,
   },
   props: {
     datacollection: {
@@ -20,35 +24,56 @@ export default {
   data: function () {
     return {
       options: {
-        legend: {
-          position: "top",
-          display: false,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                stepSize: 1800,
+                fontSize: 10,
+                callback: function (value) {
+                  return (value / 1800) * 30 + " min";
+                },
+              },
+              display: true,
+              gridLines: {
+                display: false,
+              },
+            },
+          ],
+          xAxes: [
+            {
+              gridLines: {
+                display: true,
+              },
+              ticks: {
+                fontSize: 10,
+              },
+            },
+          ],
         },
         layout: {
           padding: {
-            left: -50,
+            left: 10,
           },
         },
-        scale: {
-          ticks: {
-            beginAtZero: true,
-            min: 0,
-            stepSize: 900,
+        legend: {
+          position: "bottom",
+          labels: {
             fontSize: 10,
-            callback: function (value) {
-              return (value / 900) * 15  + " min";
-            },
-          },
-
-          pointLabels: {
-            fontSize: 15,
+            boxWidth: 20,
           },
         },
-
+        title: {
+          display: true,
+          text: "",
+        },
         tooltips: {
           // When hovering over the points, show the tooltip label
           callbacks: {
-            title: (tooltipItem, dataPt) => dataPt.labels[tooltipItem[0].index],
+            title: function (tooltipItem, data) {
+              return data.labels[tooltipItem[0].index];
+            },
             label: function (tooltipItem, data) {
               var label = data.datasets[tooltipItem.datasetIndex].label;
               var value =
@@ -73,7 +98,6 @@ export default {
             },
           },
         },
-
         responsive: true,
         maintainAspectRatio: false,
       },
@@ -83,7 +107,7 @@ export default {
 </script>
 
 <style scoped>
-#radar {
+#bar {
   position: relative;
   height: 40vh;
   width: 35vw;
