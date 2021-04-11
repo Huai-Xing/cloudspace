@@ -415,4 +415,7 @@
     box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);
     transition: opacity 0.3s ease;
   }
+  .editTaskIcon {
+    display: inline-block;
+  }
 </style>
