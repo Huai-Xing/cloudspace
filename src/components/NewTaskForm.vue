@@ -64,21 +64,43 @@
           ></toggle-button>
 
           <br />
-          Duration
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="newtask.duration.hh"
-            format="HH"
-          ></vue-timepicker>
-          hr
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="newtask.duration.mm"
-            format="mm"
-          ></vue-timepicker>
-          min
+          <label for="duration">
+            Duration
+          </label>
+          <span id="duration">
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="$v.newtask.duration.hh.$model"
+              format="HH"
+            ></vue-timepicker>
+            hr
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="$v.newtask.duration.mm.$model"
+              format="mm"
+            ></vue-timepicker>
+            min
+          </span>
+          <div v-if="$v.newtask.duration.$dirty">
+            <div v-if="!$v.newtask.duration.invalidDuration" class="error">
+              Please enter a valid duration
+            </div>
+            <div v-if="!$v.newtask.duration.minimumDuration" class="error">
+              Tasks must be at least 10 minutes long
+            </div>
+          </div>
+          <div v-if="$v.newtask.duration.hh.$dirty">
+            <div v-if="!$v.newtask.duration.hh.required" class="error">
+              Please enter number of hours
+            </div>
+          </div>
+          <div v-if="$v.newtask.duration.mm.$dirty">
+            <div v-if="!$v.newtask.duration.mm.required" class="error">
+              Please enter number of minutes
+            </div>
+          </div>
         </form>
       </template>
 
@@ -104,6 +126,22 @@
   function doesNotExist(value) {
     if (this.addNewCat) {
       return !this.categoryList.includes(value);
+    } else {
+      return true;
+    }
+  }
+
+  function invalidDuration(value) {
+    if (value.hh + value.mm == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function minimumDuration(value) {
+    if (value.hh == 0) {
+      return value.mm >= 10;
     } else {
       return true;
     }
@@ -239,6 +277,16 @@
         category: {
           required,
           doesNotExist,
+        },
+        duration: {
+          invalidDuration,
+          minimumDuration,
+          hh: {
+            required,
+          },
+          mm: {
+            required,
+          },
         },
       },
     },

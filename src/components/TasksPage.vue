@@ -84,10 +84,26 @@
               </span>
 
               <span v-if="task[1].status == 'Completed'">
-                <img
-                  src="../assets/task/moreinfo_btn.png"
-                  v-bind:idname="task[0]"
-                />
+                <v-popover offset="16" placement="left">
+                  <!-- This will be the popover target (for the events and position) -->
+
+                  <img
+                    src="../assets/task/moreinfo_btn.png"
+                    v-bind:idname="task[0]"
+                    class="tooltip target"
+                  />
+
+                  <!-- This will be the content of the popover -->
+                  <template slot="popover">
+                    <div class="tooltip-content">
+                      Coins Earned: {{ task[1].coinsEarned }}
+                      <br />
+                      Total Time: {{ task[1].actualTime }}
+                      <br />
+                      Total Break Time: {{ task[1].breakTime }}
+                    </div>
+                  </template>
+                </v-popover>
 
                 <img
                   src="../assets/task/trash_btn.png"
@@ -391,7 +407,12 @@
     margin: 2px;
     text-align: center;
   }
-  .editTaskIcon {
-    display: inline-block;
+  .tooltip-content {
+    background: white;
+    padding: 24px;
+    border-radius: 5px;
+    border-color: #4d4d4d;
+    box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease;
   }
 </style>

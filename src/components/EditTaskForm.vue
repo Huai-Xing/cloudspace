@@ -16,7 +16,7 @@
               v-model="$v.updatedtask.title.$model"
               type="text"
               id="title"
-              v-bind:placeholder="currentTask.title"
+              placeholder="Enter a new title"
             />
           </div>
           <div v-if="$v.updatedtask.title.$dirty">
@@ -66,21 +66,43 @@
             v-on:change="addNewCategory"
           ></toggle-button>
           <br />
-          Duration
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="updatedtask.duration.hh"
-            format="HH"
-          ></vue-timepicker>
-          hr
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="updatedtask.duration.mm"
-            format="mm"
-          ></vue-timepicker>
-          min
+          <label id="duration">
+            Duration
+          </label>
+          <span id="duration">
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="$v.updatedtask.duration.hh.$model"
+              format="HH"
+            ></vue-timepicker>
+            hr
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="$v.updatedtask.duration.mm.$model"
+              format="mm"
+            ></vue-timepicker>
+            min
+          </span>
+          <div v-if="$v.updatedtask.duration.$dirty">
+            <div v-if="!$v.updatedtask.duration.invalidDuration" class="error">
+              Please enter a valid duration
+            </div>
+            <div v-if="!$v.updatedtask.duration.minimumDuration" class="error">
+              Tasks must be at least 10 minutes long
+            </div>
+          </div>
+          <div v-if="$v.updatedtask.duration.hh.$dirty">
+            <div v-if="!$v.updatedtask.duration.hh.required" class="error">
+              Please enter number of hours
+            </div>
+          </div>
+          <div v-if="$v.updatedtask.duration.mm.$dirty">
+            <div v-if="!$v.updatedtask.duration.mm.required" class="error">
+              Please enter number of minutes
+            </div>
+          </div>
         </form>
       </template>
 
@@ -106,6 +128,21 @@
   function doesNotExist(value) {
     if (this.addNewCat) {
       return !this.categoryList.includes(value);
+    } else {
+      return true;
+    }
+  }
+  function invalidDuration(value) {
+    if (value.hh + value.mm == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function minimumDuration(value) {
+    if (value.hh == 0) {
+      return value.mm >= 10;
     } else {
       return true;
     }
@@ -163,7 +200,10 @@
           .get()
           .then((doc) => {
             this.currentTask = doc.data();
-            this.updatedtask = doc.data();
+            this.updatedtask.title = this.currentTask.title;
+            this.updatedtask.category = this.currentTask.category;
+            this.updatedtask.duration.hh = this.currentTask.duration.hh;
+            this.updatedtask.duration.mm = this.currentTask.duration.mm;
           });
       },
       showModal() {
@@ -196,7 +236,6 @@
             .doc(this.idname)
             .update(this.updatedtask)
             .then(() => {
-              this.isModalVisible = false;
               location.reload();
             });
 
@@ -212,20 +251,10 @@
         this.addNewCat = value;
       },
       resetForm() {
-        (this.updatedtask = {
-          category: "",
-          title: "",
-          status: "Incomplete",
-          duration: {
-            hh: "",
-            mm: "",
-          },
-          breakTime: 0,
-          actualTime: 0,
-          coinsEarned: 0,
-        }),
-          // this.isModalVisible = false;
-          document.getElementById("edit-task-form").reset();
+        this.updatedtask.title = this.currentTask.title;
+        this.updatedtask.category = this.currentTask.category;
+        this.updatedtask.duration.hh = this.currentTask.duration.hh;
+        this.updatedtask.duration.mm = this.currentTask.duration.mm;
         this.$v.$reset();
       },
     },
@@ -237,6 +266,16 @@
         category: {
           required,
           doesNotExist,
+        },
+        duration: {
+          invalidDuration,
+          minimumDuration,
+          hh: {
+            required,
+          },
+          mm: {
+            required,
+          },
         },
       },
     },

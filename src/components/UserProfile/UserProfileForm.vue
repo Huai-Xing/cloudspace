@@ -1,25 +1,34 @@
 <template>
   <div id="main">
     <form action="/action_page.php">
-    <div>
-      <label for="Name">Name</label>
-      <input type="text" id="Name" v-model="user.name" disabled="true" />
-      <span id="NameChange" v-on:click="toggle(1)">Change</span>
-    </div>
-    <div>
-      <label for="Email">Email</label>
-      <input type="text" id="Email" v-model="user.email" disabled="true" />
-    </div>
-    <div>
-      <label for="DOB">Date Of Birth</label>
-      <input type="date" id="DOB" v-model.trim="user.DOB" disabled="true" />
-      <span id="DOBChange" v-on:click="toggle(3)">Change</span>      
-    </div>
-      <span id="showPwdChange" v-show="!changePwd" v-on:click="toggle(2)">Change Password</span>
       <div>
-      <label v-show="changePwd" for="Password">Password</label>
-      <input type="password" id="Pwd" v-model.trim="password" v-show="changePwd" />
-      <span id="PwdChange" v-show="changePwd" v-on:click="toggle(2)">Cancel</span>
+        <label for="Name">Name</label>
+        <input type="text" id="Name" v-model="user.name" disabled="true" />
+        <span id="NameChange" v-on:click="toggle(1)">Change</span>
+      </div>
+      <div>
+        <label for="Email">Email</label>
+        <input type="text" id="Email" v-model="user.email" disabled="true" />
+      </div>
+      <div>
+        <label for="DOB">Date Of Birth</label>
+        <input type="date" id="DOB" v-model.trim="user.DOB" disabled="true" />
+        <span id="DOBChange" v-on:click="toggle(3)">Change</span>
+      </div>
+      <span id="showPwdChange" v-show="!changePwd" v-on:click="toggle(2)"
+        >Change Password</span
+      >
+      <div>
+        <label v-show="changePwd" for="Password">Password</label>
+        <input
+          type="password"
+          id="Pwd"
+          v-model.trim="password"
+          v-show="changePwd"
+        />
+        <span id="PwdChange" v-show="changePwd" v-on:click="toggle(2)"
+          >Cancel</span
+        >
       </div>
     </form>
   </div>
@@ -49,7 +58,7 @@
         } else {
           document.getElementById("PwdChange").textContent = "Cancel";
         }
-      }
+      },
     },
     methods: {
       toggle: function(x) {
@@ -101,7 +110,7 @@
       },
       updateData: function() {
         var currentUser = fb.auth().currentUser;
-        var uid = currentUser.uid;     
+        var uid = currentUser.uid;
         fb.firestore()
           .collection("users")
           .doc(uid)
@@ -113,12 +122,15 @@
         var user = fb.auth().currentUser;
         var newPassword = this.password;
         this.password = "";
-        user.updatePassword(newPassword).then(function() {
-          alert("Password Changed");
-        }).catch(function(error) {
-          alert(error.message);
-          console.log(error);
-        });
+        user
+          .updatePassword(newPassword)
+          .then(function() {
+            alert("Password Changed");
+          })
+          .catch(function(error) {
+            alert(error.message);
+            console.log(error);
+          });
       },
     },
     created: async function() {
@@ -156,5 +168,8 @@
   }
   #showPwdChange {
     margin-left: 38%;
+  }
+  label {
+    font-family: Lora;
   }
 </style>

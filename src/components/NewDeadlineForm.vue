@@ -61,26 +61,54 @@
           <toggle-button id="switch1" @change="addNewCategory"></toggle-button>
 
           <br />
-          Date Due <input type="date" v-model.trim="newdeadline.datedue" />
+          <label for="datedue">Date Due</label>
+          <input type="date" v-model.trim="newdeadline.datedue" id="datedue" />
+          <div v-if="$v.newdeadline.datedue.$dirty">
+            <div v-if="!$v.newdeadline.datedue.required" class="error">
+              Due date is required
+            </div>
+          </div>
           <br />
-          Time Due
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="newdeadline.timedue.hh"
-            format="HH"
-          ></vue-timepicker>
-          hr
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="newdeadline.timedue.mm"
-            format="mm"
-          ></vue-timepicker>
-          min
+          <label for="timedue">
+            Time Due
+          </label>
+          <span id="timedue">
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="newdeadline.timedue.hh"
+              format="HH"
+            ></vue-timepicker>
+            hr
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="newdeadline.timedue.mm"
+              format="mm"
+            ></vue-timepicker>
+            min
+          </span>
           <br />
-          Show Deadline <input v-model="newdeadline.showInAdvance" /> days in
-          advance
+          <label id="showdl">Show Deadline</label>
+          <span>
+            <input
+              id="showdl"
+              v-model="$v.newdeadline.showInAdvance.$model"
+              placeholder="0"
+            />
+            days in advance
+          </span>
+          <div v-if="$v.newdeadline.showInAdvance.$dirty">
+            <div v-if="!$v.newdeadline.showInAdvance.required" class="error">
+              This field is required
+            </div>
+            <div v-if="!$v.newdeadline.showInAdvance.numeric" class="error">
+              Please enter a valid input
+            </div>
+            <div v-if="!$v.newdeadline.showInAdvance.maxValue" class="error">
+              Must be less than 100
+            </div>
+          </div>
         </form>
       </template>
 
@@ -98,7 +126,7 @@
   import VueTimepicker from "vue2-timepicker";
   import "vue2-timepicker/dist/VueTimepicker.css";
   import fb from "../firebase";
-  import { required } from "vuelidate/lib/validators";
+  import { required, numeric, maxValue } from "vuelidate/lib/validators";
   import ToggleButton from "./ToggleButton";
   import vSelect from "vue-select";
   import "vue-select/dist/vue-select.css";
@@ -122,10 +150,7 @@
     props: {
       taskDate: Object,
     },
-    showModal() {
-      this.resetForm();
-      this.isModalVisible = true;
-    },
+
     data() {
       return {
         isModalVisible: false,
@@ -138,7 +163,7 @@
             mm: "",
           },
           datedue: null,
-          showInAdvance: 0,
+          showInAdvance: null,
           date: this.taskDate.toDate(),
         },
 
@@ -227,6 +252,14 @@
         category: {
           required,
           doesNotExist,
+        },
+        datedue: {
+          required,
+        },
+        showInAdvance: {
+          required,
+          numeric,
+          maxValue: maxValue(100),
         },
       },
     },

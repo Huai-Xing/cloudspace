@@ -3,7 +3,6 @@
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
     <productivity></productivity>
-    {{ trees }}
     <!-- ProductivityPage contents -->
     <div class="content-item">
       <div class="top-row" id="chart">
@@ -23,10 +22,11 @@
 
         <div class="column">
           <!-- the tree summary component here -->
-          <h3>Number of trees planted in total:</h3>
+          <h3 class="header">Number of trees planted in total:</h3>
+
           <div class="tree-summary-circle">
             <!-- to replace this text to the bind data variable here -->
-            <div class="summary-stat">3</div>
+            <div class="summary-stat">{{ trees }}</div>
           </div>
         </div>
       </div>
@@ -69,6 +69,7 @@
     },
     created() {
       this.fetchNumOfTrees();
+      console.log(this.trees);
     },
   };
 </script>
@@ -132,5 +133,8 @@
     /*font-weight: bold; */
     font-size: 100px;
     color: #fff;
+  }
+  .header {
+    font-family: Lora;
   }
 </style>

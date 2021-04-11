@@ -7,7 +7,6 @@
         You are currently editing: {{ currentDeadline.category }}-
         {{ currentDeadline.title }}
       </template>
-      {{ idname }}
 
       <template v-slot:body>
         <form id="edit-deadline-form">
@@ -17,7 +16,7 @@
               v-model="$v.updateddeadline.title.$model"
               type="text"
               id="title"
-              v-bind:placeholder="currentDeadline.title"
+              placeholder="Enter a new title"
             />
           </div>
           <div v-if="$v.updateddeadline.title.$dirty">
@@ -64,26 +63,64 @@
 
           <toggle-button id="switch3" @change="addNewCategory"></toggle-button>
           <br />
-          Date Due <input type="date" v-model.trim="updateddeadline.datedue" />
+          <label for="datedue">Date Due</label>
+          <input
+            id="datedue"
+            v-model.trim="updateddeadline.datedue"
+            type="date"
+          />
+          <div v-if="$v.updateddeadline.datedue.$dirty">
+            <div v-if="!$v.updateddeadline.datedue.required" class="error">
+              Due date is required
+            </div>
+          </div>
           <br />
-          Time Due
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="updateddeadline.timedue.hh"
-            format="HH"
-          ></vue-timepicker>
-          hr
-          <vue-timepicker
-            manual-input
-            close-on-complete
-            v-model="updateddeadline.timedue.mm"
-            format="mm"
-          ></vue-timepicker>
-          min
+          <label for="timedue">
+            Time Due
+          </label>
+          <span id="timedue">
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="updateddeadline.timedue.hh"
+              format="HH"
+              id="timedue"
+            ></vue-timepicker>
+            hr
+            <vue-timepicker
+              manual-input
+              close-on-complete
+              v-model="updateddeadline.timedue.mm"
+              format="mm"
+            ></vue-timepicker>
+            min
+          </span>
           <br />
-          Show Deadline <input v-model="updateddeadline.showInAdvance" /> days
-          in advance
+          <label id="showdl">Show Deadline</label>
+          <span id="showdl"
+            ><input
+              v-model="$v.updateddeadline.showInAdvance.$model"
+              placeholder="Please enter a value"
+            />
+            days in advance
+          </span>
+          <div v-if="$v.updateddeadline.showInAdvance.$dirty">
+            <div
+              v-if="!$v.updateddeadline.showInAdvance.required"
+              class="error"
+            >
+              This field is required
+            </div>
+            <div v-if="!$v.updateddeadline.showInAdvance.numeric" class="error">
+              Please enter a valid input
+            </div>
+            <div
+              v-if="!$v.updateddeadline.showInAdvance.maxValue"
+              class="error"
+            >
+              Must be less than 100
+            </div>
+          </div>
         </form>
       </template>
 
@@ -101,7 +138,7 @@
   import VueTimepicker from "vue2-timepicker";
   import "vue2-timepicker/dist/VueTimepicker.css";
   import fb from "../firebase";
-  import { required } from "vuelidate/lib/validators";
+  import { required, numeric, maxValue } from "vuelidate/lib/validators";
   import ToggleButton from "./ToggleButton";
   import vSelect from "vue-select";
   import "vue-select/dist/vue-select.css";
@@ -136,7 +173,7 @@
             mm: "",
           },
           datedue: null,
-          showInAdvance: 0,
+          showInAdvance: null,
         },
         addNewCat: false,
         disabledselect: false,
@@ -165,7 +202,12 @@
           .get()
           .then((doc) => {
             this.currentDeadline = doc.data();
-            this.updateddeadline = doc.data();
+            this.updateddeadline.title = this.currentDeadline.title;
+            this.updateddeadline.datedue = this.currentDeadline.datedue;
+            this.updateddeadline.category = this.currentDeadline.category;
+            this.updateddeadline.timedue.hh = this.currentDeadline.timedue.hh;
+            this.updateddeadline.timedue.mm = this.currentDeadline.timedue.mm;
+            this.updateddeadline.showInAdvance = this.currentDeadline.showInAdvance;
           });
       },
 
@@ -173,6 +215,7 @@
         this.isModalVisible = true;
       },
       closeModal() {
+        this.resetForm();
         this.isModalVisible = false;
       },
 
@@ -199,24 +242,14 @@
             .doc(this.idname)
             .update(this.updateddeadline)
             .then(() => {
-              this.isModalVisible = false;
               location.reload();
+              console.log("test");
+              console.log(this.updateddeadline);
             });
 
-          //reset values
-          (this.updateddeadline = {
-            category: "",
-            title: "",
-            status: "Incomplete",
-            duration: {
-              hh: "",
-              mm: "",
-            },
-          }),
-            (this.newcategory = "");
-          // this.isModalVisible = false;
-          document.getElementById("edit-deadline-form").reset();
-          console.log("this method works");
+          //close modal and reset values
+
+          this.closeModal();
         } else {
           event.preventDefault();
         }
@@ -224,6 +257,16 @@
       addNewCategory: function(value) {
         console.log(123);
         this.addNewCat = value;
+      },
+      resetForm() {
+        console.log(this.currentDeadline);
+        this.updateddeadline.title = this.currentDeadline.title;
+        this.updateddeadline.datedue = this.currentDeadline.datedue;
+        this.updateddeadline.category = this.currentDeadline.category;
+        this.updateddeadline.timedue.hh = this.currentDeadline.timedue.hh;
+        this.updateddeadline.timedue.mm = this.currentDeadline.timedue.mm;
+        this.updateddeadline.showInAdvance = this.currentDeadline.showInAdvance;
+        this.$v.$reset();
       },
     },
 
@@ -240,6 +283,14 @@
         category: {
           required,
           doesNotExist,
+        },
+        datedue: {
+          required,
+        },
+        showInAdvance: {
+          required,
+          numeric,
+          maxValue: maxValue(100),
         },
       },
     },

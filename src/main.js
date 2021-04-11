@@ -6,6 +6,11 @@ import Routes from "./routes.js"; // Register routes
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
 
+//Tooltip
+import VTooltip from "v-tooltip";
+Vue.use(VTooltip);
+
+//Router
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
