@@ -1,9 +1,7 @@
 <template>
-  <div>
+  <div id="full-content">
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
-    <productivity></productivity>
-    {{ trees }}
     <!-- ProductivityPage contents -->
     <div class="content-item-line">
       <span>View by:</span>
@@ -367,6 +365,9 @@ export default {
 <style scoped>
 * {
   box-sizing: border-box;
+}
+#full-content {
+  margin-bottom: 50px;
 }
 .content-item-line {
   /* border: 1px solid black; */
