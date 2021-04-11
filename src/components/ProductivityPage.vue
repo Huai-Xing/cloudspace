@@ -365,6 +365,7 @@ export default {
 <style scoped>
 * {
   box-sizing: border-box;
+  font-family: Lora;
 }
 #full-content {
   margin-bottom: 50px;
@@ -383,10 +384,9 @@ label {
   margin: 3px;
 }
 button {
-  height: 18px;
+  height: auto;
   width: auto;
-  padding-left: 5px;
-  padding-bottom: 3px;
+  padding: 5px;
   vertical-align: middle;
   background-color: white;
   border-radius: 5px;
