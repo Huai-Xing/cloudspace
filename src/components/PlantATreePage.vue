@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow: hidden;">
+  <div style="overflow: hidden">
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
 
@@ -28,6 +28,7 @@
                 :src="require(`@/assets/trees/${tree.url}`)"
               />
               <p class="treeText" v-on:click="flip()">{{ tree.name }}</p>
+              <span class="tooltiptext">See more details!</span>
             </tree-slide>
 
             <button class="arrow prev" @click="prev"></button>
@@ -183,9 +184,40 @@ export default {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   cursor: pointer;
+  margin-bottom: 3px;
 }
 .treeText:hover {
   opacity: 50%;
+}
+.tooltiptext {
+  visibility: hidden;
+  font-family: roboto;
+  text-transform: uppercase;
+  font-size: 7px;
+  letter-spacing: 0.8px;
+  background-color: #f3f3ed;
+  color: #8a827b;
+  padding: 3px;
+  text-align: center;
+  border-radius: 6px;
+  border: solid 1px;
+}
+.tooltiptext::before, .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 5.2%;
+  left: 49%;
+  margin-bottom: -1.5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #8a827b transparent;
+}
+.tooltiptext::after {
+  border-bottom: 5px solid #f3f3ed;
+  margin-bottom: -2.5px;
+}
+.treeText:hover + .tooltiptext {
+  visibility: visible;
 }
 .treeDots {
   height: 4px;
