@@ -1,20 +1,35 @@
 <template>
-  <div>
+  <div id="main">
     <form action="/action_page.php">
-      <label for="Name">Name</label>
-      <input type="text" id="Name" v-model="Name" disabled="true" />
-      <span id="NameChange" v-on:click="toggle(1)">Change</span>
-      <br />
-      <label for="Password">Password</label>
-      <input type="password" id="Pwd" v-model.trim="Password" disabled="true" />
-      <span id="PwdChange" v-on:click="toggle(2)">Change</span>
-      <br />
-      <label for="Email">Email</label>
-      <input type="text" id="Email" v-model="Email" disabled="true" />
-      <br />
-      <label for="DOB">Date Of Birth</label>
-      <input type="date" id="DOB" v-model.trim="DOB" disabled="true" />
-      <span id="DOBChange" v-on:click="toggle(3)">Change</span>
+      <div>
+        <label for="Name">Name</label>
+        <input type="text" id="Name" v-model="user.name" disabled="true" />
+        <span id="NameChange" v-on:click="toggle(1)">Change</span>
+      </div>
+      <div>
+        <label for="Email">Email</label>
+        <input type="text" id="Email" v-model="user.email" disabled="true" />
+      </div>
+      <div>
+        <label for="DOB">Date Of Birth</label>
+        <input type="date" id="DOB" v-model.trim="user.DOB" disabled="true" />
+        <span id="DOBChange" v-on:click="toggle(3)">Change</span>
+      </div>
+      <span id="showPwdChange" v-show="!changePwd" v-on:click="toggle(2)"
+        >Change Password</span
+      >
+      <div>
+        <label v-show="changePwd" for="Password">Password</label>
+        <input
+          type="password"
+          id="Pwd"
+          v-model.trim="password"
+          v-show="changePwd"
+        />
+        <span id="PwdChange" v-show="changePwd" v-on:click="toggle(2)"
+          >Cancel</span
+        >
+      </div>
     </form>
   </div>
 </template>
@@ -25,11 +40,25 @@
   export default {
     data() {
       return {
-        Name: "",
-        Password: "",
-        Email: "",
-        DOB: "",
+        user: {
+          name: "",
+          email: "",
+          DOB: "",
+          imageIdx: 0,
+          coins: 0,
+        },
+        changePwd: false,
+        password: "",
       };
+    },
+    watch: {
+      password: function() {
+        if (this.password != "") {
+          document.getElementById("PwdChange").textContent = "Save";
+        } else {
+          document.getElementById("PwdChange").textContent = "Cancel";
+        }
+      },
     },
     methods: {
       toggle: function(x) {
@@ -43,14 +72,13 @@
             this.updateData();
           }
         } else if (x == 2) {
-          if (document.getElementById("Pwd").disabled) {
-            document.getElementById("PwdChange").textContent = "Save";
-            document.getElementById("Pwd").disabled = false;
+          if (this.changePwd) {
+            this.changePwd = false;
+            if (document.getElementById("PwdChange").textContent != "Cancel") {
+              this.updatePwd();
+            }
           } else {
-            document.getElementById("PwdChange").textContent = "Change";
-            document.getElementById("Pwd").disabled = true;
-            this.updateData();
-            this.updatePwd();
+            this.changePwd = true;
           }
         } else {
           if (document.getElementById("DOB").disabled) {
@@ -72,34 +100,37 @@
           .doc(uid)
           .get()
           .then((doc) => {
-            this.Name = doc.data().name;
-            this.Password = doc.data().password;
-            this.DOB = doc.data().DOB;
-            this.Email = doc.data().email;
+            this.user.name = doc.data().user.name;
+            //this.user.password = doc.data().user.password;
+            this.user.DOB = doc.data().user.DOB;
+            this.user.email = doc.data().user.email;
+            this.user.coins = doc.data().user.coins;
+            this.user.imageIdx = doc.data().user.imageIdx;
           });
       },
       updateData: function() {
         var currentUser = fb.auth().currentUser;
-        var uid = currentUser.uid;     
+        var uid = currentUser.uid;
         fb.firestore()
           .collection("users")
           .doc(uid)
           .update({
-            name: this.Name,
-            password: this.Password,
-            DOB: this.DOB,
+            user: this.user,
           });
       },
       updatePwd: function() {
         var user = fb.auth().currentUser;
-        var newPassword = this.Password;
-
-        user.updatePassword(newPassword).then(function() {
-          alert("Password Changed");
-        }).catch(function(error) {
-          alert("Password reset fail, please try again with a stronger password");
-          console.log(error);
-        });
+        var newPassword = this.password;
+        this.password = "";
+        user
+          .updatePassword(newPassword)
+          .then(function() {
+            alert("Password Changed");
+          })
+          .catch(function(error) {
+            alert(error.message);
+            console.log(error);
+          });
       },
     },
     created: async function() {
@@ -109,11 +140,10 @@
 </script>
 
 <style scoped>
-  div {
-    align-items: center;
+  #main {
     display: flex;
+    align-content: center;
     justify-content: center;
-    margin-bottom: 100px;
   }
   label {
     text-align: right;
@@ -135,5 +165,11 @@
     margin-left: 15px;
     cursor: pointer;
     margin-right: 50px;
+  }
+  #showPwdChange {
+    margin-left: 38%;
+  }
+  label {
+    font-family: Lora;
   }
 </style>

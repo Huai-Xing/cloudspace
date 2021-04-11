@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <appNav></appNav>
-    <UserAvatar></UserAvatar>
-    <UserForm></UserForm>
-  </div>
+<div>
+  <appNav></appNav>
+  <UserAvatar></UserAvatar>
+  <UserForm></UserForm>
+</div>
 </template>
 
 
@@ -14,8 +14,7 @@ import MainNavigation from "./MainNavigation.vue";
 
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   components: {
     UserForm: UserForm,
