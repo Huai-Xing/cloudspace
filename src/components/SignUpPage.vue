@@ -77,10 +77,6 @@
           name: "",
           email: "",
           password: "",
-          DOB: "",
-          imageIdx: 0,
-          coins: 0,
-          trees: 0,
         },
       };
     },
@@ -89,7 +85,6 @@
       letsgo: function() {
         var email = this.user.email;
         var password = this.user.password;
-        var user = this.user;
         //Signing up
 
         fb.auth()
@@ -102,7 +97,14 @@
               .collection("users")
               .doc(cred.user.uid)
               .set({
-                user,
+                user: {
+                  name: this.user.name,
+                  email: this.user.email,
+                  DOB: "",
+                  imageIdx: 0,
+                  coins: 0,
+                  trees: 0,
+                },
                 categoryList: [],
               });
           })
