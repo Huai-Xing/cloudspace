@@ -90,6 +90,7 @@ export default {
   transition: all 0.3s ease 0s;
   cursor: pointer;
   outline: none;
+  margin-bottom: 20px;
 }
 .buyBtn:hover {
   color: #fff;

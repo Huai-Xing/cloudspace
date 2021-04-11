@@ -1,28 +1,43 @@
 <template>
-  <div>
+  <div style="overflow: hidden;">
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
 
     <div class="plantTreePage">
       <p class="coinText">You have {{ coins }} coins!</p>
 
-      <div class="treeBackground">
-        <span class="treeDots" v-for="i in data.length" v-bind:key="i"></span>
+      <div class="treeContainer" id="treeContainer">
+        <div class="treeCard" id="treeCard">
+          <div class="treeBackground">
+            <span
+              class="treeDots"
+              v-for="i in data.length"
+              v-bind:key="i"
+            ></span>
 
-        <tree-slide
-          v-for="(tree, index) in data"
-          v-bind:key="tree.name"
-          :index="index"
-          :visibleImg="visibleImg"
-          :direction="direction"
-          class="treeSlides"
-        >
-          <img class="treeImg" :src="require(`@/assets/trees/${tree.url}`)" />
-          <p class="treeText">{{ tree.name }}</p>
-        </tree-slide>
+            <tree-slide
+              v-for="(tree, index) in data"
+              v-bind:key="tree.name"
+              :index="index"
+              :visibleImg="visibleImg"
+              :direction="direction"
+              class="treeSlides"
+            >
+              <img
+                class="treeImg"
+                :src="require(`@/assets/trees/${tree.url}`)"
+              />
+              <p class="treeText" v-on:click="flip()">{{ tree.name }}</p>
+            </tree-slide>
 
-        <button class="arrow prev" @click="prev"></button>
-        <button class="arrow next" @click="next"></button>
+            <button class="arrow prev" @click="prev"></button>
+            <button class="arrow next" @click="next"></button>
+          </div>
+
+          <div class="treeDetails">
+            <tree-details :data="data" :visibleTree="visibleImg"></tree-details>
+          </div>
+        </div>
       </div>
 
       <p class="plantText">Do you wish to plant this tree?</p>
@@ -39,6 +54,7 @@
 import MainNavigation from "./MainNavigation.vue";
 import TreeSlide from "./Tree/TreeSlide";
 import TreePurchase from "./Tree/TreePurchase";
+import TreeDetails from "./Tree/TreeDetails";
 import firebase from "../firebase";
 
 export default {
@@ -47,54 +63,14 @@ export default {
     appNav: MainNavigation,
     TreeSlide,
     TreePurchase,
+    TreeDetails,
   },
   data() {
     return {
-      coins: 329,
+      coins: 0,
       visibleImg: 0,
       direction: "",
-      data: [
-        {
-          name: "Casuarina Tree",
-          url: "casuarina.png",
-          price: "240",
-        },
-        {
-          name: "Rain Tree",
-          url: "rain.png",
-          price: "240",
-        },
-        {
-          name: "Yellow Flame Tree",
-          url: "yellow_flame.png",
-          price: "300",
-        },
-        {
-          name: "Angsana Tree",
-          url: "angsana.png",
-          price: "320",
-        },
-        {
-          name: "Sea Apple Tree",
-          url: "sea_apple.png",
-          price: "350",
-        },
-        {
-          name: "Trumpet Tree",
-          url: "trumpet.png",
-          price: "420",
-        },
-        {
-          name: "Handkerchief Tree",
-          url: "handkerchief.png",
-          price: "500",
-        },
-        {
-          name: "Baobab Tree",
-          url: "baobab.png",
-          price: "600",
-        },
-      ],
+      data: [],
     };
   },
   computed: {
@@ -128,6 +104,14 @@ export default {
       }
       dots[this.visibleImg].className += " active";
     },
+    flip() {
+      var card = document.getElementById("treeCard");
+      if (card.style.transform == "rotateY(180deg)") {
+        card.style.transform = "rotateY(0deg)";
+      } else {
+        card.style.transform = "rotateY(180deg)";
+      }
+    },
     fetchCoins() {
       var uid = firebase.auth().currentUser.uid;
       firebase
@@ -137,6 +121,18 @@ export default {
         .get()
         .then((doc) => {
           this.coins = doc.data().user.coins;
+        });
+    },
+    fetchData() {
+      firebase
+        .firestore()
+        .collection("trees")
+        .orderBy("price")
+        .get()
+        .then((snap) => {
+          snap.forEach((doc) => {
+            this.data.push(doc.data());
+          });
         });
     },
     afford: function (price) {
@@ -149,6 +145,7 @@ export default {
   },
   created() {
     this.fetchCoins();
+    this.fetchData();
   },
 };
 </script>
@@ -185,6 +182,10 @@ export default {
   font-family: Roboto;
   text-transform: uppercase;
   letter-spacing: 1.5px;
+  cursor: pointer;
+}
+.treeText:hover {
+  opacity: 50%;
 }
 .treeDots {
   height: 4px;
@@ -230,5 +231,39 @@ export default {
 .plantText {
   font-size: 12px;
   padding: 10px;
+}
+/* flip card */
+.treeBackground,
+.treeDetails {
+  position: absolute;
+  background-color: #f3f3ed;
+  text-align: center;
+  width: 350px;
+  height: 330px;
+  border-radius: 45px;
+  margin: 0 auto;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+.treeBackground {
+  margin: 0 auto;
+  overflow: hidden;
+}
+.treeDetails {
+  transform: rotateY(180deg);
+}
+/* .treeBackground:hover, .treeDetails:hover {
+  box-shadow: 0px 0px 20px 1px #000;
+} */
+.treeCard {
+  transition: transform 1.2s;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+}
+.treeContainer {
+  width: auto;
+  height: 330px;
+  perspective: 1000px;
 }
 </style>
