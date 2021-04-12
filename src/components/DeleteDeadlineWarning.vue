@@ -16,11 +16,8 @@
       </template>
 
       <template v-slot:footer>
-        <button @click="closeModal" class="cfmBtn">
-          No
-        </button>
         <button @click="deleteDeadline" class="cfmBtn">
-          Yes
+          Delete
         </button>
       </template>
     </Modal>
@@ -116,6 +113,7 @@
     cursor: pointer;
     width: 100px;
     padding: 5px 12px 5px 12px;
+    color: red;
   }
   img {
     width: 28px;

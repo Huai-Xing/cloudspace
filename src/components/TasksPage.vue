@@ -35,10 +35,10 @@
               v-bind:idname="deadline[0]"
               style="display: inline-block"
             ></edit-deadline-form>
-            <!-- <delete-deadline-warning
+            <delete-deadline-warning
               style="display: inline-block"
-              v-bind:idname="task[0]"
-            ></delete-deadline-warning> -->
+              v-bind:idname="deadline[0]"
+            ></delete-deadline-warning>
           </div>
         </div>
       </div>
@@ -131,7 +131,7 @@
   import NewDeadlineForm from "./NewDeadlineForm.vue";
   import EditDeadlineForm from "./EditDeadlineForm.vue";
   import DeleteTaskWarning from "./DeleteTaskWarning.vue";
-  // import DeleteDeadlineWarning from "./DeleteDeadlineWarning.vue";
+  import DeleteDeadlineWarning from "./DeleteDeadlineWarning.vue";
 
   export default {
     data() {
@@ -152,7 +152,7 @@
       NewDeadlineForm,
       EditDeadlineForm,
       DeleteTaskWarning,
-      // DeleteDeadlineWarning,
+      DeleteDeadlineWarning,
     },
     methods: {
       //Checking which tasks to display
