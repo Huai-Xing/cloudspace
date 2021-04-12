@@ -40,8 +40,9 @@ export default {
 }
 .category {
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.6px;
   font-size: 13px;
+  font-weight: 600;
 }
 .title, .date {
   font-size: 10px;
