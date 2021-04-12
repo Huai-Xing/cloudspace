@@ -44,11 +44,11 @@
         showTimer: true,
         showBreak: false,
         currentBreak: 0,
-        currentTimer: 10,
+        currentTimer: 0,
         timerTimePassed: 0,
         breakTimePassed: 0,
         coin: 0,
-        breakTimeAllowed: 300,
+        breakTimeAllowed: 0,
         taskTitle: this.$route.params.taskTitle,
         timeForTask: this.$route.params.timeForTask,
         taskId: this.$route.params.taskId,
@@ -133,9 +133,9 @@
     },
 
     created() {
-      this.currentTimer = this.timeForTask;
-      this.coin = Math.floor(this.timeForTask / 600);
-      this.breakTimeAllowed = (this.timeForTask / 1200) * 300;
+      this.currentTimer = parseInt(this.timeForTask);
+      this.coin = Math.floor(parseInt(this.timeForTask) / 600);
+      this.breakTimeAllowed = (parseInt(this.timeForTask) / 1200) * 300;
     },
   };
 </script>

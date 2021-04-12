@@ -126,7 +126,7 @@
         timerInterval: null,
         title: "Task",
         coinsToEarn: 0,
-        totalTime: 3600,
+        totalTime: 0,
         timeToStop: null,
         timeStop: 0,
       };
@@ -210,9 +210,9 @@
 
     async created() {
       this.title = this.taskTitle;
-      this.totalTime = this.currentTimer + this.timerTimePassed;
-      this.timePassed = this.timerTimePassed;
-      this.coinsToEarn = this.coin;
+      this.totalTime = parseInt(this.currentTimer) + parseInt(this.timerTimePassed);
+      this.timePassed = parseInt(this.timerTimePassed);
+      this.coinsToEarn = parseInt(this.coin);
       this.coinsToEarn = await coinCal(this.totalTime);
       //console.log("COINS: " + this.coinsToEarn);
       // to start the timer immediately when the component gets mounted

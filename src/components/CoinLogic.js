@@ -69,7 +69,7 @@ async function getList() {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data().date);
+            //console.log(doc.id, " => ", doc.data().date);
             taskList.push(doc.data());
         });
     });
