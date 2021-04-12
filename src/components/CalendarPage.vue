@@ -2,12 +2,6 @@
   <div>
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
-    <!--
-    <div class="coinBox">
-      <img src="../assets/coin.png" class="coinImg" />
-      <span class="coinNo">{{ coins }}</span>
-    </div>
-    -->
     <div class="cal">
       <CalHeader v-on:changeMonth="reGenerate"></CalHeader>
       <ul>
@@ -98,24 +92,5 @@ ul {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(5, 1fr);
-}
-.coinBox {
-  display:flex;
-  font-family: Lora;
-  font-size: 18px;
-  margin-left: 80%;
-  border: 2px solid black;
-  border-radius: 14px;
-  width: max-content;
-  padding: 0px 2px 0px 2px;
-  align-items: center;
-  justify-content: center;
-}
-.coinImg {
-  height: 28px;
-  margin: 2px;
-}
-.coinNo {
-  padding: 5px;
 }
 </style>
