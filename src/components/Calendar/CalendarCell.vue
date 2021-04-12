@@ -161,6 +161,7 @@ export default {
   display: flex;
   justify-content: flex-end;
   position: sticky;
+  top: 0;
   padding-top: 3px;
   padding-right: 3px;
   margin-bottom: 3px;

@@ -347,6 +347,8 @@ h2 {
 .backToToday {
   font-family: lora;
   color: #4d4d4d;
+  text-decoration: underline;
+  margin-left: 20px;
 }
 .deadlines {
   min-height: 150px;
