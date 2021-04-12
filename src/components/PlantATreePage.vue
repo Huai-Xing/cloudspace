@@ -140,10 +140,6 @@ export default {
       return this.coins >= price;
     },
   },
-  mounted() {
-    document.getElementsByClassName("treeDots")[this.visibleImg].className +=
-      " active";
-  },
   created() {
     this.fetchCoins();
     this.fetchData();
