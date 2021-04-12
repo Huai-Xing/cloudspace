@@ -135,6 +135,7 @@
       },
       preventNav(event) {
         event.preventDefault();
+        event.returnValue = null;
       },
     },
 
@@ -151,12 +152,6 @@
     },
 
     beforeRouteLeave(to, from, next) {
-      //   if (!window.confirm("Are you sure you want to leave?")) {
-      //     return;
-      //   }
-
-      //   next();
-      // },
       if (!this.cancel && !this.complete) {
         window.alert(
           "You cannot leave this page unless you abort or complete the mission."
