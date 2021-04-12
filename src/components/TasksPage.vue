@@ -17,6 +17,8 @@
           class="addTask"
           v-bind:taskDate="date"
         ></new-deadline-form>
+        <br>
+        <p id="deadlineToggle" v-on:click="toggleDeadlines">{{toggleDeadlineText}}</p>
         <hr class="line" />
         <div
           class="tasksList"
@@ -25,7 +27,13 @@
         >
           <div v-if="checkDeadlineDate(deadline)">
             <br />
-            <input type="checkbox" id="key" />
+            <input
+              type="checkbox"
+              :value="deadline[0]"
+              id="deadline[0]"
+              @change="updateDeadlines"
+              v-model="updatedCheckedDeadlines"
+            />
             <label for="key">
               {{ deadline[1].category }} - {{ deadline[1].title }}: Due on
               {{ deadline[1].datedue }} @ {{ deadline[1].timedue.hh
@@ -143,6 +151,10 @@ export default {
       deadlines: [],
       isToday: true,
       moreInfoPacket: [],
+      currentCheckedDeadlines: [],
+      updatedCheckedDeadlines: [],
+      showupdatedCheckedDeadlines: false,
+      toggleDeadlineText: "Show completed deadlines",
     };
   },
   //Register Locally
@@ -154,6 +166,55 @@ export default {
     EditDeadlineForm,
   },
   methods: {
+    toggleDeadlines: function () {
+      this.showupdatedCheckedDeadlines = !this.showupdatedCheckedDeadlines;
+      if (this.showupdatedCheckedDeadlines) {
+        this.toggleDeadlineText = "Hide completed deadlines";
+      } else {
+        this.toggleDeadlineText = "Show completed deadlines";
+      }
+    },
+    getUpdateList: function () {
+      var longSet;
+      var shortSet;
+      var uncheck; //True means a deadline was unchecked
+      if (
+        this.currentCheckedDeadlines.length >
+        this.updatedCheckedDeadlines.length
+      ) {
+        longSet = new Set(this.currentCheckedDeadlines);
+        shortSet = new Set(this.updatedCheckedDeadlines);
+        uncheck = true;
+      } else {
+        longSet = new Set(this.updatedCheckedDeadlines);
+        shortSet = new Set(this.currentCheckedDeadlines);
+        uncheck = false;
+      }
+      var diff = new Set([...longSet].filter((x) => !shortSet.has(x)));
+      var newStatus = uncheck ? "Incomplete" : "Completed";
+      var deadlineId = diff.values().next().value;
+      fb.firestore()
+        .collection("tasks")
+        .doc(this.user)
+        .collection("deadlinesList")
+        .doc(deadlineId)
+        .update({
+          status: newStatus,
+        })
+        .then(() => {
+          for (var i = 0; i < this.deadlines.length; i++) {
+            if (this.deadlines[i][0] == deadlineId) {
+              this.deadlines[i][1].status = newStatus;
+            }
+          }
+        });
+      this.currentCheckedDeadlines = this.updatedCheckedDeadlines;
+    },
+    updateDeadlines: function () {
+      this.$nextTick(() => {
+        this.getUpdateList();
+      });
+    },
     //Checking which tasks to display
     checkTaskDate: function (task) {
       console.log(task[1].date.toDate());
@@ -193,7 +254,11 @@ export default {
       console.log(end);
 
       if (this.date >= start && this.date <= end) {
-        return true;
+        if (deadline[1].status != "Incomplete") {
+          return this.showupdatedCheckedDeadlines;
+        } else {
+          return true;
+        }
       } else {
         return false;
       }
@@ -221,6 +286,10 @@ export default {
         .then((snapshot) => {
           snapshot.forEach((doc) => {
             this.deadlines.push([doc.id, doc.data()]);
+            if (doc.data().status == "Completed") {
+              this.updatedCheckedDeadlines.push(doc.id);
+              this.currentCheckedDeadlines.push(doc.id);
+            }
           });
         });
     },
@@ -366,6 +435,16 @@ span {
   font-weight: 600;
   display: inline-block;
 }
+
+#deadlineToggle {
+  margin: 0;
+  text-align: right;
+  font-size: 9px;
+  text-decoration: underline;
+  width: 96%;
+  cursor: pointer;
+}
+
 .addTask {
   float: right;
   margin-right: 6%;
