@@ -54,6 +54,7 @@
           </span>
         </span>
       </p>
+      <p id="coins-reduce" v-show="coinsReduced">Coins are reduced. See info for more details.</p>
       <!-- Timer completes -->
       <button id="done" class="timerControlledBtns" @click="doneTimer()">
         <span class="tooltiptext">Complete task</span>
@@ -129,6 +130,7 @@
         totalTime: 0,
         timeToStop: null,
         timeStop: 0,
+        coinsReduced: false,
       };
     },
 
@@ -214,6 +216,7 @@
       this.timePassed = parseInt(this.timerTimePassed);
       this.coinsToEarn = parseInt(this.coin);
       this.coinsToEarn = await coinCal(this.totalTime);
+      this.coinsReduced = !(this.coinsToEarn == this.coin);
       //console.log("COINS: " + this.coinsToEarn);
       // to start the timer immediately when the component gets mounted
       this.startTimer();
@@ -335,7 +338,15 @@
     position: relative;
     display: inline-block;
   }
-
+  #coins-to-earn {
+    margin-bottom: 0;
+  }
+  #coins-reduce {
+    margin: 0;
+    font-size: 9px;
+    color: red;
+  }
+  
   .buttons {
     display: block;
     margin-left: auto;
@@ -348,6 +359,7 @@
     width: 40px;
     height: 40px;
     margin: 8px;
+    margin-top: 25px;
   }
   img {
     position: relative;
