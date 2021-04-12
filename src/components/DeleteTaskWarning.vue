@@ -1,37 +1,26 @@
 <template>
-  <div id="app">
-    <button type="button" class="buyBtn" @click="showModal">
-      <img class="priceCoin" src="../../assets/coin.png" />
-      <span class="priceText"> {{ treePrice }} </span>
-    </button>
+  <div>
+    <img src="../assets/task/trash_btn.png" @click="showModal" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
-        <div v-show="afford">
-          <p v-show="!bought">Are you sure?</p>
-          <p v-show="bought">You planted a tree!</p>
-        </div>
-        <div v-show="!afford">Sorry!</div>
+        <p>Are you sure?</p>
       </template>
 
       <template v-slot:body>
-        <div v-show="afford">
-          <p class="treeModalText" v-show="!bought">
-            {{ treeName }} costs {{ treePrice }} coins. <br />
-            Proceed with purchase?
-          </p>
-          <p class="treeModalText" v-show="bought">
-            Thank you! <br />
-            A confirmation has been sent to your email.
+        <div>
+          <p class="treeModalText">
+            Deleting a task cannot be undone.
           </p>
         </div>
-
-        <div v-show="!afford">Come back when you have enough coins!</div>
       </template>
 
       <template v-slot:footer>
-        <button v-show="!bought && afford" @click="purchase" class="cfmBtn">
-          Buy
+        <button @click="closeModal" class="cfmBtn">
+          No
+        </button>
+        <button @click="deleteTask" class="cfmBtn">
+          Yes
         </button>
       </template>
     </Modal>
@@ -39,19 +28,18 @@
 </template>
 
 <script>
-  import Modal from "../Modal.vue";
-  import firebase from "../../firebase";
+  import Modal from "./Modal.vue";
+  import fb from "../firebase";
 
   export default {
-    name: "App",
-    props: ["treeName", "treePrice", "afford"],
+    props: ["idname"],
     components: {
       Modal,
     },
     data() {
       return {
         isModalVisible: false,
-        bought: false,
+        user: fb.auth().currentUser.uid,
       };
     },
     methods: {
@@ -61,20 +49,18 @@
       closeModal() {
         this.isModalVisible = false;
       },
-      purchase() {
-        this.bought = true;
-        var uid = firebase.auth().currentUser.uid;
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(uid)
-          .update({
-            "user.coins": firebase.firestore.FieldValue.increment(
-              0 - this.treePrice
-            ),
-            "user.trees": firebase.firestore.FieldValue.increment(1),
-          })
-          .then(() => location.reload());
+      deleteTask() {
+        let doc_id = this.idname;
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .doc(doc_id)
+          .delete()
+          .then(() => {
+            location.reload();
+          });
+        this.closeModal();
       },
     },
   };
@@ -122,10 +108,7 @@
     padding: 6px;
     letter-spacing: 1.5px;
   }
-  .treeModalText {
-    font-family: Roboto;
-    padding: 3px 50px 13px 50px;
-  }
+
   .cfmBtn {
     background-color: white;
     border-radius: 5px;
@@ -134,5 +117,10 @@
     cursor: pointer;
     width: 100px;
     padding: 5px 12px 5px 12px;
+  }
+  img {
+    width: 28px;
+    height: 28px;
+    margin: 2px;
   }
 </style>
