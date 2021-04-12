@@ -3,10 +3,7 @@
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
 
-    <div class="coinBox">
-      <img src="../assets/coin.png" class="coinImg" />
-      <span class="coinNo">{{ coins }}</span>
-    </div>
+    <coin-box :coins="coins"></coin-box>
 
     <div class="task">
       <i class="arrow left" v-on:click="change(0)"></i>
@@ -23,28 +20,31 @@
           v-bind:taskDate="date"
         ></new-deadline-form>
         <hr class="line" />
-        <div
-          class="tasksList"
-          v-for="deadline in deadlines"
-          v-bind:key="deadline[0]"
-        >
-          <div v-if="checkDeadlineDate(deadline)">
-            <br />
-            <input type="checkbox" id="key" />
-            <label for="key">
-              {{ deadline[1].category }} - {{ deadline[1].title }}: Due on
-              {{ deadline[1].datedue }} @ {{ deadline[1].timedue.hh
-              }}{{ deadline[1].timedue.mm }}
-            </label>
-            <edit-deadline-form
-              v-bind:idname="deadline[0]"
-              style="display: inline-block"
-            ></edit-deadline-form>
-            <delete-deadline-warning
-              style="display: inline-block"
-              v-bind:idname="deadline[0]"
-            ></delete-deadline-warning>
-          </div>
+        <div class="deadlinesList">
+          <span v-for="deadline in deadlines" v-bind:key="deadline[0]">
+            <span v-if="checkDeadlineDate(deadline)">
+              <input type="checkbox" id="key" />
+
+              <deadlines-box
+                :category="deadline[1].category"
+                :title="deadline[1].title"
+                :datedue="deadline[1].datedue"
+                :hour="deadline[1].timedue.hh"
+                :min="deadline[1].timedue.mm"
+              >
+              </deadlines-box>
+
+              <edit-deadline-form
+                v-bind:idname="deadline[0]"
+                style="display: inline-block"
+              ></edit-deadline-form>
+
+              <delete-deadline-warning
+                style="display: inline-block"
+                v-bind:idname="deadline[0]"
+              ></delete-deadline-warning>
+            </span>
+          </span>
         </div>
       </div>
 
@@ -60,7 +60,7 @@
           <span class="taskLabel"> Status </span>
         </div>
 
-        <div class="tasksList" v-for="task in tasks" v-bind:key="task[0]">
+        <div v-for="task in tasks" v-bind:key="task[0]">
           <div v-if="checkTaskDate(task)">
             <div class="task-container">
               <span class="taskText"> {{ task[1].category }} </span>
@@ -137,6 +137,8 @@ import NewDeadlineForm from "./NewDeadlineForm.vue";
 import EditDeadlineForm from "./EditDeadlineForm.vue";
 import DeleteTaskWarning from "./DeleteTaskWarning.vue";
 import DeleteDeadlineWarning from "./DeleteDeadlineWarning.vue";
+import DeadlinesBox from "./Tasks/DeadlinesBox.vue";
+import CoinBox from "./CoinBox.vue";
 
 export default {
   data() {
@@ -159,6 +161,8 @@ export default {
     EditDeadlineForm,
     DeleteTaskWarning,
     DeleteDeadlineWarning,
+    DeadlinesBox,
+    CoinBox,
   },
   methods: {
     //Checking which tasks to display
@@ -205,7 +209,7 @@ export default {
         return false;
       }
     },
-    // Fetching user's coins 
+    // Fetching user's coins
     fetchCoins() {
       fb.firestore()
         .collection("users")
@@ -340,12 +344,6 @@ h2 {
 .left:hover {
   filter: opacity(0.6);
 }
-span {
-  align-items: center;
-  margin-left: 20px;
-  text-decoration: underline;
-  cursor: pointer;
-}
 .backToToday {
   font-family: lora;
   color: #4d4d4d;
@@ -353,6 +351,14 @@ span {
 .deadlines {
   min-height: 150px;
   max-height: 150px;
+}
+.deadlinesList {
+  width: 94%;
+  overflow: auto;
+  white-space: nowrap;
+}
+input {
+  margin-left: 25px;
 }
 .sublabel {
   font-family: lora;
@@ -399,6 +405,7 @@ span {
   text-decoration: none;
   font-size: 12px;
   padding-top: 10px;
+  margin-left: 20px;
 }
 img {
   height: 28px;
@@ -414,25 +421,23 @@ img {
   box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s ease;
 }
-.coinBox {
-  display: flex;
-  font-family: Lora;
-  font-size: 16px;
-  margin-left: 80%;
-  border: 2px solid black;
-  border-radius: 14px;
-  width: max-content;
-  padding: 0px 2px 0px 2px;
-  align-items: center;
-  justify-content: center;
+/* width */
+::-webkit-scrollbar {
+  height: 6px;
 }
-.coinImg {
-  height: 24px;
-  margin: 2px;
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff;
 }
-.coinNo {
-  padding: 5px;
-  margin: 0px;
-  text-decoration: none;
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
