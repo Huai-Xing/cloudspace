@@ -101,9 +101,15 @@
                     <div class="tooltip-content">
                       Coins Earned: {{ task[1].coinsEarned }}
                       <br />
-                      Total Time: {{ task[1].actualTime }}
+                      Total Time:
+                      {{ Math.floor(task[1].actualTime / 3600) }} hrs
+                      {{ Math.floor((task[1].actualTime % 3600) / 60) }} min
+                      {{ Math.floor((task[1].actualTime % 3600) % 60) }} s
                       <br />
-                      Total Break Time: {{ task[1].breakTime }}
+                      Total Break Time:
+                      {{ Math.floor(task[1].breakTime / 3600) }} hrs
+                      {{ Math.floor((task[1].breakTime % 3600) / 60) }} min
+                      {{ Math.floor((task[1].breakTime % 3600) % 60) }} s
                     </div>
                   </template>
                 </v-popover>

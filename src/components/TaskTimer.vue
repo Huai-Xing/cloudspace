@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="timer-content">
       <countdown-timer
         v-if="showTimer"
@@ -52,6 +51,8 @@
         taskTitle: this.$route.params.taskTitle,
         timeForTask: this.$route.params.timeForTask,
         taskId: this.$route.params.taskId,
+        cancel: false,
+        complete: false,
       };
     },
     methods: {
@@ -71,6 +72,7 @@
         //z is coins
         //console.log("complete " + x);
         //console.log("extra " + y);
+        this.complete = true;
         this.coin = z;
         this.coinPenalty(y);
         this.timerTimePassed = x + y;
@@ -79,6 +81,7 @@
       cancelTimer: function() {
         //console.log("cancel");
         this.coin = 0;
+        this.cancel = true;
         this.$router.push({
           name: "Tasks",
         });
@@ -130,12 +133,38 @@
       convertToSecond: function(x) {
         return x.hh * 3600 + x.mm * 60;
       },
+      preventNav(event) {
+        event.preventDefault();
+      },
     },
 
     created() {
       this.currentTimer = this.timeForTask;
       this.coin = Math.floor(this.timeForTask / 600);
       this.breakTimeAllowed = (this.timeForTask / 1200) * 300;
+    },
+    beforeMount() {
+      window.addEventListener("beforeunload", this.preventNav);
+      this.$once("hook:beforeDestroy", () => {
+        window.removeEventListener("beforeunload", this.preventNav);
+      });
+    },
+
+    beforeRouteLeave(to, from, next) {
+      //   if (!window.confirm("Are you sure you want to leave?")) {
+      //     return;
+      //   }
+
+      //   next();
+      // },
+      if (!this.cancel && !this.complete) {
+        window.alert(
+          "You cannot leave this page unless you abort or complete the mission."
+        );
+        next(false);
+      } else {
+        next();
+      }
     },
   };
 </script>
