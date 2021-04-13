@@ -6,6 +6,7 @@
         dayCurrentMonth: isNotCurrentMonth,
         dayTodayCell: isToday,
       }"
+      v-on:click="goToTaskPage"
     >
       <div class="cellItems">
         <div class="day">
@@ -13,31 +14,29 @@
             :class="{
               dayToday: isToday,
             }"
-            v-on:click="goToTaskPage"
           >
-            {{ date.get('date') }}
+            {{ date.get("date") }}
           </li>
         </div>
         <div>
-          <li class="deadlines" 
-          v-for="item in deadlinesToday"  
-          v-bind:key="item.title"
-          :class="{ itemsEmpty: isNotCurrentMonth }" 
-          v-on:click="goToTaskPage"
+          <li
+            class="deadlines"
+            v-for="item in deadlinesToday"
+            v-bind:key="item.title"
+            :class="{ itemsEmpty: isNotCurrentMonth }"
           >
             {{ item.title }}
           </li>
 
-          <li class="items" 
-          v-for="item in tasksToday"  
-          v-bind:key="item.title"
-          :class="{ itemsEmpty: isNotCurrentMonth }" 
-          v-on:click="goToTaskPage"
+          <li
+            class="items"
+            v-for="item in tasksToday"
+            v-bind:key="item.title"
+            :class="{ itemsEmpty: isNotCurrentMonth }"
           >
             {{ item.title }}
           </li>
         </div>
-
       </div>
     </li>
   </div>
@@ -46,7 +45,7 @@
 
 <script>
 import dayjs from "dayjs";
-import firebase from '../../firebase';
+import firebase from "../../firebase";
 
 export default {
   props: {
@@ -55,13 +54,15 @@ export default {
   },
   data() {
     return {
-      isNotCurrentMonth: this.selectedDate.get('month') != this.date.get('month'),
-      isToday: dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
+      isNotCurrentMonth:
+        this.selectedDate.get("month") != this.date.get("month"),
+      isToday:
+        dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
       todayDate: dayjs(),
       data: [
-        // "BT3103 Assignment 2", 
-        // "Meeting with Group", 
-        // "Take a short break :)", 
+        // "BT3103 Assignment 2",
+        // "Meeting with Group",
+        // "Take a short break :)",
         // "Very very very very very very very very very very very long task"
       ],
       tasksToday: [],
@@ -71,20 +72,22 @@ export default {
   methods: {
     fetchData: function () {
       var uid = firebase.auth().currentUser.uid;
-      firebase.firestore()
+      firebase
+        .firestore()
         .collection("tasks")
         .doc(uid)
         .collection("deadlinesList")
         .get()
         .then((snap) =>
           snap.forEach((doc) => {
-            if (this.compareDate(doc.data().date.toDate(), this.date)) {
+            if (this.compareDate(new Date(doc.data().datedue), this.date)) {
               this.deadlinesToday.push(doc.data());
             }
           })
         );
 
-      firebase.firestore()
+      firebase
+        .firestore()
         .collection("tasks")
         .doc(uid)
         .collection("tasksList")
@@ -107,14 +110,16 @@ export default {
         return true;
       }
     },
-    goToTaskPage: function() {
-      this.$router.push({ name: "Tasks", params: { date: this.date.format() } }); // push with date
-    }
+    goToTaskPage: function () {
+      this.$router.push({
+        name: "Tasks",
+        params: { date: this.date.format() },
+      }); // push with date
+    },
   },
   created() {
     this.fetchData();
-
-  }
+  },
 };
 </script>
 
@@ -127,6 +132,7 @@ export default {
 .cell {
   list-style-type: None;
   display: inline-block;
+  background-color: #fff;
   border: 2px solid rgb(230, 230, 230);
   border-top: 0px;
   position: relative;
@@ -135,9 +141,10 @@ export default {
   min-width: 133px;
   padding: 3px;
   overflow: auto;
+  cursor: pointer;
 }
 .dayCurrentMonth {
-  background-color: rgb(220, 220, 220);
+  background-color: #eeeeee;
 }
 /*
 .dayTodayCell {
@@ -167,9 +174,9 @@ export default {
   margin-bottom: 3px;
   cursor: pointer;
 }
-.day:hover, .day:focus {
+.cell .day:hover, .cell .day:focus {
   color: black;
-}
+} 
 .dayToday {
   background-color: #26818f;
   color: white;
@@ -205,12 +212,12 @@ export default {
   overflow: hidden;
   cursor: pointer;
 }
-.itemsEmpty{
+.itemsEmpty {
   visibility: hidden;
 }
-.items:hover {
+/* .items:hover {
   filter: brightness(90%);
-}
+} */
 .items:nth-child(odd) {
   background-color: #d1e0f3;
 }
