@@ -15,9 +15,9 @@
                 There is no task scheduled today.<br />Schedule one now and let
                 cloudspace help you be productive.
               </p>
-              <li v-for="data in task" v-bind:key="data.title">
-                <p id="taskContent">{{ data.category }}: {{ data.title }}</p>
-                <p id="taskStatus">Status: {{ data.status }}</p>
+              <li v-for="data in task" v-bind:key="data.title" v-on:click="goToTaskPage('today')">
+                <p class="mainListItem" id="taskContent">{{ data.category }}: {{ data.title }}</p>
+                <p class="mainListItem" id="taskStatus">Status: {{ data.status }}</p>
               </li>
             </ul>
           </div>
@@ -28,12 +28,11 @@
             <ul>
               <p v-show="deadlineEmpty">Hurray! No deadlines for this week!</p>
               <li v-for="data in deadline" v-bind:key="data">
-                <p id="deadlineContent">
+                <p class="mainListItem" id="deadlineContent" v-on:click="goToTaskPage(data.datedue)">
                   {{ data.category }}: {{ data.title }}
                 </p>
-                <p id="deadlineStatus">
-                  Due Date: {{ data.datedue }} @ {{ data.timedue.hh
-                  }}{{ data.timedue.mm }}
+                <p class="mainListItem" id="deadlineStatus">
+                  Due on: {{ getDate(data.datedue) }}, {{ data.timedue.hh }}{{ data.timedue.mm }}
                 </p>
               </li>
             </ul>
@@ -55,6 +54,7 @@
         name: "",
         deadline: [],
         task: [],
+        month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       };
     },
     //Register Locally
@@ -108,6 +108,8 @@
           .collection("tasks")
           .doc(uid)
           .collection("deadlinesList")
+          .orderBy("datedue") // sort by date 
+          .where("datedue", ">", today.toISOString().substring(0, 10)) // query dates after today
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -135,6 +137,18 @@
         }
         return false;
       },
+      goToTaskPage: function(date) {
+        if (date==="today") {
+          this.$router.push({name:"Tasks"});
+          return;
+        }
+        this.$router.push({name:"Tasks", params: {date: date}});
+        return;
+      },
+      getDate(dateStr) {
+        var d = new Date(dateStr);
+        return d.getDate() + " " + this.month[d.getMonth()] + " " + d.getFullYear();
+      }
     },
     created: async function() {
       await this.fetchData();
@@ -166,7 +180,9 @@
   }
   #phrase {
     color: rgb(110, 110, 110);
+    font-family: "Source Sans Pro";
     font-size: 12px;
+    margin-top: 0.5%;
     margin-bottom: 2%;
   }
   .dashboard {
@@ -179,15 +195,13 @@
     height: 15vw;
   }
   .overviewHead {
-    text-decoration: underline;
-    background-color: #81b762;
-    border-radius: 20px 20px 0 0;
+    background-color:#81b762;
+    border-radius: 16px 16px 0 0;
     font-size: 16px;
     color: white;
     font-weight: 550;
     margin: 0;
-    padding: 2%;
-    padding-left: 3%;
+    padding: 3% 3% 2% 4%;
   }
   .overview > div {
     position: relative;
@@ -195,7 +209,7 @@
     max-height: 80%;
     overflow: auto;
     border: 5px solid #81b762;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 16px 16px;
   }
   #task {
     margin-right: 5%;
@@ -220,9 +234,12 @@
     cursor: pointer;
   }
   li > p {
-    font-family: roboto;
+    font-family: "Source Sans Pro";
     font-size: 11px;
     text-align: left;
+  }
+  .mainItemList {
+    font-family: "Source Sans Pro";
   }
   #taskStatus {
     border-radius: 0px 20px 20px 0px;

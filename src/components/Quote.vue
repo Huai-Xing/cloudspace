@@ -60,40 +60,37 @@ export default {
   display: inline-block;
   border: 5px solid #81b762;
   background-color: #81b762;
-  border-radius: 20px 20px 0 0;
+  border-radius: 16px 16px 0 0;
   width: 100%;
-  margin: 0;
-  padding: 0;
 }
 #bottom {
   position: relative;
   display: inline-block;
   border: 5px solid #81b762;
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 16px 16px;
   width: 100%;
   margin: 0;
   padding: 0;
 }
-p {
-  margin: 0;
-  padding: 0;
-  padding-left: 0.8%;
-}
 #title {
-  text-decoration: underline;
   font-size: 16px;
   color: white;
-  font-weight: 550;
+  margin: 0;
+  padding: 8px 15px;
 }
 #quote {
-  margin-top: 5px;
+  font-family: "Source Sans Pro";
   font-style: italic;
   font-size: 18px;
-  padding-bottom: 0.8%;
+  letter-spacing: 0.3px;
+  padding: 12px;
+  margin: 0px;
 }
 #author {
+  font-family: "Source Sans Pro";
   text-align: left;
-  font-size: 14px;
-  padding-bottom: 0.8%;
+  font-size: 12px;
+  margin: 0px;
+  padding: 0px 0px 18px 18px;
 }
 </style>

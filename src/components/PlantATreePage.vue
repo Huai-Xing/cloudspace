@@ -15,7 +15,7 @@
               v-bind:key="i"
             ></span>
 
-<!-- add v-if tree not undefined -->
+            <!-- add v-if tree not undefined -->
             <tree-slide
               v-for="(tree, index) in data"
               v-bind:key="tree.name"
@@ -29,7 +29,6 @@
                 :src="require(`@/assets/trees/${tree.url}`)"
               />
               <p class="treeText" v-on:click="flip()">{{ tree.name }}</p>
-              <span class="tooltiptext">See more details!</span>
             </tree-slide>
 
             <button class="arrow prev" @click="prev"></button>
@@ -42,6 +41,7 @@
         </div>
       </div>
 
+      <p class="seeMore">Click on tree name to learn more!</p>
       <p class="plantText">Do you wish to plant this tree?</p>
       <tree-purchase
         :treeName="data[visibleImg].name"
@@ -176,8 +176,8 @@ export default {
   margin-top: 20px;
 }
 .treeText {
-  font-size: 12px;
-  font-family: Roboto;
+  font-size: 13px;
+  font-family: "Source Sans Pro";
   text-transform: uppercase;
   letter-spacing: 1.5px;
   cursor: pointer;
@@ -186,7 +186,15 @@ export default {
 .treeText:hover {
   opacity: 50%;
 }
-.tooltiptext {
+.seeMore {
+  color: #8a827bce;
+  font-family: "Source Sans Pro";
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  margin-top: 12px;
+  padding: 0% 46.5%;
+}
+/* .tooltiptext {
   visibility: hidden;
   font-family: roboto;
   text-transform: uppercase;
@@ -215,7 +223,7 @@ export default {
 }
 .treeText:hover + .tooltiptext {
   visibility: visible;
-}
+} */
 .treeDots {
   height: 4px;
   width: 4px;
@@ -259,7 +267,7 @@ export default {
 }
 .plantText {
   font-size: 12px;
-  padding: 10px;
+  padding: 0px 10px 10px 10px;
 }
 /* flip card */
 .treeBackground,

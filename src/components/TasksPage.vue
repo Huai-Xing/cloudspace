@@ -92,6 +92,7 @@
                   v-bind:idname="task[0]"
                   class="editBtn"
                 ></edit-task-form>
+                
                 <delete-task-warning
                   style="display: inline-block"
                   v-bind:idname="task[0]"
@@ -106,7 +107,7 @@
                   <img
                     src="../assets/task/moreinfo_btn.png"
                     v-bind:idname="task[0]"
-                    class="tooltip target"
+                    class="editBtn"
                   />
 
                   <!-- This will be the content of the popover -->
@@ -492,13 +493,14 @@ input.checkbox {
 .taskLabel {
   font-family: montserrat;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
   text-decoration: none;
 }
 .task-container {
   text-align: center;
+  align-items: center;
   display: grid;
   min-width: 96%;
   padding: 10px 20px;
@@ -507,7 +509,7 @@ input.checkbox {
 .taskText {
   font-family: Lora;
   text-decoration: none;
-  font-size: 12px;
+  font-size: 14px;
   padding-top: 10px;
   margin: 10px;
 }

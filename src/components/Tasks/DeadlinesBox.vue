@@ -27,7 +27,6 @@ export default {
 
 <style scoped>
 * {
-  font-family: roboto;
   margin: 0px;
 }
 .deadlineBox {

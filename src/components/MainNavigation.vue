@@ -190,10 +190,12 @@ img {
 a {
   color: black;
   text-decoration: none;
+  transition: 0.1s;
 }
 a:hover,
 span:hover {
   font-weight: 600;
+  font-size: 15px;
 }
 .active {
   font-weight: 600;

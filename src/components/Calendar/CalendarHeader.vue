@@ -98,10 +98,10 @@ ul {
   grid-template-columns: repeat(7, 1fr);
 }
 li {
-  font-family: montserrat;
+  font-family: "Source Sans Pro";
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.8px;
   color: white;
   background-color: #34b2c5;
   list-style-type: None;

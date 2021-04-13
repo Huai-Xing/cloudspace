@@ -26,8 +26,8 @@ export default {
   align-items: center;
 }
 .coinBox {
-  display: inline-flex;
   font-family: Lora;
+  display: inline-flex;
   font-size: 16px;
   margin-left: 80%;
   border: 2px solid #555;

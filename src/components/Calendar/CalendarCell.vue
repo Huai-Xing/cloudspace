@@ -171,7 +171,7 @@ export default {
   left: 85%;
   /* padding-top: 3px;
   padding-right: 3px; */
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   cursor: pointer;
 }
 .cell .day:hover, .cell .day:focus {
@@ -190,7 +190,7 @@ export default {
   top: -3px;
 }
 .deadlines {
-  font-family: Roboto;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: 11px;
   color: rgb(209, 5, 5);
   height: 10px;
@@ -198,7 +198,7 @@ export default {
   margin: 4px 3px 0 3px;
 }
 .items {
-  font-family: roboto;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: 11px;
   text-align: left;
   list-style-type: None;
