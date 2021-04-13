@@ -109,7 +109,6 @@ export default {
 <style scoped>
 #bar {
   position: relative;
-  height: 40vh;
-  width: 35vw;
+  height: 42vh;
 }
 </style>
