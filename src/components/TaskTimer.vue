@@ -28,10 +28,6 @@
   import fb from "../firebase.js";
 
   export default {
-    // props: {
-    //   timeForTask: Number,
-    //   taskId: String,
-    // },
     //Register Locally
     components: {
       "countdown-timer": CountDownTimerComponent,

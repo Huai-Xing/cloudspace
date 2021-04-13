@@ -143,397 +143,397 @@
 </template>
 
 <script>
-import fb from "../firebase";
-import EditTaskForm from "./EditTaskForm.vue";
-import MainNavigation from "./MainNavigation.vue";
-import NewTaskForm from "./NewTaskForm.vue";
-import dayjs from "dayjs";
-import NewDeadlineForm from "./NewDeadlineForm.vue";
-import EditDeadlineForm from "./EditDeadlineForm.vue";
-import DeleteTaskWarning from "./DeleteTaskWarning.vue";
-import DeleteDeadlineWarning from "./DeleteDeadlineWarning.vue";
-import DeadlinesBox from "./Tasks/DeadlinesBox.vue";
-import CoinBox from "./CoinBox.vue";
+  import fb from "../firebase";
+  import EditTaskForm from "./EditTaskForm.vue";
+  import MainNavigation from "./MainNavigation.vue";
+  import NewTaskForm from "./NewTaskForm.vue";
+  import dayjs from "dayjs";
+  import NewDeadlineForm from "./NewDeadlineForm.vue";
+  import EditDeadlineForm from "./EditDeadlineForm.vue";
+  import DeleteTaskWarning from "./DeleteTaskWarning.vue";
+  import DeleteDeadlineWarning from "./DeleteDeadlineWarning.vue";
+  import DeadlinesBox from "./Tasks/DeadlinesBox.vue";
+  import CoinBox from "./CoinBox.vue";
 
-export default {
-  data() {
-    return {
-      date: dayjs(),
-      user: fb.auth().currentUser.uid,
-      tasks: [],
-      deadlines: [],
-      isToday: true,
-      moreInfoPacket: [],
-      coins: 0,
-      currentCheckedDeadlines: [],
-      updatedCheckedDeadlines: [],
-      showupdatedCheckedDeadlines: false,
-      toggleDeadlineText: "Show completed deadlines",
-    };
-  },
-  //Register Locally
-  components: {
-    appNav: MainNavigation,
-    NewTaskForm,
-    EditTaskForm,
-    NewDeadlineForm,
-    EditDeadlineForm,
-    DeleteTaskWarning,
-    DeleteDeadlineWarning,
-    DeadlinesBox,
-    CoinBox,
-  },
-  methods: {
-    toggleDeadlines: function () {
-      this.showupdatedCheckedDeadlines = !this.showupdatedCheckedDeadlines;
-      if (this.showupdatedCheckedDeadlines) {
-        this.toggleDeadlineText = "Hide completed deadlines";
-      } else {
-        this.toggleDeadlineText = "Show completed deadlines";
-      }
+  export default {
+    data() {
+      return {
+        date: dayjs(),
+        user: fb.auth().currentUser.uid,
+        tasks: [],
+        deadlines: [],
+        isToday: true,
+        moreInfoPacket: [],
+        coins: 0,
+        currentCheckedDeadlines: [],
+        updatedCheckedDeadlines: [],
+        showupdatedCheckedDeadlines: false,
+        toggleDeadlineText: "Show completed deadlines",
+      };
     },
-    getUpdateList: function () {
-      var longSet;
-      var shortSet;
-      var uncheck; //True means a deadline was unchecked
-      if (
-        this.currentCheckedDeadlines.length >
-        this.updatedCheckedDeadlines.length
-      ) {
-        longSet = new Set(this.currentCheckedDeadlines);
-        shortSet = new Set(this.updatedCheckedDeadlines);
-        uncheck = true;
-      } else {
-        longSet = new Set(this.updatedCheckedDeadlines);
-        shortSet = new Set(this.currentCheckedDeadlines);
-        uncheck = false;
-      }
-      var diff = new Set([...longSet].filter((x) => !shortSet.has(x)));
-      var newStatus = uncheck ? "Incomplete" : "Completed";
-      var deadlineId = diff.values().next().value;
-      fb.firestore()
-        .collection("tasks")
-        .doc(this.user)
-        .collection("deadlinesList")
-        .doc(deadlineId)
-        .update({
-          status: newStatus,
-        })
-        .then(() => {
-          for (var i = 0; i < this.deadlines.length; i++) {
-            if (this.deadlines[i][0] == deadlineId) {
-              this.deadlines[i][1].status = newStatus;
-            }
-          }
-        });
-      this.currentCheckedDeadlines = this.updatedCheckedDeadlines;
+    //Register Locally
+    components: {
+      appNav: MainNavigation,
+      NewTaskForm,
+      EditTaskForm,
+      NewDeadlineForm,
+      EditDeadlineForm,
+      DeleteTaskWarning,
+      DeleteDeadlineWarning,
+      DeadlinesBox,
+      CoinBox,
     },
-    updateDeadlines: function () {
-      this.$nextTick(() => {
-        this.getUpdateList();
-      });
-    },
-    //Checking which tasks to display
-    checkTaskDate: function (task) {
-      console.log(task[1].date.toDate());
-      var date = this.date.get("date");
-      var month = this.date.get("month");
-      var year = this.date.get("year");
-      let start = new Date(year, month, date, 0, 0, 0);
-      let end = new Date(year, month, date, 23, 59, 59);
-      if (task[1].date.toDate() >= start && task[1].date.toDate() <= end) {
-        return true;
-      } else {
-        false;
-      }
-    },
-    checkDeadlineDate: function (deadline) {
-      let duedate = new Date(deadline[1].datedue);
-      var month = duedate.getMonth();
-      var date = duedate.getDate();
-      var year = duedate.getFullYear();
-      var end = new Date(
-        year,
-        month,
-        date,
-        deadline[1].timedue.hh,
-        deadline[1].timedue.mm,
-        59
-      );
-      var start = new Date(
-        year,
-        month,
-        date - deadline[1].showInAdvance,
-        0,
-        0,
-        0
-      );
-      console.log(start);
-      console.log(end);
-
-      if (this.date >= start && this.date <= end) {
-        if (deadline[1].status != "Incomplete") {
-          return this.showupdatedCheckedDeadlines;
+    methods: {
+      toggleDeadlines: function() {
+        this.showupdatedCheckedDeadlines = !this.showupdatedCheckedDeadlines;
+        if (this.showupdatedCheckedDeadlines) {
+          this.toggleDeadlineText = "Hide completed deadlines";
         } else {
-          return true;
+          this.toggleDeadlineText = "Show completed deadlines";
         }
-      } else {
-        return false;
-      }
-    },
-    // Fetching user's coins
-    fetchCoins() {
-      fb.firestore()
-        .collection("users")
-        .doc(this.user)
-        .get()
-        .then((doc) => {
-          this.coins = doc.data().user.coins;
-        });
-    },
-    //Fetching all user's tasks
-    fetchTasks: function () {
-      fb.firestore()
-        .collection("tasks")
-        .doc(this.user)
-        .collection("tasksList")
-        .get()
-        .then((snapshot) => {
-          snapshot.forEach((doc) => {
-            this.tasks.push([doc.id, doc.data()]);
-          });
-        });
-    },
-    //Fetching user's deadlines
-    fetchDeadLines: function () {
-      fb.firestore()
-        .collection("tasks")
-        .doc(this.user)
-        .collection("deadlinesList")
-        .get()
-        .then((snapshot) => {
-          snapshot.forEach((doc) => {
-            this.deadlines.push([doc.id, doc.data()]);
-            if (doc.data().status == "Completed") {
-              this.updatedCheckedDeadlines.push(doc.id);
-              this.currentCheckedDeadlines.push(doc.id);
+      },
+      getUpdateList: function() {
+        var longSet;
+        var shortSet;
+        var uncheck; //True means a deadline was unchecked
+        if (
+          this.currentCheckedDeadlines.length >
+          this.updatedCheckedDeadlines.length
+        ) {
+          longSet = new Set(this.currentCheckedDeadlines);
+          shortSet = new Set(this.updatedCheckedDeadlines);
+          uncheck = true;
+        } else {
+          longSet = new Set(this.updatedCheckedDeadlines);
+          shortSet = new Set(this.currentCheckedDeadlines);
+          uncheck = false;
+        }
+        var diff = new Set([...longSet].filter((x) => !shortSet.has(x)));
+        var newStatus = uncheck ? "Incomplete" : "Completed";
+        var deadlineId = diff.values().next().value;
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("deadlinesList")
+          .doc(deadlineId)
+          .update({
+            status: newStatus,
+          })
+          .then(() => {
+            for (var i = 0; i < this.deadlines.length; i++) {
+              if (this.deadlines[i][0] == deadlineId) {
+                this.deadlines[i][1].status = newStatus;
+              }
             }
           });
+        this.currentCheckedDeadlines = this.updatedCheckedDeadlines;
+      },
+      updateDeadlines: function() {
+        this.$nextTick(() => {
+          this.getUpdateList();
         });
+      },
+      //Checking which tasks to display
+      checkTaskDate: function(task) {
+        console.log(task[1].date.toDate());
+        var date = this.date.get("date");
+        var month = this.date.get("month");
+        var year = this.date.get("year");
+        let start = new Date(year, month, date, 0, 0, 0);
+        let end = new Date(year, month, date, 23, 59, 59);
+        if (task[1].date.toDate() >= start && task[1].date.toDate() <= end) {
+          return true;
+        } else {
+          false;
+        }
+      },
+      checkDeadlineDate: function(deadline) {
+        let duedate = new Date(deadline[1].datedue);
+        var month = duedate.getMonth();
+        var date = duedate.getDate();
+        var year = duedate.getFullYear();
+        var end = new Date(
+          year,
+          month,
+          date,
+          deadline[1].timedue.hh,
+          deadline[1].timedue.mm,
+          59
+        );
+        var start = new Date(
+          year,
+          month,
+          date - deadline[1].showInAdvance,
+          0,
+          0,
+          0
+        );
+        console.log(start);
+        console.log(end);
+
+        if (this.date >= start && this.date <= end) {
+          if (deadline[1].status != "Incomplete") {
+            return this.showupdatedCheckedDeadlines;
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      },
+      // Fetching user's coins
+      fetchCoins() {
+        fb.firestore()
+          .collection("users")
+          .doc(this.user)
+          .get()
+          .then((doc) => {
+            this.coins = doc.data().user.coins;
+          });
+      },
+      //Fetching all user's tasks
+      fetchTasks: function() {
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              this.tasks.push([doc.id, doc.data()]);
+            });
+          });
+      },
+      //Fetching user's deadlines
+      fetchDeadLines: function() {
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("deadlinesList")
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              this.deadlines.push([doc.id, doc.data()]);
+              if (doc.data().status == "Completed") {
+                this.updatedCheckedDeadlines.push(doc.id);
+                this.currentCheckedDeadlines.push(doc.id);
+              }
+            });
+          });
+      },
+      change: function(x) {
+        if (x == 0) {
+          this.date = this.date.subtract(1, "day");
+        } else if (x == 1) {
+          this.date = this.date.add(1, "day");
+        } else {
+          this.date = dayjs();
+        }
+        this.$router.push({
+          name: "Tasks",
+          params: { date: this.date.format() },
+        });
+        this.isToday = this.date.isSame(dayjs(), "day");
+      },
+
+      startTask: function(event) {
+        let doc_id = event.target.getAttribute("idname");
+
+        fb.firestore()
+          .collection("tasks")
+          .doc(this.user)
+          .collection("tasksList")
+          .doc(doc_id)
+          .get()
+          .then((doc) => {
+            let totalseconds =
+              doc.data().duration.hh * 3600 + doc.data().duration.mm * 60;
+            console.log(totalseconds);
+            let title = doc.data().category + " - " + doc.data().title;
+            this.$router.push({
+              name: "Timer",
+              params: {
+                taskId: doc_id,
+                timeForTask: totalseconds,
+                taskTitle: title,
+              },
+            });
+          });
+      },
+      // showInfo: function(event) {
+      //   let doc_id = event.target.getAttribute("idname");
+      //   fb.firestore()
+      //     .collection("tasks")
+      //     .doc(this.user)
+      //     .collection("tasksList")
+      //     .doc(doc_id)
+      //     .get()
+      //     .then((doc) => {
+      //       this.moreInfoPacket = doc.data();
+      //       console.log(this.moreInfoPacket);
+      //     });
+      // },
     },
-    change: function (x) {
-      if (x == 0) {
-        this.date = this.date.subtract(1, "day");
-      } else if (x == 1) {
-        this.date = this.date.add(1, "day");
-      } else {
-        this.date = dayjs();
-      }
-      this.$router.push({
-        name: "Tasks",
-        params: { date: this.date.format() },
-      });
+    created() {
+      this.fetchCoins();
+      this.fetchTasks();
+      this.fetchDeadLines();
+      this.date = dayjs(this.$route.params.date);
       this.isToday = this.date.isSame(dayjs(), "day");
     },
-
-    startTask: function (event) {
-      let doc_id = event.target.getAttribute("idname");
-
-      fb.firestore()
-        .collection("tasks")
-        .doc(this.user)
-        .collection("tasksList")
-        .doc(doc_id)
-        .get()
-        .then((doc) => {
-          let totalseconds =
-            doc.data().duration.hh * 3600 + doc.data().duration.mm * 60;
-          console.log(totalseconds);
-          let title = doc.data().category + " - " + doc.data().title;
-          this.$router.push({
-            name: "Timer",
-            params: {
-              taskId: doc_id,
-              timeForTask: totalseconds,
-              taskTitle: title,
-            },
-          });
-        });
-    },
-    // showInfo: function(event) {
-    //   let doc_id = event.target.getAttribute("idname");
-    //   fb.firestore()
-    //     .collection("tasks")
-    //     .doc(this.user)
-    //     .collection("tasksList")
-    //     .doc(doc_id)
-    //     .get()
-    //     .then((doc) => {
-    //       this.moreInfoPacket = doc.data();
-    //       console.log(this.moreInfoPacket);
-    //     });
-    // },
-  },
-  created() {
-    this.fetchCoins();
-    this.fetchTasks();
-    this.fetchDeadLines();
-    this.date = dayjs(this.$route.params.date);
-    this.isToday = this.date.isSame(dayjs(), "day");
-  },
-};
+  };
 </script>
 
 <style scoped>
-.task {
-  margin-left: 240px;
-}
-h2 {
-  font-family: Lora;
-  font-size: 20px;
-  color: black;
-  display: inline-block;
-  text-align: center;
-  width: 180px;
-  margin-top: -100px;
-}
-.arrow {
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 2px;
-  cursor: pointer;
-}
-.right {
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-  width: 2px;
-  height: 2px;
-}
-.left {
-  transform: rotate(135deg);
-  -webkit-transform: rotate(135deg);
-  width: 2px;
-  height: 2px;
-}
-.right:hover,
-.left:hover {
-  filter: opacity(0.6);
-}
-.backToToday {
-  font-family: lora;
-  color: #4d4d4d;
-  text-decoration: underline;
-  margin-left: 20px;
-}
-.deadlines {
-  min-height: 150px;
-  max-height: 150px;
-}
-.deadlinesList {
-  width: 94%;
-  overflow: auto;
-  white-space: nowrap;
-}
-input {
-  margin-left: 25px;
-}
-.sublabel {
-  font-family: lora;
-  font-size: 16px;
-  font-weight: 600;
-  display: inline-block;
-}
+  .task {
+    margin-left: 240px;
+  }
+  h2 {
+    font-family: Lora;
+    font-size: 20px;
+    color: black;
+    display: inline-block;
+    text-align: center;
+    width: 180px;
+    margin-top: -100px;
+  }
+  .arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 2px;
+    cursor: pointer;
+  }
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    width: 2px;
+    height: 2px;
+  }
+  .left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    width: 2px;
+    height: 2px;
+  }
+  .right:hover,
+  .left:hover {
+    filter: opacity(0.6);
+  }
+  .backToToday {
+    font-family: lora;
+    color: #4d4d4d;
+    text-decoration: underline;
+    margin-left: 20px;
+  }
+  .deadlines {
+    min-height: 150px;
+    max-height: 150px;
+  }
+  .deadlinesList {
+    width: 94%;
+    overflow: auto;
+    white-space: nowrap;
+  }
+  input {
+    margin-left: 25px;
+  }
+  .sublabel {
+    font-family: lora;
+    font-size: 16px;
+    font-weight: 600;
+    display: inline-block;
+  }
 
-#deadlineToggle {
-  font-family: Lora;
-  margin: 0;
-  text-align: right;
-  font-size: 10px;
-  text-decoration: underline;
-  cursor: pointer;
-  position: relative;
-  left: -77px;
-  top: 20px;
-  color: rgb(51, 51, 51);
-}
+  #deadlineToggle {
+    font-family: Lora;
+    margin: 0;
+    text-align: right;
+    font-size: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+    position: relative;
+    left: -77px;
+    top: 20px;
+    color: rgb(51, 51, 51);
+  }
 
-#deadlineToggle:hover {
-  color: red;
-}
+  #deadlineToggle:hover {
+    color: red;
+  }
 
-.addTask {
-  float: right;
-  margin-right: 6%;
-}
-.line {
-  height: 2px;
-  width: 96%;
-  float: left;
-  background-color: #607c868d;
-  border: none;
-}
-.label-container {
-  text-align: center;
-  color: #34b2c5;
-  display: grid;
-  min-width: 96%;
-  padding: 20px;
-  grid-template-columns: 120px repeat(3, 1fr) 400px;
-}
-.taskLabel {
-  font-family: montserrat;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-.task-container {
-  text-align: center;
-  display: grid;
-  min-width: 96%;
-  padding: 10px;
-  grid-template-columns: 120px repeat(3, 1fr) 400px;
-}
-.taskText {
-  font-family: Lora;
-  text-decoration: none;
-  font-size: 12px;
-  padding-top: 10px;
-  margin-left: 20px;
-}
-img {
-  height: 28px;
-  width: auto;
-  margin: 2px;
-  text-align: center;
-}
-.tooltip-content {
-  background: white;
-  padding: 24px;
-  border-radius: 5px;
-  border-color: #4d4d4d;
-  box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.3s ease;
-}
-/* width */
-::-webkit-scrollbar {
-  height: 6px;
-}
+  .addTask {
+    float: right;
+    margin-right: 6%;
+  }
+  .line {
+    height: 2px;
+    width: 96%;
+    float: left;
+    background-color: #607c868d;
+    border: none;
+  }
+  .label-container {
+    text-align: center;
+    color: #34b2c5;
+    display: grid;
+    min-width: 96%;
+    padding: 20px;
+    grid-template-columns: 120px repeat(3, 1fr) 400px;
+  }
+  .taskLabel {
+    font-family: montserrat;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .task-container {
+    text-align: center;
+    display: grid;
+    min-width: 96%;
+    padding: 10px;
+    grid-template-columns: 120px repeat(3, 1fr) 400px;
+  }
+  .taskText {
+    font-family: Lora;
+    text-decoration: none;
+    font-size: 12px;
+    padding-top: 10px;
+    margin-left: 20px;
+  }
+  img {
+    height: 28px;
+    width: auto;
+    margin: 2px;
+    text-align: center;
+  }
+  .tooltip-content {
+    background: white;
+    padding: 24px;
+    border-radius: 5px;
+    border-color: #4d4d4d;
+    box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease;
+  }
+  /* width */
+  ::-webkit-scrollbar {
+    height: 6px;
+  }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #fff;
-}
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #fff;
+  }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 </style>
