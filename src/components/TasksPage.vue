@@ -13,12 +13,11 @@
 
       <div class="deadlines">
         <p class="sublabel">Deadlines:</p>
+        <span id="deadlineToggle" v-on:click="toggleDeadlines">{{toggleDeadlineText}}</span>
         <new-deadline-form
           class="addTask"
           v-bind:taskDate="date"
         ></new-deadline-form>
-        <br>
-        <p id="deadlineToggle" v-on:click="toggleDeadlines">{{toggleDeadlineText}}</p>
         <hr class="line" />
         <div
           class="tasksList"
@@ -252,7 +251,7 @@ export default {
       );
       console.log(start);
       console.log(end);
-
+      
       if (this.date >= start && this.date <= end) {
         if (deadline[1].status != "Incomplete") {
           return this.showupdatedCheckedDeadlines;
@@ -437,12 +436,20 @@ span {
 }
 
 #deadlineToggle {
+  font-family: Lora;
   margin: 0;
   text-align: right;
-  font-size: 9px;
+  font-size: 10px;
   text-decoration: underline;
-  width: 96%;
   cursor: pointer;
+  position: relative;
+  left: -77px;
+  top: 20px;
+  color: rgb(51, 51, 51);
+}
+
+#deadlineToggle:hover {
+  color: red;
 }
 
 .addTask {
