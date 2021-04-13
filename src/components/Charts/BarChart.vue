@@ -47,7 +47,7 @@ export default {
                 display: true,
               },
               ticks: {
-                fontSize: 10,
+                fontSize: 8,
               },
             },
           ],

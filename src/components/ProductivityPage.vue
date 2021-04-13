@@ -35,11 +35,21 @@
           ></line-chart>
         </div>
         <hr class="line" />
-        <div class="content-item-circle">
-          <p class="bottom-title">Number of trees planted</p>
-          <div class="tree-summary-circle">
-            <!-- to replace this text to the bind data variable here -->
-            <div class="summary-stat">{{ trees }}</div>
+        <div class="content-item-tree">
+          <p class="bottom-title">Planted Trees</p>
+          <div class="tree-field">
+            <p id='tree-default' v-show="treeList.length == 0">No trees are planted yet...<br>Buy one now with coins or donate money to plant one!</p>
+            <span id="number-tree">Total number of trees planted: {{treeList.length}}</span>
+            <ul v-show="treeList.length != 0">
+              <li v-for="(tree, index) in treeList" v-bind:key="index">
+                <img
+                  class="treeImg"
+                  :src="require(`@/assets/trees/${treeListPng[tree][0]}`)"
+                />
+                <p class="base"></p>
+                <p class="treeName">{{ treeListPng[tree][1] }}</p>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -84,7 +94,8 @@ export default {
   data() {
     return {
       user: fb.auth().currentUser.uid,
-      trees: 0,
+      treeList: [],
+      treeListPng: {},
       custom: false,
       dataInfo: "",
       dateFrom: 7,
@@ -101,17 +112,24 @@ export default {
     };
   },
   methods: {
-    fetchNumOfTrees: function () {
+    fetchTreeList: function () {
       fb.firestore()
         .collection("users")
         .doc(this.user)
         .get()
         .then((doc) => {
-          //console.log(doc.data().user.trees);
-          this.trees = doc.data().user.trees;
-          if (!this.trees) {
-            this.trees = 0;
+          this.treeList = doc.data().treeList;
+          if (this.treeList == null) {
+            this.treeList = [];
           }
+        });
+      fb.firestore()
+        .collection("trees")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.treeListPng[doc.id] = [doc.data().url, doc.data().name];
+          });
         });
     },
     drillDown: function (x, bool) {
@@ -369,7 +387,7 @@ export default {
     },
   },
   created() {
-    this.fetchNumOfTrees();
+    this.fetchTreeList();
     this.fetchItems();
   },
 };
@@ -394,7 +412,7 @@ export default {
   margin-left: 5px;
   margin-right: 0.5%;
   display: block;
-  width: 57%;
+  width: 65%;
 }
 .content-item-chart {
   /* border: 1px solid black; */
@@ -431,7 +449,7 @@ button:focus {
   transform: translateY(1px);
   outline: none;
 }
-button:hover{
+button:hover {
   transform: scale(1.1);
 }
 label {
@@ -444,7 +462,7 @@ label {
 .right {
   /* border: 1px solid black; */
   display: block;
-  width: 40%;
+  width: 30%;
   margin-left: 0.5%;
 }
 .bottom-title {
@@ -457,46 +475,99 @@ label {
 }
 .line {
   border: 0.5px solid rgba(180, 180, 180, 0.4);
+  margin: 25px 5px 25px 5px; /*Top right bottom left*/
 }
 .vertical-line {
   border-left: 1.5px solid rgba(180, 180, 180, 0.4);
-  margin: 0;
+  margin: 0 15px 0 15px;
   padding: 0;
 }
-.content-item-circle {
-  /* border: 1px solid black; */
-  display: block;
-  width: 23%;
+.tree-field {
+  border-radius: 50px;
+  background-color: rgba(0, 199, 0, 0.5);
+  height: 45vh;
+  margin: 5px;
+  overflow: auto;
 }
-/** Styling for the circle **/
-.tree-summary-circle {
-  /* (A) PERCENTAGE WIDTH & BORDER RADIUS */
-  border-radius: 100%;
-
-  /* (B) BACKGROUND COLOR */
-  background: #bedaae;
-
-  /* (C) NECESSARY TO POSITION TEXT BLOCK */
-  line-height: 0;
-  position: relative;
-  margin: 15%;
+ul {
+  list-style-type: None;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
-
-/* (D) MATCH HEIGHT */
-.tree-summary-circle:after {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
+li {
+  list-style-type: None;
+  margin: auto;
+  padding: 0;
+  margin-bottom: 10px;
 }
-
-/* (E) TEXT BLOCK */
-.summary-stat {
-  /* (E1) CENTER TEXT IN CIRCLE */
-  position: absolute;
-  bottom: 50%;
-  width: 100%;
+.treeName {
+  margin: 0;
+  padding: 0;
+  font-size: 10px;
   text-align: center;
-  font-size: 100px;
-  color: #fff;
+}
+.treeImg {
+  display: block;
+  /* border: 1px solid black; */
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  margin-bottom: 0;
+  -webkit-transform-origin: 50% 100%;
+  transform-origin: 50% 100%;
+  -webkit-animation: swinging 5s ease-in-out forwards infinite;
+  animation: swinging 5s ease-in-out forwards infinite;
+}
+
+@-webkit-keyframes swinging {
+  0% {
+    -webkit-transform: rotate(5deg);
+  }
+  50% {
+    -webkit-transform: rotate(-3deg);
+  }
+  100% {
+    -webkit-transform: rotate(5deg);
+  }
+}
+
+@keyframes swinging {
+  0% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  100% {
+    transform: rotate(5deg);
+  }
+}
+
+.base {
+  position: relative;
+  top: -10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 80px;
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.24);
+  border-radius: 100%;
+}
+#tree-default {
+  margin-top: 19.5vh;
+  text-align: center;
+  opacity: 0.6;
+}
+#number-tree {
+  font-size: 10px;
+  font-weight: 300;
+  position: sticky;
+  left: 500px;
+  top: 265px;
+  opacity: 0.6;
 }
 </style>
