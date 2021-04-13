@@ -22,7 +22,7 @@
           </p>
           <p class="treeModalText" v-show="bought">
             Thank you! <br />
-            A confirmation has been sent to your email.
+            NParks will sent you a confirmation when the tree is planted!
           </p>
         </div>
 
@@ -73,6 +73,7 @@
               0 - this.treePrice
             ),
             "user.trees": firebase.firestore.FieldValue.increment(1),
+            
           })
           .then(() => location.reload());
       },
