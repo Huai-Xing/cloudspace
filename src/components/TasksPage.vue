@@ -27,6 +27,7 @@
           <span v-for="deadline in deadlines" v-bind:key="deadline[0]">
             <span v-if="checkDeadlineDate(deadline)">
               <input
+                class="checkbox"
                 type="checkbox"
                 :value="deadline[0]"
                 id="deadline[0]"
@@ -45,12 +46,12 @@
 
               <edit-deadline-form
                 v-bind:idname="deadline[0]"
-                style="display: inline-block"
+                class="editBtn"
               ></edit-deadline-form>
 
               <delete-deadline-warning
-                style="display: inline-block"
                 v-bind:idname="deadline[0]"
+                class="editBtn"
               ></delete-deadline-warning>
             </span>
           </span>
@@ -84,30 +85,28 @@
                   src="../assets/task/start_btn.png"
                   v-on:click="startTask($event)"
                   v-bind:idname="task[0]"
+                  class="editBtn"
                 />
                 <edit-task-form
                   style="display: inline-block"
                   v-bind:idname="task[0]"
+                  class="editBtn"
                 ></edit-task-form>
                 <delete-task-warning
                   style="display: inline-block"
                   v-bind:idname="task[0]"
+                  class="editBtn"
                 ></delete-task-warning>
               </span>
 
               <span v-if="task[1].status == 'Completed'">
-                <v-popover
-                  offset="16"
-                  placement="left"
-                  style="display: inline-block"
-                >
+                <v-popover offset="16" placement="left" class="editBtn">
                   <!-- This will be the popover target (for the events and position) -->
 
                   <img
                     src="../assets/task/moreinfo_btn.png"
                     v-bind:idname="task[0]"
                     class="tooltip target"
-                    style="display: inline-block"
                   />
 
                   <!-- This will be the content of the popover -->
@@ -129,8 +128,8 @@
                 </v-popover>
 
                 <delete-task-warning
-                  style="display: inline-block"
                   v-bind:idname="task[0]"
+                  class="editBtn"
                 ></delete-task-warning>
               </span>
             </div>
@@ -425,6 +424,10 @@ h2 {
   color: #4d4d4d;
   text-decoration: underline;
   margin-left: 20px;
+  cursor: pointer;
+}
+.backToToday:hover {
+  color: rgb(255, 96, 96);
 }
 .deadlines {
   min-height: 150px;
@@ -438,6 +441,10 @@ h2 {
 input {
   margin-left: 25px;
 }
+input.checkbox {
+  height: 35px;
+  width: 15px;
+}
 .sublabel {
   font-family: lora;
   font-size: 16px;
@@ -449,22 +456,23 @@ input {
   font-family: Lora;
   margin: 0;
   text-align: right;
-  font-size: 10px;
-  text-decoration: underline;
+  font-size: 12px;
   cursor: pointer;
   position: relative;
   left: -77px;
   top: 20px;
-  color: rgb(51, 51, 51);
+  color: #4d4d4d;
+  text-decoration: underline;
 }
 
 #deadlineToggle:hover {
-  color: red;
+  color: rgb(255, 96, 96);
 }
 
 .addTask {
   float: right;
   margin-right: 6%;
+  cursor: pointer;
 }
 .line {
   height: 2px;
@@ -493,7 +501,7 @@ input {
   text-align: center;
   display: grid;
   min-width: 96%;
-  padding: 10px;
+  padding: 10px 20px;
   grid-template-columns: 120px repeat(3, 1fr) 400px;
 }
 .taskText {
@@ -501,7 +509,7 @@ input {
   text-decoration: none;
   font-size: 12px;
   padding-top: 10px;
-  margin-left: 20px;
+  margin: 10px;
 }
 img {
   height: 28px;
@@ -535,5 +543,9 @@ img {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+.editBtn {
+  display: inline-block;
+  cursor: pointer;
 }
 </style>

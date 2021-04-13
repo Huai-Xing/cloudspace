@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="../assets/task/add_btn.png" @click="showModal" />
+    <img src="../assets/task/add1.png" @click="showModal" class="plusBtn" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
@@ -279,9 +279,20 @@
     font-family: Roboto;
     font-size: 10px;
   }
-  img {
-    width: 38px;
-    height: 38px;
+  .plusBtn {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    height: 22px;
+    width: 22px;
+    padding: 5px;
+  }
+  .plusBtn:hover, .plusBtn:active {
+    box-shadow: inset 0px 0px 2px #c1c1c1;
+    transform: translateY(4px);
+    outline: none;
   }
   button {
     font-family: Lora;

@@ -83,7 +83,7 @@ export default {
   position: fixed;
   top: 70px;
   left: 240px;
-  width: 1001px;
+  /* width: 1001px; */
 }
 ul {
   list-style-type: none;

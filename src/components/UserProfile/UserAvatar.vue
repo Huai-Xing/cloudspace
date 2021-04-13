@@ -131,6 +131,7 @@
 
 <style scoped>
   .content {
+    padding-top: 50px;
     margin-bottom: 20px;
   }
   #avatar {

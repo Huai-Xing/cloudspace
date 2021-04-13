@@ -190,11 +190,11 @@ export default {
   visibility: hidden;
   font-family: roboto;
   text-transform: uppercase;
-  font-size: 7px;
-  letter-spacing: 0.8px;
+  font-size: 9px;
+  letter-spacing: 0.5px;
   background-color: #f3f3ed;
   color: #8a827b;
-  padding: 3px;
+  padding: 3px 7px;
   text-align: center;
   border-radius: 6px;
   border: solid 1px;

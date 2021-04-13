@@ -127,18 +127,18 @@ export default {
 <style scoped>
 .container {
   margin: 0;
-  height: 90px;
+  height: 104px;
 }
 .cell {
   list-style-type: None;
   display: inline-block;
   background-color: #fff;
   border: 2px solid rgb(230, 230, 230);
-  border-top: 0px;
+  /* border-top: 0px; */
   position: relative;
-  min-height: 82px;
-  max-height: 82px;
-  min-width: 133px;
+  min-height: 94px;
+  max-height: 94px;
+  min-width: 147px;
   padding: 3px;
   overflow: auto;
   cursor: pointer;
@@ -157,21 +157,21 @@ export default {
 .day {
   font-family: montserrat;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 13px;
   color: #26818f;
   list-style-type: None;
   display: block;
-  height: 16px;
+  height: 20px;
+  width: 20px;
   /*border: 1px solid black;
   border-radius: 100%;*/
-  /* text-align: right; */
-  display: flex;
-  justify-content: flex-end;
+  text-align: center;
   position: sticky;
-  top: 0;
-  padding-top: 3px;
-  padding-right: 3px;
-  margin-bottom: 3px;
+  top: 3px;
+  left: 85%;
+  /* padding-top: 3px;
+  padding-right: 3px; */
+  margin-bottom: 6px;
   cursor: pointer;
 }
 .cell .day:hover, .cell .day:focus {
@@ -181,8 +181,8 @@ export default {
   background-color: #26818f;
   color: white;
   border-radius: 100%;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -191,21 +191,22 @@ export default {
 }
 .deadlines {
   font-family: Roboto;
-  font-size: 10px;
+  font-size: 11px;
   color: rgb(209, 5, 5);
   height: 10px;
-  padding: 4px 9px;
+  padding: 5px 9px;
+  margin: 4px 3px 0 3px;
 }
 .items {
   font-family: roboto;
-  font-size: 9px;
+  font-size: 11px;
   text-align: left;
   list-style-type: None;
   display: block;
   border-radius: 4px;
   background-color: #ffe1bb;
-  padding: 4px 9px;
-  margin: 3px 3px 0px 3px;
+  padding: 5px 9px;
+  margin: 4px 3px 0 3px;
   height: 10px;
   white-space: normal;
   text-overflow: ellipsis;
