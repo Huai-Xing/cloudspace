@@ -11,7 +11,7 @@ Chart.elements.Rectangle.prototype.draw = function () {
   var vm = this._view;
   var left, right, top, bottom, signX, signY, borderSkipped, radius, width, height, x, y;
   var borderWidth = vm.borderWidth;
-  var cornerRadius = 20;
+  var cornerRadius = 4;
 
   left = vm.x - vm.width / 2;
   right = vm.x + vm.width / 2;
