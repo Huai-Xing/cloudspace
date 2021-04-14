@@ -1,6 +1,9 @@
 
 import { Line, mixins } from "vue-chartjs";
 const { reactiveProp } = mixins;
+import Chart from 'chart.js';
+
+Chart.defaults.global.defaultFontFamily = 'roboto';
 
 export default {
   extends: Line,
