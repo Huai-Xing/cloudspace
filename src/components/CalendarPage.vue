@@ -82,7 +82,7 @@ export default {
 .cal {
   position: fixed;
   top: 70px;
-  left: 240px;
+  left: 230px;
   /* width: 1001px; */
 }
 ul {

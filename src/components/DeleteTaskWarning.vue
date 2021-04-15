@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="../assets/task/trash_btn.png" @click="showModal" />
+    <img src="../assets/task/trash-col.svg" @click="showModal" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
@@ -117,8 +117,9 @@
     color: red;
   }
   img {
-    width: 28px;
-    height: 28px;
-    margin: 2px;
+    width: 23px;
+    height: 23px;
+    margin: 8px;
+    cursor: pointer;
   }
 </style>

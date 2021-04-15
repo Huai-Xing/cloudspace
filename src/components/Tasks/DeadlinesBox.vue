@@ -30,7 +30,7 @@ export default {
   margin: 0px;
 }
 .deadlineBox {
-  width: 120px;
+  width: 150px;
   display: inline-block;
   padding: 10px 2px;
   /* border: 1px solid;
@@ -40,10 +40,10 @@ export default {
 .category {
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 .title, .date {
-  font-size: 10px;
+  font-size: 12px;
 }
 </style>

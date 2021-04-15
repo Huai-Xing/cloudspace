@@ -53,11 +53,11 @@ export default {
 <style scoped>
 h2 {
   font-family: Lora;
-  font-size: 20px;
+  font-size: 24px;
   color: black;
   display: inline-block;
   text-align: center;
-  width: 180px;
+  width: 240px;
 }
 .arrow {
   border: solid black;

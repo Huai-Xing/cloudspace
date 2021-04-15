@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="../assets/task/edit_btn.png" @click="showModal" />
+    <img src="../assets/task/edit-col.svg" @click="showModal" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
@@ -289,14 +289,15 @@
 
 <style scoped>
   * {
-    font-family: Roboto;
+    font-family: "Source Sans Pro";
     font-size: 10px;
   }
   img {
-    height: 28px;
+    height: 23px;
     width: auto;
-    margin: 2px;
+    margin: 8px;
     text-align: center;
+    cursor: pointer;
   }
   button {
     font-family: Lora;
