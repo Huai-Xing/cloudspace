@@ -43,12 +43,20 @@ export default {
       var idx =
         (Math.floor(quotes.length / dayjs().get("Date")) + dayjs().get("M")) %
         quotes.length;
-      this.quote = quotes[idx].quote;
-      this.author = quotes[idx].author;
+      var currAuthor = quotes[idx].author;
+      var currQuote = quotes[idx].quote;
+      while (currAuthor == null) {
+        quotes.splice(idx, 1);
+        idx = (Math.floor(quotes.length / dayjs().get("Date")) + dayjs().get("M")) % quotes.length;
+        currAuthor = quotes[idx].author;
+        currQuote = quotes[idx].quote;
+      }
+      this.quote = currQuote;
+      this.author = currAuthor;
     },
   },
   created: async function () {
-    console.log(dayjs().get("month"));
+    // console.log(dayjs().get("month"));
     await this.fetchQuotes();
   },
 };
