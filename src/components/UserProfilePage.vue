@@ -25,10 +25,8 @@
     methods: {
       getImageIdx: function(id) {
         this.imageIdx = id;
+        console.log(id);
       },
-    },
-    created() {
-      console.log(this.imageIdx);
     },
   };
 </script>

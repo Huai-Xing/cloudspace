@@ -134,6 +134,7 @@
       },
       getImageURL: function(avatar) {
         var val = avatar + 1;
+        console.log(val);
         return require("../assets/avatar/Avatar_" + val + ".png");
       },
 
@@ -156,7 +157,6 @@
     },
     created() {
       this.isActive = this.$route.name;
-      console.log(this.imageIdx);
     },
   };
 </script>

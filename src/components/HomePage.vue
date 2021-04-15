@@ -82,6 +82,7 @@
           .get()
           .then((doc) => {
             this.name = "Hello, " + doc.data().user.name + "!";
+            this.imageIdx = doc.data().user.imageIdx;
           });
       },
       fetchAll: function() {
