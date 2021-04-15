@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+    <appNav v-bind:imageIdx="imageIdx"></appNav>
     <div class="head">
       <p id="welcome">{{ name }}</p>
       <p id="phrase">Stay productive & plant trees</p>
@@ -55,6 +55,7 @@
         name: "",
         deadline: [],
         task: [],
+        imageIdx: this.$route.params.image,
       };
     },
     //Register Locally
@@ -139,6 +140,7 @@
     created: async function() {
       await this.fetchData();
       this.fetchAll();
+      console.log(this.imageIdx);
     },
   };
 </script>

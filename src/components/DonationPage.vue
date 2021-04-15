@@ -1,6 +1,6 @@
 <template>
   <div>
-    <main-navigation></main-navigation>
+    <main-navigation v-bind:imageIdx="imageIdx"></main-navigation>
   </div>
 </template>
 
@@ -8,6 +8,11 @@
   import MainNavigation from "./MainNavigation.vue";
   export default {
     components: { MainNavigation },
+    data() {
+      return {
+        imageIdx: this.$route.params.image,
+      };
+    },
   };
 </script>
 

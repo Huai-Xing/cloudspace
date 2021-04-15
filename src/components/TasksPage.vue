@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+    <appNav v-bind:imageIdx="imageIdx"></appNav>
 
     <coin-box :coins="coins"></coin-box>
 
@@ -169,6 +169,7 @@
         updatedCheckedDeadlines: [],
         showupdatedCheckedDeadlines: false,
         toggleDeadlineText: "Show completed deadlines",
+        imageIdx: this.$route.params.image,
       };
     },
     //Register Locally

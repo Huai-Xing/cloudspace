@@ -1,7 +1,7 @@
 <template>
   <div style="overflow: hidden">
     <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+    <appNav v-bind:imageIdx="imageIdx"></appNav>
 
     <div class="plantTreePage">
       <p class="coinText">You have {{ coins }} coins!</p>
@@ -72,6 +72,7 @@
         visibleImg: 0,
         direction: "",
         data: [],
+        imageIdx: this.$route.params.image,
       };
     },
     computed: {
