@@ -232,7 +232,7 @@ export default {
         actual[catIdx] = currentVal + taskList[j].actualTime;
         actCounter[catIdx] = currentCount + 1;
       }
-      for (var l = 0; l < taskList.length; l++) {
+      for (var l = 0; l < labels.length; l++) {
         actual[l] = actual[l] / actCounter[l];
       }
       this.datacollectionRadar = {
@@ -240,14 +240,14 @@ export default {
         datasets: [
           {
             label: "Avg Actual Time",
-            backgroundColor: ["rgba(255, 159, 64, 0.5)"],
+            backgroundColor: "rgba(255, 159, 64, 0.3)",
             borderColor: "rgba(255, 159, 64, 0.5)",
             radius: 4,
-            pointRadius: 4, //The size of the plotted points
+            pointRadius: 3, //The size of the plotted points
             pointBorderWidth: 2,
             pointBackgroundColor: "limegreen",
-            pointBorderColor: "rgba(255, 159, 64, 0.6)",
-            pointHoverRadius: 7,
+            pointBorderColor: "rgba(255, 159, 64, 0.8)",
+            pointHoverRadius: 6,
             data: actual,
           },
         ],
@@ -489,6 +489,10 @@ label {
   margin: 5px;
   overflow: auto;
 }
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
 ul {
   list-style-type: None;
   margin: 0;
@@ -505,7 +509,7 @@ li {
 .treeName {
   margin: 0;
   padding: 0;
-  font-size: 10px;
+  font-size: 9px;
   text-align: center;
 }
 .treeImg {
@@ -567,7 +571,7 @@ li {
   font-weight: 300;
   position: sticky;
   left: 500px;
-  top: 265px;
+  top: 245px;
   opacity: 0.6;
 }
 </style>

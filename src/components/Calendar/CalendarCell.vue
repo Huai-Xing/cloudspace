@@ -34,7 +34,7 @@
           :class="{ itemsEmpty: isNotCurrentMonth }" 
           v-on:click="goToTaskPage"
           >
-            {{ item.title }}
+            {{ item.title }} <span v-show="item.status == 'Completed'"> &#10004;</span>
           </li>
         </div>
 
@@ -224,4 +224,8 @@ export default {
 ::-webkit-scrollbar-thumb:hover {
   background: #888; 
 } */
+li > span {
+  position: sticky;
+  left: 100%;
+}
 </style>

@@ -24,10 +24,6 @@ export default {
           position: "top",
           display: false,
         },
-        layout: {
-          padding: {
-          }
-        },
         scale: {
           ticks: {
             beginAtZero: true,
@@ -83,7 +79,7 @@ export default {
 
 <style scoped>
 #radar {
-  position: relative;
+  position: relative; 
   height: 42vh;
   margin-top: 20px;
 }
