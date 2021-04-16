@@ -14,6 +14,9 @@ Vue.use(VTooltip);
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
+import draggable from 'vuedraggable'
+Vue.component('draggable', draggable)
+
 // Register Header & Footer globally
 import Header from "./components/Header.vue";
 Vue.component("pgHeader", Header);

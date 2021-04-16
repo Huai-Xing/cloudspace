@@ -18,6 +18,7 @@
         <new-deadline-form
           class="addTask"
           v-bind:taskDate="date"
+          v-tooltip.bottom="{ content: 'Add deadline' }"
         ></new-deadline-form>
 
         <div id="deadlineToggle" v-on:click="toggleDeadlines">
@@ -65,7 +66,11 @@
 
       <div>
         <p class="sublabel">To Do:</p>
-        <new-task-form class="addTask" v-bind:taskDate="date"></new-task-form>
+        <new-task-form
+          class="addTask"
+          v-bind:taskDate="date"
+          v-tooltip.bottom="'Add new task'"
+        ></new-task-form>
         <!-- <hr class="line" /> -->
         <br />
         <div class="label-container">
@@ -76,81 +81,93 @@
         </div>
 
         <div class="tasksList">
-          <div v-for="task in tasks" v-bind:key="task[0]">
-            <div v-if="checkTaskDate(task)">
-              <div class="task-container">
-                <span class="taskText"> {{ task[1].category }} </span>
-                <span class="taskText"> {{ task[1].title }} </span>
-                <span class="taskText">
-                  {{ task[1].duration.hh }}hr {{ task[1].duration.mm }}min
-                </span>
-                <span
-                  class="taskText"
-                  :class="{
-                    incompleteText: task[1].status != 'Completed',
-                    completeText: task[1].status == 'Completed',
-                  }"
-                >
-                  {{ task[1].status }}
-                </span>
+          <draggable ghost-class="ghost" @end="onEnd">
+            <transition-group type="transition" name="flip-list">
+              <div class="sortable" v-for="task in tasks" v-bind:key="task[0]">
+                <div v-if="checkTaskDate(task)">
+                  <div class="task-container">
+                    <span class="taskText"> {{ task[1].category }} </span>
+                    <span class="taskText"> {{ task[1].title }} </span>
+                    <span class="taskText">
+                      {{ task[1].duration.hh }}hr {{ task[1].duration.mm }}min
+                    </span>
+                    <span
+                      class="taskText"
+                      :class="{
+                        incompleteText: task[1].status != 'Completed',
+                        completeText: task[1].status == 'Completed',
+                      }"
+                    >
+                      {{ task[1].status }}
+                    </span>
 
-                <span v-if="task[1].status == 'Incomplete'">
-                  <img
-                    src="../assets/task/hourglass-col.svg"
-                    v-on:click="startTask($event)"
-                    v-bind:idname="task[0]"
-                    class="editBtn"
-                  />
-                  <edit-task-form
-                    style="display: inline-block"
-                    v-bind:idname="task[0]"
-                    class="editBtn"
-                  ></edit-task-form>
+                    <span v-if="task[1].status == 'Incomplete'">
+                      <img
+                        src="../assets/task/hourglass-col.svg"
+                        v-on:click="startTask($event)"
+                        v-bind:idname="task[0]"
+                        class="editBtn"
+                        v-tooltip.bottom="'Start timer'"
+                      />
+                      <edit-task-form
+                        style="display: inline-block"
+                        v-bind:idname="task[0]"
+                        class="editBtn"
+                      ></edit-task-form>
 
-                  <delete-task-warning
-                    style="display: inline-block"
-                    v-bind:idname="task[0]"
-                    class="editBtn"
-                  ></delete-task-warning>
-                </span>
+                      <delete-task-warning
+                        style="display: inline-block"
+                        v-bind:idname="task[0]"
+                        class="editBtn"
+                      ></delete-task-warning>
+                    </span>
 
-                <span v-if="task[1].status == 'Completed'">
-                  <v-popover offset="16" placement="left" class="editBtn">
-                    <!-- This will be the popover target (for the events and position) -->
+                    <span v-if="task[1].status == 'Completed'">
+                      <v-popover offset="16" placement="left" class="editBtn">
+                        <!-- This will be the popover target (for the events and position) -->
 
-                    <img
-                      src="../assets/task/pending-col.svg"
-                      v-bind:idname="task[0]"
-                      class="editBtn"
-                    />
+                        <img
+                          src="../assets/task/pending-col.svg"
+                          v-bind:idname="task[0]"
+                          class="editBtn"
+                          v-tooltip.bottom="'More info'"
+                        />
 
-                    <!-- This will be the content of the popover -->
-                    <template slot="popover">
-                      <div class="tooltip-content">
-                        Coins Earned: {{ task[1].coinsEarned }}
-                        <br />
-                        Total Time:
-                        {{ Math.floor(task[1].actualTime / 3600) }} hrs
-                        {{ Math.floor((task[1].actualTime % 3600) / 60) }} min
-                        {{ Math.floor((task[1].actualTime % 3600) % 60) }} s
-                        <br />
-                        Total Break Time:
-                        {{ Math.floor(task[1].breakTime / 3600) }} hrs
-                        {{ Math.floor((task[1].breakTime % 3600) / 60) }} min
-                        {{ Math.floor((task[1].breakTime % 3600) % 60) }} s
-                      </div>
-                    </template>
-                  </v-popover>
+                        <!-- This will be the content of the popover -->
+                        <template slot="popover">
+                          <div class="tooltip-content">
+                            Coins Earned: {{ task[1].coinsEarned }}
+                            <br />
+                            Total Time:
+                            {{ Math.floor(task[1].actualTime / 3600) }} hrs
+                            {{
+                              Math.floor((task[1].actualTime % 3600) / 60)
+                            }}
+                            min
+                            {{ Math.floor((task[1].actualTime % 3600) % 60) }} s
+                            <br />
+                            Total Break Time:
+                            {{ Math.floor(task[1].breakTime / 3600) }} hrs
+                            {{
+                              Math.floor((task[1].breakTime % 3600) / 60)
+                            }}
+                            min
+                            {{ Math.floor((task[1].breakTime % 3600) % 60) }} s
+                          </div>
+                        </template>
+                      </v-popover>
 
-                  <delete-task-warning
-                    v-bind:idname="task[0]"
-                    class="editBtn"
-                  ></delete-task-warning>
-                </span>
+                      <delete-task-warning
+                        v-bind:idname="task[0]"
+                        class="editBtn"
+                      ></delete-task-warning>
+                    </span>
+                  </div>
+                  <!-- <hr class="line" /> -->
+                </div>
               </div>
-              <!-- <hr class="line" /> -->
-            </div>
-          </div>
+            </transition-group>
+          </draggable>
         </div>
       </div>
     </div>
@@ -375,6 +392,12 @@ export default {
           });
         });
     },
+    
+    onEnd: function(evt) {
+      console.log(evt)
+      this.oldIndex = evt.oldIndex;
+      this.newIndex = evt.newIndex;
+    },
     // showInfo: function(event) {
     //   let doc_id = event.target.getAttribute("idname");
     //   fb.firestore()
@@ -454,7 +477,7 @@ h2 {
   max-height: 240px;
   padding: 2px;
   overflow: auto;
-  margin-bottom: 15px
+  margin-bottom: 15px;
 }
 .deadlinesList {
   width: 94%;
@@ -538,6 +561,8 @@ input.checkbox {
   box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.1);
   border-radius: 11px;
   margin-top: 15px;
+  background-color: #fff;
+  cursor: move;
 }
 .taskText {
   font-family: "Source Sans Pro";
@@ -567,6 +592,7 @@ img {
   cursor: pointer;
 }
 .tooltip-content {
+  font-family: "Source Sans Pro";
   background: white;
   padding: 24px;
   border-radius: 5px;
@@ -597,4 +623,14 @@ img {
 .editBtn {
   display: inline-block;
 }
+
+/* draggable */
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.ghost {
+  /* border-left: 4px solid rgb(0,183,255); */
+  opacity: 0.3;
+}
+
 </style>
