@@ -55,42 +55,51 @@ export default {
 </script>
 
 <style scoped>
+* {
+  font-family: "Source Sans Pro";
+}
 #top {
   position: relative;
   display: inline-block;
+  /* border: 5px solid #34b2c5; */
+  /* background-color: #34b2c5; */
   border: 5px solid #81b762;
   background-color: #81b762;
-  border-radius: 16px 16px 0 0;
-  width: 100%;
+  border-radius: 12px 12px 0 0;
+  width: 94%;
 }
 #bottom {
   position: relative;
   display: inline-block;
   border: 5px solid #81b762;
-  border-radius: 0 0 16px 16px;
-  width: 100%;
+  /* border: 5px solid #34b2c5; */
+  border-radius: 0 0 12px 12px;
+  width: 94%;
   margin: 0;
   padding: 0;
+  margin-top: -5px;
 }
 #title {
   font-size: 16px;
+  letter-spacing: 0.4px;
   color: white;
   margin: 0;
   padding: 8px 15px;
 }
 #quote {
-  font-family: "Source Sans Pro";
+  font-family: Lora;
   font-style: italic;
   font-size: 18px;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
   padding: 12px;
   margin: 0px;
 }
 #author {
-  font-family: "Source Sans Pro";
   text-align: left;
-  font-size: 12px;
+  font-size: 10px;
+  letter-spacing: 0.4px;
   margin: 0px;
   padding: 0px 0px 18px 18px;
+  text-transform: uppercase;
 }
 </style>
