@@ -93,7 +93,7 @@
                 <!-- <div v-if="checkTaskDate(task)"> -->
 
                 <div class="task-container">
-                  <span class="taskText"> {{ task[1].category }} </span>
+                  <span class="taskText"> {{ task[1].category }} {{ task[1].index }} </span>
                   <span class="taskText"> {{ task[1].title }} </span>
                   <span class="taskText">
                     {{ task[1].duration.hh }}hr {{ task[1].duration.mm }}min
@@ -407,27 +407,47 @@ export default {
           this.tasksToday.push(item);
         }
       }
-      console.log(this.tasksToday);
+      this.tasksToday.sort(function(a,b) { 
+        return parseInt(a[1].index) - parseInt(b[1].index)
+      })
     },
 
     onEnd: function (evt) {
-      console.log(evt);
-      this.oldIndex = evt.oldIndex;
-      this.newIndex = evt.newIndex;
+      // console.log(evt);
+      // this.oldIndex = evt.oldIndex;
+      // this.newIndex = evt.newIndex;
+
+      const taskRef = fb.firestore().collection("tasks").doc(this.user).collection("tasksList");
+
+      // update changed task
+      taskRef.doc(this.tasksToday[evt.oldIndex][0]).update({"index": evt.newIndex})
+  
+      // update affected tasks
+      var affectedTasks = [] //array of doc id 
+      var inc = 0;
+      var i;
+
+      // if task shifts up
+      if (evt.oldIndex > evt.newIndex) {
+        for (i = evt.newIndex; i < evt.oldIndex; i++) {
+          affectedTasks.push(this.tasksToday[i][0]);
+        }
+        inc = 1;
+      // if task shifts down
+      } else if (evt.oldIndex < evt.newIndex) {
+        for (i = evt.oldIndex+1; i <= evt.newIndex; i++) {
+          affectedTasks.push(this.tasksToday[i][0]);
+        }
+        inc = -1;
+      }
+
+      taskRef.where(fb.firestore.FieldPath.documentId(), 'in', affectedTasks)
+        .get()
+        .then(snap => {
+          snap.forEach(task => taskRef.doc(task.id).update({"index": fb.firestore.FieldValue.increment(inc)}));
+        })
+      
     },
-    // showInfo: function(event) {
-    //   let doc_id = event.target.getAttribute("idname");
-    //   fb.firestore()
-    //     .collection("tasks")
-    //     .doc(this.user)
-    //     .collection("tasksList")
-    //     .doc(doc_id)
-    //     .get()
-    //     .then((doc) => {
-    //       this.moreInfoPacket = doc.data();
-    //       console.log(this.moreInfoPacket);
-    //     });
-    // },
   },
   created() {
     this.fetchCoins();
