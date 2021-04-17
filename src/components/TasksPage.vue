@@ -82,7 +82,13 @@
           <span class="taskLabel"> Status </span>
         </div>
 
-        <div class="tasksList">
+        <div v-if="tasksToday.length===0 && dataLoaded" class="noTasksToday"> 
+          <img class="man" src="../assets/task/task-man.png">
+          <p> You have no tasks for the day! </p>
+          <img class="signpost" src="../assets/task/task-sign.png">
+        </div>
+
+        <div class="tasksList" v-if="tasksToday.length > 0">
           <draggable ghost-class="ghost" @end="onEnd">
             <transition-group type="transition" name="flip-list">
               <div
@@ -676,5 +682,29 @@ img {
 .ghost {
   /* border-left: 4px solid rgb(0,183,255); */
   opacity: 0.3;
+}
+.noTasksToday {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.noTasksToday p {
+  font-family: "Lora";
+  font-size: 16px;
+  letter-spacing: 0.4px;
+  color: #0c6472; 
+  width: 50%;
+}
+.man {
+  height: 200px;
+  width: auto;
+  opacity: 90%;
+  margin-left: 50px;
+
+}
+.signpost {
+  height: 260px;
+  margin-top: -40px;
+  margin-left: 30px;
 }
 </style>
