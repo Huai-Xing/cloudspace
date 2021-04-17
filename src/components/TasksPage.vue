@@ -82,9 +82,10 @@
 
         <div class="tasksList">
           <draggable ghost-class="ghost" @end="onEnd">
-            <transition-group type="transition" name="flip-list">
-              <div class="sortable" v-for="task in tasks" v-bind:key="task[0]">
-                <div v-if="checkTaskDate(task)">
+            <transition-group type="transition" name="flip-list" >
+              <div class="sortable" v-for="task in tasksToday" v-bind:key="task[0]">
+                <!-- <div v-if="checkTaskDate(task)"> -->
+
                   <div class="task-container">
                     <span class="taskText"> {{ task[1].category }} </span>
                     <span class="taskText"> {{ task[1].title }} </span>
@@ -164,7 +165,7 @@
                     </span>
                   </div>
                   <!-- <hr class="line" /> -->
-                </div>
+                <!-- </div> -->
               </div>
             </transition-group>
           </draggable>
@@ -193,6 +194,8 @@ export default {
       date: dayjs(),
       user: fb.auth().currentUser.uid,
       tasks: [],
+      tasksToday: [],
+      dataLoaded: false,
       deadlines: [],
       isToday: true,
       moreInfoPacket: [],
@@ -300,8 +303,8 @@ export default {
         0,
         0
       );
-      console.log(start);
-      console.log(end);
+      // console.log(start);
+      // console.log(end);
 
       if (this.date >= start && this.date <= end) {
         if (deadline[1].status != "Incomplete") {
@@ -334,7 +337,8 @@ export default {
           snapshot.forEach((doc) => {
             this.tasks.push([doc.id, doc.data()]);
           });
-        });
+        })
+        .then(() => this.dataLoaded = true);
     },
     //Fetching user's deadlines
     fetchDeadLines: function () {
@@ -392,6 +396,17 @@ export default {
           });
         });
     },
+
+    populateToday: function() {
+      this.tasksToday = [];
+      for (var i = 0; i < this.tasks.length; i++) {
+        var item = this.tasks[i];
+        if (this.checkTaskDate(item)) {
+          this.tasksToday.push(item);
+        }
+      }
+      console.log(this.tasksToday);
+    },
     
     onEnd: function(evt) {
       console.log(evt)
@@ -419,6 +434,14 @@ export default {
     this.date = dayjs(this.$route.params.date);
     this.isToday = this.date.isSame(dayjs(), "day");
   },
+  watch: {
+    dataLoaded: function() {
+      this.populateToday();
+    },
+    date: function() {
+      this.populateToday();
+    }
+  }
 };
 </script>
 
