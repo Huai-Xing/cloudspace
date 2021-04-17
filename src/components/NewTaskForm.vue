@@ -157,6 +157,7 @@
     },
     props: {
       taskDate: Object,
+      taskCount: Number,
     },
     showModal() {
       this.resetForm();
@@ -177,6 +178,7 @@
           actualTime: 0,
           coinsEarned: 0,
           date: this.taskDate.toDate(),
+          index: this.taskCount,
         },
 
         user: fb.auth().currentUser.uid,
