@@ -3,47 +3,71 @@
     <!-- Side MainNavigation after log in -->
     <appNav></appNav>
     <!-- ProductivityPage contents -->
-    <div class="content-item-line">
-      <span>View by:</span>
-      <button v-on:click="changeView(0)">Week</button>
-      <button v-on:click="changeView(1)">Month</button>
-      <button v-on:click="changeView(2)">Year</button>
-      <button v-on:click="viewCustom()">Custom Range</button>
-      <label v-show="custom" for="customFrom">From</label>
-      <input
-        v-show="custom"
-        type="date"
-        id="customFrom"
-        v-model.trim="dateFromInput"
-      />
-      <label v-show="custom" for="customTo">To</label>
-      <input
-        v-show="custom"
-        type="date"
-        id="customTo"
-        v-model.trim="dateToInput"
-      />
-      <button v-show="custom" v-on:click="changeView(3)">View Range</button>
-      {{ dataInfo }}
-      <line-chart
-        v-bind:datacollection="datacollectionLine"
-        v-on:drillDown="drillDown"
-      ></line-chart>
-    </div>
-    <div class="bottom">
-      <div class="content-item-bar">
-        <p class="bottom-title">{{ barTitle }}</p>
-        <bar-chart v-bind:datacollection="datacollectionBar"></bar-chart>
+    <div class="dashboard-content">
+      <div class="left">
+        <div class="content-item-chart">
+          <span>Productivity</span><br />
+          <span class="viewby">View by:</span>
+          <button v-on:click="changeView(0)">Week</button>
+          <button v-on:click="changeView(1)">Month</button>
+          <button v-on:click="changeView(2)">Year</button>
+          <button v-on:click="viewCustom()">Custom Range</button>
+          <br />
+          <label v-show="custom" for="customFrom">From</label>
+          <input
+            v-show="custom"
+            type="date"
+            id="customFrom"
+            v-model.trim="dateFromInput"
+          />
+          <label v-show="custom" for="customTo">To</label>
+          <input
+            v-show="custom"
+            type="date"
+            id="customTo"
+            v-model.trim="dateToInput"
+          />
+          <button v-show="custom" v-on:click="changeView(3)">View Range</button>
+          <span class="viewby">{{ dataInfo }}</span>
+          <line-chart
+            v-bind:datacollection="datacollectionLine"
+            v-on:drillDown="drillDown"
+          ></line-chart>
+        </div>
+        <hr class="line" />
+        <div class="content-item-tree">
+          <p class="bottom-title">Planted Trees</p>
+          <div class="tree-field">
+            <p id='tree-default' v-show="treeList.length == 0">No trees are planted yet...<br>Buy one now with coins or donate money to plant one!</p>
+            <span id="number-tree">Total number of trees planted: {{treeList.length}}</span>
+            <ul v-show="treeList.length != 0">
+              <li v-for="(tree, index) in treeList" v-bind:key="index">
+                <img
+                  class="treeImg"
+                  :src="require(`@/assets/trees/${treeListPng[tree][0]}`)"
+                />
+                <p class="base"></p>
+                <p class="treeName">{{ treeListPng[tree][1] }}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="content-item-radar">
-        <p class="bottom-title">{{ radarTitle }}</p>
-        <radar-chart v-bind:datacollection="datacollectionRadar"></radar-chart>
-      </div>
-      <div class="content-item-circle">
-        <p class="bottom-title">Number of trees planted</p>
-        <div class="tree-summary-circle">
-          <!-- to replace this text to the bind data variable here -->
-          <div class="summary-stat">{{trees}}</div>
+      <div class="vertical-line"></div>
+      <div class="right">
+        <div class="content-item-chart">
+          <p class="bottom-title">{{ barTitle }}</p>
+          <bar-chart v-bind:datacollection="datacollectionBar"></bar-chart>
+        </div>
+        <hr class="line" />
+        <div class="content-item-chart">
+          <p class="bottom-title">
+            Average actual time taken per category for period
+          </p>
+          <p class="bottom-title">{{ radarTitle }}</p>
+          <radar-chart
+            v-bind:datacollection="datacollectionRadar"
+          ></radar-chart>
         </div>
       </div>
     </div>
@@ -70,7 +94,8 @@ export default {
   data() {
     return {
       user: fb.auth().currentUser.uid,
-      trees: 0,
+      treeList: [],
+      treeListPng: {},
       custom: false,
       dataInfo: "",
       dateFrom: 7,
@@ -87,17 +112,24 @@ export default {
     };
   },
   methods: {
-    fetchNumOfTrees: function () {
+    fetchTreeList: function () {
       fb.firestore()
         .collection("users")
         .doc(this.user)
         .get()
         .then((doc) => {
-          //console.log(doc.data().user.trees);
-          this.trees = doc.data().user.trees;
-          if (!this.trees) {
-            this.trees = 0;
+          this.treeList = doc.data().treeList;
+          if (this.treeList == null) {
+            this.treeList = [];
           }
+        });
+      fb.firestore()
+        .collection("trees")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.treeListPng[doc.id] = [doc.data().url, doc.data().name];
+          });
         });
     },
     drillDown: function (x, bool) {
@@ -200,7 +232,7 @@ export default {
         actual[catIdx] = currentVal + taskList[j].actualTime;
         actCounter[catIdx] = currentCount + 1;
       }
-      for (var l = 0; l < taskList.length; l++) {
+      for (var l = 0; l < labels.length; l++) {
         actual[l] = actual[l] / actCounter[l];
       }
       this.datacollectionRadar = {
@@ -208,14 +240,14 @@ export default {
         datasets: [
           {
             label: "Avg Actual Time",
-            backgroundColor: ["rgba(64, 191, 128, 0.45)"],
-            borderColor: "rgba(64, 191, 128, 0.45)",
+            backgroundColor: "rgba(255, 159, 64, 0.3)",
+            borderColor: "rgba(255, 159, 64, 0.5)",
             radius: 4,
-            pointRadius: 4, //The size of the plotted points
+            pointRadius: 3, //The size of the plotted points
             pointBorderWidth: 2,
             pointBackgroundColor: "limegreen",
-            pointBorderColor: "rgba(64, 191, 128, 0.6)",
-            pointHoverRadius: 7,
+            pointBorderColor: "rgba(255, 159, 64, 0.8)",
+            pointHoverRadius: 6,
             data: actual,
           },
         ],
@@ -224,11 +256,7 @@ export default {
       from.setDate(from.getDate() - this.dateFrom);
       const to = new Date(this.dateTo); //new Date();
       to.setDate(to.getDate());
-      this.radarTitle =
-        "Average actual time taken per category for period " +
-        this.formatDate(from) +
-        " - " +
-        this.formatDate(to);
+      this.radarTitle = this.formatDate(from) + " - " + this.formatDate(to);
     },
     generateBarData: function (taskList) {
       var actual = [];
@@ -253,20 +281,23 @@ export default {
           {
             label: "Actual Time Taken",
             data: actual,
-            borderColor: "#3e95cd",
-            backgroundColor: "#3e95cd",
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            borderWidth: 1,
           },
           {
             label: "Total Break Time",
             data: breakTime,
-            borderColor: "#3cba9f",
-            backgroundColor: "#3cba9f",
+            borderColor: "rgba(255, 206, 86, 1)",
+            backgroundColor: "rgba(255, 206, 86, 0.2)",
+            borderWidth: 1,
           },
           {
             label: "Scheduled Time",
             data: schedule,
-            borderColor: "#8e5ea2",
-            backgroundColor: "#8e5ea2",
+            borderColor: "rgba(54, 162, 235, 1)",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderWidth: 1,
           },
         ],
       };
@@ -289,8 +320,8 @@ export default {
           scheduled += this.convertToSecond(taskList[i].duration);
         } else {
           actualList.push(actual); //Actual
-          breakTimeList.push(scheduled); //Scheduled
-          scheduledList.push(breakTime); //Break
+          breakTimeList.push(breakTime); //Scheduled
+          scheduledList.push(scheduled); //Break
           labelList.push(this.formatDate(currentDate)); //Time
           actual = taskList[i].actualTime;
           breakTime = taskList[i].breakTime;
@@ -299,8 +330,8 @@ export default {
         }
       }
       actualList.push(actual); //Actual
-      breakTimeList.push(scheduled); //Scheduled
-      scheduledList.push(breakTime); //Break
+      breakTimeList.push(breakTime); //Scheduled
+      scheduledList.push(scheduled); //Break
       labelList.push(this.formatDate(currentDate)); //Time
       this.datacollectionLine = {
         labels: labelList,
@@ -308,22 +339,22 @@ export default {
           {
             label: "Actual Time Taken",
             data: actualList,
-            borderColor: "#3e95cd",
-            backgroundColor: "#3e95cd",
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 1)",
             fill: false,
           },
           {
             label: "Total Break Time",
             data: breakTimeList,
-            borderColor: "#3cba9f",
-            backgroundColor: "#3cba9f",
+            borderColor: "rgba(255, 206, 86, 1)",
+            backgroundColor: "rgba(255, 206, 86, 1)",
             fill: false,
           },
           {
             label: "Scheduled Time",
             data: scheduledList,
-            borderColor: "#8e5ea2",
-            backgroundColor: "#8e5ea2",
+            borderColor: "rgba(54, 162, 235, 1)",
+            backgroundColor: "rgba(54, 162, 235, 1)",
             fill: false,
           },
         ],
@@ -356,7 +387,7 @@ export default {
     },
   },
   created() {
-    this.fetchNumOfTrees();
+    this.fetchTreeList();
     this.fetchItems();
   },
 };
@@ -370,18 +401,37 @@ export default {
 #full-content {
   margin-bottom: 50px;
 }
-.content-item-line {
+.dashboard-content {
+  display: flex;
+  margin-left: 175px;
+  margin: 0;
+  padding: 0;
+}
+.left {
   /* border: 1px solid black; */
-  margin-left: 14%;
+  margin-left: 5px;
+  margin-right: 0.5%;
   display: block;
-  width: 85%;
+  width: 65%;
+}
+.content-item-chart {
+  /* border: 1px solid black; */
+  display: block;
+  margin-bottom: 10px;
+  padding-top: 10px;
 }
 span {
-  font-weight: 700;
+  font-weight: 600;
+  margin-left: 5px;
+}
+.viewby {
+  font-size: 10px;
 }
 button,
-label {
+label,
+input {
   margin: 3px;
+  font-size: 10px;
 }
 button {
   height: auto;
@@ -399,74 +449,129 @@ button:focus {
   transform: translateY(1px);
   outline: none;
 }
+button:hover {
+  transform: scale(1.1);
+}
 label {
-  margin-left: 12px;
-  margin-right: 8px;
+  margin-left: 5px;
+  margin-right: 3px;
 }
 #customTo {
   margin-right: 5px;
 }
-.bottom {
-  /* border: 1px solid black; */
-  margin-left: 14%;
-  display: flex;
-  width: 85%;
-}
-.content-item-bar {
+.right {
   /* border: 1px solid black; */
   display: block;
-  width: 42%;
+  width: 30%;
+  margin-left: 0.5%;
 }
 .bottom-title {
   /* border: 1px solid black; */
   margin: 0;
-  margin-top: 1%;
-  margin-bottom: 2%;
   padding: 0;
   text-align: center;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  text-decoration: underline;
 }
-.content-item-radar {
-  /* border: 1px solid black; */
-  display: block;
-  width: 35%;
+.line {
+  border: 0.5px solid rgba(180, 180, 180, 0.4);
+  margin: 25px 5px 25px 5px; /*Top right bottom left*/
 }
-.content-item-circle {
-  /* border: 1px solid black; */
-  display: block;
-  width: 23%;
+.vertical-line {
+  border-left: 1.5px solid rgba(180, 180, 180, 0.4);
+  margin: 0 15px 0 15px;
+  padding: 0;
 }
-/** Styling for the circle **/
-.tree-summary-circle {
-  /* (A) PERCENTAGE WIDTH & BORDER RADIUS */
-  border-radius: 100%;
-
-  /* (B) BACKGROUND COLOR */
-  background: #bedaae;
-
-  /* (C) NECESSARY TO POSITION TEXT BLOCK */
-  line-height: 0;
-  position: relative;
-  margin: 15%;
+.tree-field {
+  border-radius: 50px;
+  background-color: rgba(0, 199, 0, 0.5);
+  height: 45vh;
+  margin: 5px;
+  overflow: auto;
 }
-
-/* (D) MATCH HEIGHT */
-.tree-summary-circle:after {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
 }
-
-/* (E) TEXT BLOCK */
-.summary-stat {
-  /* (E1) CENTER TEXT IN CIRCLE */
-  position: absolute;
-  bottom: 50%;
-  width: 100%;
+ul {
+  list-style-type: None;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+li {
+  list-style-type: None;
+  margin: auto;
+  padding: 0;
+  margin-bottom: 10px;
+}
+.treeName {
+  margin: 0;
+  padding: 0;
+  font-size: 9px;
   text-align: center;
-  font-size: 100px;
-  color: #fff;
+}
+.treeImg {
+  display: block;
+  /* border: 1px solid black; */
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  margin-bottom: 0;
+  -webkit-transform-origin: 50% 100%;
+  transform-origin: 50% 100%;
+  -webkit-animation: swinging 5s ease-in-out forwards infinite;
+  animation: swinging 5s ease-in-out forwards infinite;
+}
+
+@-webkit-keyframes swinging {
+  0% {
+    -webkit-transform: rotate(5deg);
+  }
+  50% {
+    -webkit-transform: rotate(-3deg);
+  }
+  100% {
+    -webkit-transform: rotate(5deg);
+  }
+}
+
+@keyframes swinging {
+  0% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  100% {
+    transform: rotate(5deg);
+  }
+}
+
+.base {
+  position: relative;
+  top: -10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 80px;
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.24);
+  border-radius: 100%;
+}
+#tree-default {
+  margin-top: 19.5vh;
+  text-align: center;
+  opacity: 0.6;
+}
+#number-tree {
+  font-size: 10px;
+  font-weight: 300;
+  position: sticky;
+  left: 500px;
+  top: 245px;
+  opacity: 0.6;
 }
 </style>

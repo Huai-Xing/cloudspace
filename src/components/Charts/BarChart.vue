@@ -47,7 +47,7 @@ export default {
                 display: true,
               },
               ticks: {
-                fontSize: 10,
+                fontSize: 8,
               },
             },
           ],
@@ -109,7 +109,6 @@ export default {
 <style scoped>
 #bar {
   position: relative;
-  height: 40vh;
-  width: 35vw;
+  height: 42vh;
 }
 </style>

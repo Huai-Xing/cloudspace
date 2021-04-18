@@ -44,6 +44,7 @@
       <p class="seeMore">Click on tree name to learn more!</p>
       <p class="plantText">Do you wish to plant this tree?</p>
       <tree-purchase
+        :treeId="data[visibleImg].id"
         :treeName="data[visibleImg].name"
         :treePrice="data[visibleImg].price"
         :afford="afford(data[visibleImg].price)"
@@ -133,7 +134,9 @@ export default {
         .get()
         .then((snap) => {
           snap.forEach((doc) => {
-            this.data.push(doc.data());
+            var newData = doc.data();
+            newData.id = doc.id;
+            this.data.push(newData);
           });
         });
     },
