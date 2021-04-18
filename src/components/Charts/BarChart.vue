@@ -31,6 +31,7 @@ export default {
                 min: 0,
                 stepSize: 1800,
                 fontSize: 10,
+                fontFamily: "Source Sans Pro",
                 callback: function (value) {
                   return (value / 1800) * 30 + " min";
                 },
@@ -47,7 +48,8 @@ export default {
                 display: true,
               },
               ticks: {
-                fontSize: 8,
+                fontSize: 9,
+                fontFamily: "Source Sans Pro",
               },
             },
           ],
@@ -109,6 +111,6 @@ export default {
 <style scoped>
 #bar {
   position: relative;
-  height: 42vh;
+  height: 38vh;
 }
 </style>

@@ -30,6 +30,7 @@ export default {
             min: 0,
             stepSize: 900,
             fontSize: 10,
+            fontFamily: 'Source Sans Pro',
             callback: function (value) {
               return (value / 900) * 15  + " min";
             },
@@ -37,6 +38,7 @@ export default {
 
           pointLabels: {
             fontSize: 15,
+            fontFamily: "Source Sans Pro",
           },
         },
 
@@ -80,7 +82,7 @@ export default {
 <style scoped>
 #radar {
   position: relative; 
-  height: 42vh;
+  height: 38vh;
   margin-top: 20px;
 }
 </style>

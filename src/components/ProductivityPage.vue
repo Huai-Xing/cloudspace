@@ -5,8 +5,8 @@
     <!-- ProductivityPage contents -->
     <div class="dashboard-content">
       <div class="left">
+        <span class="title">Productivity</span><br />
         <div class="content-item-chart">
-          <span>Productivity</span><br />
           <span class="viewby">View by:</span>
           <button v-on:click="changeView(0)">Week</button>
           <button v-on:click="changeView(1)">Month</button>
@@ -36,10 +36,13 @@
         </div>
         <hr class="line" />
         <div class="content-item-tree">
-          <p class="bottom-title">Planted Trees</p>
+          <p class="tree-bottom-title">Planted Trees</p>
+          <span id="number-tree">Total number of trees planted: {{ treeList.length }}</span>
           <div class="tree-field">
-            <p id='tree-default' v-show="treeList.length == 0">No trees are planted yet...<br>Buy one now with coins or donate money to plant one!</p>
-            <span id="number-tree">Total number of trees planted: {{treeList.length}}</span>
+            <p id="tree-default" v-show="treeList.length == 0">
+              No trees are planted yet...<br />Buy one now with coins or donate
+              money to plant one!
+            </p>
             <ul v-show="treeList.length != 0">
               <li v-for="(tree, index) in treeList" v-bind:key="index">
                 <img
@@ -403,35 +406,38 @@ export default {
 }
 .dashboard-content {
   display: flex;
-  margin-left: 175px;
-  margin: 0;
+  margin-left: 230px;
+  margin-right: 70px;
   padding: 0;
 }
 .left {
   /* border: 1px solid black; */
-  margin-left: 5px;
+  /* margin-left: 70px; */
   margin-right: 0.5%;
   display: block;
-  width: 65%;
+  width: 70%;
 }
 .content-item-chart {
   /* border: 1px solid black; */
   display: block;
-  margin-bottom: 10px;
-  padding-top: 10px;
+  padding-top: 5px;
 }
-span {
+.title {
   font-weight: 600;
-  margin-left: 5px;
+  font-size: 24px;
 }
 .viewby {
-  font-size: 10px;
+  font-size: 12px;
+  font-family: "Source Sans Pro";
+  font-weight: 600;
+  padding: 6px 12px;
 }
 button,
 label,
 input {
   margin: 3px;
   font-size: 10px;
+  font-family: "Source Sans Pro";
 }
 button {
   height: auto;
@@ -465,17 +471,38 @@ label {
   width: 30%;
   margin-left: 0.5%;
 }
+.tree-bottom-title {
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+  /* margin: 5px 0px 20px 0px; */
+  display: inline-block;
+  margin: 12px 0px;
+}
+#number-tree {
+  font-family: "Source Sans Pro";
+  font-size: 11px;
+  font-weight: 500;
+  position: sticky;
+  padding: 8px 12px;
+  margin: 5px 0px;
+  color: #fff;
+  background-color: #34b2c5;
+  border-radius: 4px;
+  float: right;
+}
 .bottom-title {
   /* border: 1px solid black; */
   margin: 0;
   padding: 0;
   text-align: center;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
+  margin-bottom: 10px;
 }
 .line {
   border: 0.5px solid rgba(180, 180, 180, 0.4);
-  margin: 25px 5px 25px 5px; /*Top right bottom left*/
+  margin: 20px 5px 15px 5px; /*Top right bottom left*/
 }
 .vertical-line {
   border-left: 1.5px solid rgba(180, 180, 180, 0.4);
@@ -484,14 +511,11 @@ label {
 }
 .tree-field {
   border-radius: 50px;
-  background-color: rgba(0, 199, 0, 0.5);
-  height: 45vh;
+  background-color: #c5d2d580;
+  /* background-color: rgba(0, 199, 0, 0.5); */
+  height: 38vh;
   margin: 5px;
   overflow: auto;
-}
-::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
 }
 ul {
   list-style-type: None;
@@ -504,7 +528,7 @@ li {
   list-style-type: None;
   margin: auto;
   padding: 0;
-  margin-bottom: 10px;
+  margin: 10px auto;
 }
 .treeName {
   margin: 0;
@@ -519,6 +543,7 @@ li {
   height: 90px;
   overflow: hidden;
   margin-bottom: 0;
+  margin-left: 5px;
   -webkit-transform-origin: 50% 100%;
   transform-origin: 50% 100%;
   -webkit-animation: swinging 5s ease-in-out forwards infinite;
@@ -566,12 +591,23 @@ li {
   text-align: center;
   opacity: 0.6;
 }
-#number-tree {
-  font-size: 10px;
-  font-weight: 300;
-  position: sticky;
-  left: 500px;
-  top: 245px;
-  opacity: 0.6;
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #39828d;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #0c6472;
 }
 </style>

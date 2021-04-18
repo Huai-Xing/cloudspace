@@ -69,7 +69,8 @@ export default {
               ticks: {
                 min: 0,
                 stepSize: 3600,
-                fontSize: 10,
+                fontSize: 11,
+                fontFamily: "Source Sans Pro",
                 callback: function (value) {
                   return (value / 3600) * 1 + " hr";
                 },
@@ -83,7 +84,8 @@ export default {
           xAxes: [
             {
               ticks: {
-                fontSize: 10,
+                fontSize: 11,
+                fontFamily: "Source Sans Pro",
               },
               gridLines: {
                 display: false,
@@ -137,6 +139,6 @@ export default {
 <style scoped>
 #line {
   position: relative;
-  height: 45vh;
+  height: 38vh;
 }
 </style>

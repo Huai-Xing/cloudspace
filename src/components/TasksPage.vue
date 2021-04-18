@@ -698,13 +698,13 @@ img {
 .man {
   height: 200px;
   width: auto;
-  opacity: 90%;
-  margin-left: 50px;
-
+  opacity: 85%;
+  margin-left: 30px;
 }
 .signpost {
   height: 260px;
   margin-top: -40px;
-  margin-left: 30px;
+  margin-left: 50px;
+  opacity: 80%;
 }
 </style>
