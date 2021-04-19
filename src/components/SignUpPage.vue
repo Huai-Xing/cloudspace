@@ -133,6 +133,7 @@
   * {
     font-weight: lighter;
     font-size: 13px;
+    font-family: "Source Sans Pro";
   }
   body {
     min-width: 100%;

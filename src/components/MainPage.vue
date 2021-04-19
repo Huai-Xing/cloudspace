@@ -14,10 +14,10 @@
     <div class="content-item">
       <div id="how-cloudspace-works">
         <h2 class="content-section-header">
-          How Cloudspace Works
+          What Does Cloudspace Do?
         </h2>
         <h3 class="content-subheader">
-          Keep your life in check, in time, and in balance.
+          Making your life greener and cleaner!
         </h3>
 
         <div class="content-describe-row">
@@ -36,8 +36,7 @@
               alt="background2_main"
               src="../assets/background2_main.png"
             />
-            <h2>Personalised productivity</h2>
-            <p>Dashboards at your fingertips</p>
+            <h2>Personalised productivity dashboard at your fingertips</h2>
           </div>
 
           <div class="column">
@@ -46,7 +45,7 @@
               alt="background2_main"
               src="../assets/background3_trees.png"
             />
-            <h2>Collect coins to plant a real tree!</h2>
+            <h2>Collect coins to plant real trees</h2>
           </div>
         </div>
       </div>
@@ -59,7 +58,7 @@
           Why Cloudspace?
         </h2>
         <h3 class="content-subheader">
-          To help Kranji Woodlands site to recover its green lands!
+          We care for you and the environment.
         </h3>
 
         <div class="content-describe-row">
@@ -67,25 +66,21 @@
             <img
               class="column-image"
               alt="deforested"
-              src="../assets/deforested.png"
+              src="../assets/cut-trees.png"
             />
-            <h2> Did you know? </h2>
+            <h2>Did you know?</h2>
             <p>
-              About 4.5 hectare of land at Kranji Woodlands was cleared by
-              mistake.
+              Almost 160,000 trees are being cut down daily just to produce
+              paper and related products!
             </p>
           </div>
 
           <div class="column">
-            <img
-              class="column-image"
-              alt="football_field"
-              src="../assets/football-field.png"
-            />
-            <h2>How big is 4.5 hectare? </h2>
+            <img class="column-image" alt="timer" src="../assets/timer.png" />
+            <h2>Stay focused</h2>
             <p>
-              The ‘errorneously’ cleared forested area is about the size of 6
-              football fields!
+              Cloudspace's timer and coin allocation system will keep you
+              focused throughout your task
             </p>
           </div>
 
@@ -93,14 +88,14 @@
             <img
               class="column-image"
               alt="npark-logo"
-              src="../assets/NParks_logo.jpg"
+              src="../assets/NParks_logo.png"
             />
             <h2>
               Cloudspace's environmental conservation efforts
             </h2>
             <p>
-              Partnering with NParks, join Cloudspace to grow real trees to help
-              Kranji Woodlands recover its greenery.
+              Join Cloudspace, in partnership with NParks, to plant more trees
+              in Singapore!
             </p>
           </div>
         </div>
@@ -116,8 +111,9 @@
 <style scoped>
   * {
     font-weight: lighter;
-    font-size: 13px;
+    font-size: 14px;
     box-sizing: border-box;
+    font-family: "Source Sans Pro";
   }
 
   img {
@@ -177,7 +173,7 @@
 
   .content-subheader {
     text-align: center;
-    font-size: 12px;
+    font-size: 16px;
   }
 
   /* Create three equal columns that floats next to each other */
@@ -186,7 +182,6 @@
     width: 33.33%;
     padding: 10px;
     margin-bottom: 20px;
-
     text-align: center;
   }
 
@@ -198,13 +193,15 @@
   }
 
   .column-image {
-    width: 200px;
+    width: auto;
     height: 200px;
   }
   h2 {
     font-weight: bold;
+    font-size: 15px;
   }
-  h3 {
-    font-size: 16px;
+  p {
+    padding-left: 15%;
+    padding-right: 15%;
   }
 </style>

@@ -39,7 +39,9 @@
           <!-- <input type="checkbox" id="checkbox" /> -->
           <!-- <label for="checkbox" id="cblabel">Keep me logged in</label><br /> -->
 
-          <button type="submit" value="Submit" id="submit">Let's go!</button>
+          <button type="submit" value="Submit" id="submit" class="submit">
+            Let's go!
+          </button>
           <br />
           <p id="forgetpwd" v-on:click="toggleResetPwd">Forget Password</p>
         </div>
@@ -59,11 +61,13 @@
           <p id="invalidEmail" v-show="invalidEmail">
             Please provide a valid email address
           </p>
-          <button type="submit" value="Submit" id="reset">
+          <button type="submit" class="submit" value="Submit" id="reset">
             Send email to reset password
           </button>
           <br />
-          <p id="forgetpwd" v-on:click="toggleResetPwd">Return to Log In</p>
+          <p id="forgetpwd" v-on:click="toggleResetPwd">
+            Return to Log In
+          </p>
         </div>
       </form>
     </div>
@@ -158,6 +162,7 @@
   * {
     font-weight: lighter;
     font-size: 13px;
+    font-family: "Source Sans Pro";
   }
   body {
     min-width: 100%;
@@ -257,7 +262,7 @@
     color: #cccccc;
   }
 
-  #submit {
+  .submit {
     width: 270px;
     padding: 6px;
     margin-top: 12px;
@@ -267,13 +272,13 @@
     color: #fff;
   }
 
-  #submit:hover {
+  .submit:hover {
     box-shadow: 0px 2px 15px #849c7651;
     transform: translateY(-1px);
   }
 
-  #submit:active,
-  #submit:focus {
+  .submit:active,
+  .submit:focus {
     transform: translateY(2px);
     box-shadow: none;
     outline: none;
