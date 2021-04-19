@@ -81,7 +81,7 @@
 
 <style scoped>
 .toggle__label {
-  font-size: 9px;
+  font-size: 10px;
 }
   .toggle__button {
     vertical-align: middle;

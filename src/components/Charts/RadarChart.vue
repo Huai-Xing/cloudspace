@@ -24,17 +24,13 @@ export default {
           position: "top",
           display: false,
         },
-        layout: {
-          padding: {
-            left: -50,
-          },
-        },
         scale: {
           ticks: {
             beginAtZero: true,
             min: 0,
             stepSize: 900,
             fontSize: 10,
+            fontFamily: 'Source Sans Pro',
             callback: function (value) {
               return (value / 900) * 15  + " min";
             },
@@ -42,6 +38,7 @@ export default {
 
           pointLabels: {
             fontSize: 15,
+            fontFamily: "Source Sans Pro",
           },
         },
 
@@ -84,8 +81,8 @@ export default {
 
 <style scoped>
 #radar {
-  position: relative;
-  height: 40vh;
-  width: 35vw;
+  position: relative; 
+  height: 38vh;
+  margin-top: 20px;
 }
 </style>

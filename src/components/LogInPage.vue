@@ -55,7 +55,7 @@
             placeholder="user@domain.com"
             required
             v-model="emailReset"
-          /><br>
+          /><br />
           <p id="invalidEmail" v-show="invalidEmail">
             Please provide a valid email address
           </p>
@@ -200,9 +200,9 @@ a {
 
 #rightphoto {
   position: absolute;
-  top: 12%;
-  right: 3%;
-  width: 26%;
+  top: 14%;
+  right: 7%;
+  width: 21%;
   height: auto;
 }
 
@@ -253,7 +253,7 @@ input {
 
 #cblabel {
   font-style: italic;
-  font-size: 10px;
+  font-size: 11px;
   vertical-align: middle;
   color: #cccccc;
 }
@@ -265,14 +265,28 @@ input {
   font-family: Lora;
   border: none;
   background-color: #bedaae;
+  color: #fff;
+}
+
+#submit:hover {
+  box-shadow: 0px 2px 15px #849c7651;
+  transform: translateY(-1px);
+}
+
+#submit:active,
+#submit:focus {
+  transform: translateY(2px);
+  box-shadow: none;
+  outline: none;
 }
 
 #forgetpwd {
-  margin-top: 4px;
+  margin-top: 6px;
   text-align: center;
-  text-decoration: underline;
   cursor: pointer;
   font-family: Lora;
+  font-size: 11px;
+  text-decoration: underline;
 }
 
 #forgetpwd:hover {

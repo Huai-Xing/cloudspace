@@ -78,18 +78,18 @@
 </script>
 
 <style scoped>
-  .cal {
-    position: fixed;
-    top: 70px;
-    left: 240px;
-    width: 1001px;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-  }
+.cal {
+  position: fixed;
+  top: 70px;
+  left: 230px;
+  /* width: 1001px; */
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
 </style>

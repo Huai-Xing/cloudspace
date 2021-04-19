@@ -2,11 +2,7 @@ import fb from "../firebase.js";
 
 async function coinCal(x) {
     var taskList = await getList();
-    if (taskList.length < 10) {
-        return countBasic(x);
-    } else {
-        return countAdvance(x, taskList);
-    }
+    return countAdvance(x, taskList);
 }
 
 function countAdvance(x, taskList) {
@@ -21,10 +17,21 @@ function countAdvance(x, taskList) {
     }
     var averageTR = totalTR / taskList.length;
     //console.log(averageTR);
-    if (averageTR < 0.9 || averageTR > 1.1) {
-        return getAdvanceCoin(basicCoins, averageTR);
+    if (taskList.length < 10) {
+        if (taskList.length >= 5) {
+            if (averageTR < 0.8 || averageTR > 1.2) {
+                return [basicCoins,averageTR,1];
+            } else {
+                return [basicCoins,averageTR,0];
+            }
+        } else {
+            return [basicCoins,averageTR,0];
+        }
+    }
+    if (averageTR < 0.8 || averageTR > 1.2) {
+        return [getAdvanceCoin(basicCoins, averageTR),averageTR,2];
     } else {
-        return basicCoins;
+        return [basicCoins,averageTR,0];
     }
 }
 

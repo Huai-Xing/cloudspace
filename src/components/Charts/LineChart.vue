@@ -24,12 +24,6 @@ export default {
   data: function () {
     return {
       options: {
-        //Remove if want curve lines
-        elements: {
-          line: {
-            tension: 0,
-          },
-        },
         hover: {
           onHover: function (e) {
             var point = this.getElementAtEvent(e);
@@ -63,7 +57,7 @@ export default {
           padding: 10,
         },
         legend: {
-          position: "right",
+          position: "bottom",
           labels: {
             fontSize: 10,
             boxWidth: 20,
@@ -74,9 +68,14 @@ export default {
             {
               ticks: {
                 min: 0,
-                stepSize: 1800,
+                stepSize: 3600,
+                fontSize: 11,
+                fontFamily: "Source Sans Pro",
+                callback: function (value) {
+                  return (value / 3600) * 1 + " hr";
+                },
               },
-              display: false,
+              display: true,
               gridLines: {
                 display: false,
               },
@@ -84,6 +83,10 @@ export default {
           ],
           xAxes: [
             {
+              ticks: {
+                fontSize: 11,
+                fontFamily: "Source Sans Pro",
+              },
               gridLines: {
                 display: false,
               },
@@ -136,6 +139,6 @@ export default {
 <style scoped>
 #line {
   position: relative;
-  height: 32vh;
+  height: 38vh;
 }
 </style>

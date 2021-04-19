@@ -43,57 +43,71 @@ export default {
       var idx =
         (Math.floor(quotes.length / dayjs().get("Date")) + dayjs().get("M")) %
         quotes.length;
-      this.quote = quotes[idx].quote;
-      this.author = quotes[idx].author;
+      var currAuthor = quotes[idx].author;
+      var currQuote = quotes[idx].quote;
+      while (currAuthor == null) {
+        quotes.splice(idx, 1);
+        idx = (Math.floor(quotes.length / dayjs().get("Date")) + dayjs().get("M")) % quotes.length;
+        currAuthor = quotes[idx].author;
+        currQuote = quotes[idx].quote;
+      }
+      this.quote = currQuote;
+      this.author = currAuthor;
     },
   },
   created: async function () {
-    console.log(dayjs().get("month"));
+    // console.log(dayjs().get("month"));
     await this.fetchQuotes();
   },
 };
 </script>
 
 <style scoped>
+* {
+  font-family: "Source Sans Pro";
+}
 #top {
   position: relative;
   display: inline-block;
+  /* border: 5px solid #34b2c5; */
+  /* background-color: #34b2c5; */
   border: 5px solid #81b762;
   background-color: #81b762;
-  border-radius: 20px 20px 0 0;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+  border-radius: 12px 12px 0 0;
+  width: 94%;
 }
 #bottom {
   position: relative;
   display: inline-block;
   border: 5px solid #81b762;
-  border-radius: 0 0 20px 20px;
-  width: 100%;
+  /* border: 5px solid #34b2c5; */
+  border-radius: 0 0 12px 12px;
+  width: 94%;
   margin: 0;
   padding: 0;
-}
-p {
-  margin: 0;
-  padding: 0;
-  padding-left: 0.8%;
+  margin-top: -5px;
 }
 #title {
-  text-decoration: underline;
   font-size: 16px;
+  letter-spacing: 0.4px;
   color: white;
-  font-weight: 550;
+  margin: 0;
+  padding: 8px 15px;
 }
 #quote {
-  margin-top: 5px;
+  font-family: Lora;
   font-style: italic;
   font-size: 18px;
-  padding-bottom: 0.8%;
+  letter-spacing: 0.4px;
+  padding: 12px;
+  margin: 0px;
 }
 #author {
   text-align: left;
-  font-size: 14px;
-  padding-bottom: 0.8%;
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  margin: 0px;
+  padding: 0px 0px 18px 18px;
+  text-transform: uppercase;
 }
 </style>

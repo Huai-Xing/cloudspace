@@ -226,14 +226,32 @@
         parseInt(this.currentTimer) + parseInt(this.timerTimePassed);
       this.timePassed = parseInt(this.timerTimePassed);
       this.coinsToEarn = parseInt(this.coin);
-      this.coinsToEarn = await coinCal(this.totalTime);
-      this.coinsReduced = !(this.coinsToEarn == this.coin);
+      var calCoin = await coinCal(this.totalTime);
+      this.coinsToEarn = calCoin[0];
+      this.checkCoinReduce(calCoin[1], calCoin[2]);
       //console.log("COINS: " + this.coinsToEarn);
       // to start the timer immediately when the component gets mounted
       this.startTimer();
     },
 
     methods: {
+      checkCoinReduce: function(averageTR, penalise) {
+        if (penalise == 2) {
+          if (averageTR > 1) {
+            this.coinsReduced = "Warning: Coins are reduced as you have been frequently underallocating time for tasks. See info for more details.";
+          } else {
+            this.coinsReduced = "Warning: Coins are reduced as you have been frequently overallocating time for tasks. See info for more details.";
+          }
+        } else if (penalise == 0) {
+          this.coinsReduced == "";
+        } else {
+          if (averageTR < 1) {
+            this.coinsReduced = "Warning: You have been frequently overallocating time for tasks, please adjust time allocation for future tasks to prevent incurring coins penalty.";
+          } else {
+            this.coinsReduced = "Warning: You have been frequently underallocating time for tasks, please adjust time allocation for future tasks to prevent incurring coins penalty.";
+          }
+        }
+      },
       onTimesUp: function() {
         clearInterval(this.timerInterval);
         document.getElementById("pause").setAttribute("disabled", true);
@@ -358,8 +376,11 @@
   }
   #coins-reduce {
     margin: 0;
+    margin-left: auto;
+    margin-right: auto;
     font-size: 9px;
     color: red;
+    width: 310px;
   }
 
   .buttons {
@@ -388,6 +409,8 @@
     font-size: 10px;
   }
   #timer-title {
+    margin-left: auto;
+    margin-right: auto;
     display: block;
     text-align: center;
     width: 400px;

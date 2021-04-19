@@ -39,46 +39,63 @@
 </template>
 
 <script>
-  import Modal from "../Modal.vue";
-  import firebase from "../../firebase";
+import Modal from "../Modal.vue";
+import firebase from "../../firebase";
 
-  export default {
-    name: "App",
-    props: ["treeName", "treePrice", "afford"],
-    components: {
-      Modal,
+export default {
+  name: "App",
+  props: ["treeId", "treeName", "treePrice", "afford"],
+  components: {
+    Modal,
+  },
+  data() {
+    return {
+      isModalVisible: false,
+      bought: false,
+    };
+  },
+  methods: {
+    showModal() {
+      this.isModalVisible = true;
     },
-    data() {
-      return {
-        isModalVisible: false,
-        bought: false,
-      };
+    closeModal() {
+      this.isModalVisible = false;
     },
-    methods: {
-      showModal() {
-        this.isModalVisible = true;
-      },
-      closeModal() {
-        this.isModalVisible = false;
-      },
-      purchase() {
-        this.bought = true;
-        var uid = firebase.auth().currentUser.uid;
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(uid)
-          .update({
-            "user.coins": firebase.firestore.FieldValue.increment(
-              0 - this.treePrice
-            ),
-            "user.trees": firebase.firestore.FieldValue.increment(1),
-            
-          })
-          .then(() => location.reload());
-      },
+    purchase() {
+      this.bought = true;
+      var treeList = [];
+      var uid = firebase.auth().currentUser.uid;
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((doc) => {
+          treeList = doc.data().treeList;
+        })
+        .then(() => {
+          if (treeList == null) {
+            treeList = [];
+          }
+          treeList.push(this.treeId);
+          firebase.firestore().collection("users").doc(uid).update({
+            treeList: treeList,
+          });
+        });
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .update({
+          "user.coins": firebase.firestore.FieldValue.increment(
+            0 - this.treePrice
+          ),
+          "user.trees": firebase.firestore.FieldValue.increment(1),
+        })
+        .then(() => location.reload());
     },
-  };
+  },
+};
 </script>
 
 <style scoped>
