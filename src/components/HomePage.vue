@@ -354,7 +354,7 @@
     width: 280px;
     bottom: 25px;
     right: 40px;
-    opacity: 80%;
+    opacity: 0.8;
     cursor: default;
   }
   .overview {
