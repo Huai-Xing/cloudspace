@@ -77,234 +77,233 @@
 </template>
 
 <script>
-import fb from "../firebase";
-export default {
-  data() {
-    return {
-      invalidEmail: false,
-      showReset: false,
-      emailReset: "",
-      user: {
-        name: "",
-        email: "",
-        password: "",
+  import fb from "../firebase";
+  export default {
+    data() {
+      return {
+        invalidEmail: false,
+        showReset: false,
+        emailReset: "",
+        user: {
+          name: "",
+          email: "",
+          password: "",
+        },
+      };
+    },
+    // mtds
+    methods: {
+      toggleResetPwd: function() {
+        this.showReset = !this.showReset;
+        this.emailReset = "";
       },
-    };
-  },
-  // mtds
-  methods: {
-    toggleResetPwd: function () {
-      this.showReset = !this.showReset;
-      this.emailReset = "";
-    },
-    resetpwd: function () {
-      var email = this.emailReset;
-      fb.auth()
-        .sendPasswordResetEmail(email)
-        .then(() => {
-          this.toggleResetPwd();
-          this.invalidEmail = false;
-        })
-        .catch(() => {
-          this.invalidEmail = true;
-        });
-    },
-    letsgo: function () {
-      var email = this.user.email;
-      var password = this.user.password;
-      // var user = this.user;
-      //Signing up
-
-      //Singing in
-      fb.auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((cred) => {
-          alert("Successfully logged into " + cred.user.email);
-          // console.log(cred.user.uid);
-        })
-        .then(() => {
-          this.$router.push({
-            name: "Home",
-            params: { name: this.user.email },
+      resetpwd: function() {
+        var email = this.emailReset;
+        fb.auth()
+          .sendPasswordResetEmail(email)
+          .then(() => {
+            this.toggleResetPwd();
+            this.invalidEmail = false;
+          })
+          .catch(() => {
+            this.invalidEmail = true;
           });
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+      },
+      letsgo: function() {
+        var email = this.user.email;
+        var password = this.user.password;
+        // var user = this.user;
+        //Signing up
 
-      this.user.email = "";
-      this.user.password = "";
-      event.target.reset();
+        //Singing in
+        fb.auth()
+          .signInWithEmailAndPassword(email, password)
+          .then((cred) => {
+            alert("Successfully logged into " + cred.user.email);
+          })
+          .then(() => {
+            this.$router.push({
+              name: "Home",
+              params: { name: this.user.email },
+            });
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+
+        this.user.email = "";
+        this.user.password = "";
+        event.target.reset();
+      },
     },
-  },
 
-  // Fn to push the user to '/login/calendar' once the Let's go button is clicked
-  // logIn: function() {
-  //   // to push user to '/login/calendar'
-  //   this.$router.push({ name: "Calendar" });
+    // Fn to push the user to '/login/calendar' once the Let's go button is clicked
+    // logIn: function() {
+    //   // to push user to '/login/calendar'
+    //   this.$router.push({ name: "Calendar" });
 
-  //   // Other logic (retriving details from firebase for the specific user?) here
-  // },
+    //   // Other logic (retriving details from firebase for the specific user?) here
+    // },
 
-  // beforeRouteUpdate(to, from, next) {
-  //   this.newUser = to.params.newUser;
-  //   next();
-  // },
-  //Register Locally
-  components: {},
-};
+    // beforeRouteUpdate(to, from, next) {
+    //   this.newUser = to.params.newUser;
+    //   next();
+    // },
+    //Register Locally
+    components: {},
+  };
 </script>
 
 <style scoped>
-* {
-  font-weight: lighter;
-  font-size: 13px;
-}
-body {
-  min-width: 100%;
-  width: 100%;
-}
-img {
-  width: 300px;
-  height: 300px;
-}
-ul {
-  position: absolute;
-  right: 10%;
-  top: 2%;
-  list-style-type: None;
-  margin: 0;
-  padding: 0;
-}
+  * {
+    font-weight: lighter;
+    font-size: 13px;
+  }
+  body {
+    min-width: 100%;
+    width: 100%;
+  }
+  img {
+    width: 300px;
+    height: 300px;
+  }
+  ul {
+    position: absolute;
+    right: 10%;
+    top: 2%;
+    list-style-type: None;
+    margin: 0;
+    padding: 0;
+  }
 
-li {
-  font-family: "Lora";
-  display: inline;
-  font-size: 14px;
-  margin-left: 5px;
-  margin-right: 5px;
-  float: right;
-}
+  li {
+    font-family: "Lora";
+    display: inline;
+    font-size: 14px;
+    margin-left: 5px;
+    margin-right: 5px;
+    float: right;
+  }
 
-a {
-  color: black;
-}
+  a {
+    color: black;
+  }
 
-#leftphoto {
-  position: absolute;
-  left: 3%;
-  bottom: 5%;
-  width: 22%;
-  height: auto;
-}
+  #leftphoto {
+    position: absolute;
+    left: 3%;
+    bottom: 5%;
+    width: 22%;
+    height: auto;
+  }
 
-#rightphoto {
-  position: absolute;
-  top: 14%;
-  right: 7%;
-  width: 21%;
-  height: auto;
-}
+  #rightphoto {
+    position: absolute;
+    top: 14%;
+    right: 7%;
+    width: 21%;
+    height: auto;
+  }
 
-#chunk {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+  #chunk {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-#sign {
-  font-family: Lora;
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
+  #sign {
+    font-family: Lora;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
-input {
-  font-family: Roboto;
-  width: 250px;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-top: 3px;
-  margin-bottom: 15px;
-  border-radius: 3px;
-  border-width: thin;
-  border-color: #cccccc;
-  border-style: solid;
-}
+  input {
+    font-family: Roboto;
+    width: 250px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 3px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    border-width: thin;
+    border-color: #cccccc;
+    border-style: solid;
+  }
 
-::placeholder {
-  color: #cccccc;
-  opacity: 1;
-  font-family: Roboto;
-  font-style: italic;
-}
+  ::placeholder {
+    color: #cccccc;
+    opacity: 1;
+    font-family: Roboto;
+    font-style: italic;
+  }
 
-#checkbox {
-  vertical-align: middle;
-  padding: 5px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  width: 20px;
-  border-color: #cccccc;
-}
+  #checkbox {
+    vertical-align: middle;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 20px;
+    border-color: #cccccc;
+  }
 
-#cblabel {
-  font-style: italic;
-  font-size: 11px;
-  vertical-align: middle;
-  color: #cccccc;
-}
+  #cblabel {
+    font-style: italic;
+    font-size: 11px;
+    vertical-align: middle;
+    color: #cccccc;
+  }
 
-#submit {
-  width: 270px;
-  padding: 6px;
-  margin-top: 12px;
-  font-family: Lora;
-  border: none;
-  background-color: #bedaae;
-  color: #fff;
-}
+  #submit {
+    width: 270px;
+    padding: 6px;
+    margin-top: 12px;
+    font-family: Lora;
+    border: none;
+    background-color: #bedaae;
+    color: #fff;
+  }
 
-#submit:hover {
-  box-shadow: 0px 2px 15px #849c7651;
-  transform: translateY(-1px);
-}
+  #submit:hover {
+    box-shadow: 0px 2px 15px #849c7651;
+    transform: translateY(-1px);
+  }
 
-#submit:active,
-#submit:focus {
-  transform: translateY(2px);
-  box-shadow: none;
-  outline: none;
-}
+  #submit:active,
+  #submit:focus {
+    transform: translateY(2px);
+    box-shadow: none;
+    outline: none;
+  }
 
-#forgetpwd {
-  margin-top: 6px;
-  text-align: center;
-  cursor: pointer;
-  font-family: Lora;
-  font-size: 11px;
-  text-decoration: underline;
-}
+  #forgetpwd {
+    margin-top: 6px;
+    text-align: center;
+    cursor: pointer;
+    font-family: Lora;
+    font-size: 11px;
+    text-decoration: underline;
+  }
 
-#forgetpwd:hover {
-  color: red;
-}
+  #forgetpwd:hover {
+    color: red;
+  }
 
-#invalidEmail {
-  margin-top: 0;
-  color: red;
-  font-family: Lora;
-}
+  #invalidEmail {
+    margin-top: 0;
+    color: red;
+    font-family: Lora;
+  }
 
-#reset {
-  width: 270px;
-  padding: 6px;
-  margin-top: 0;
-  font-family: Lora;
-  border: none;
-  background-color: #bedaae;
-}
+  #reset {
+    width: 270px;
+    padding: 6px;
+    margin-top: 0;
+    font-family: Lora;
+    border: none;
+    background-color: #bedaae;
+  }
 </style>

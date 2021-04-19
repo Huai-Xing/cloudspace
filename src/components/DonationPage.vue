@@ -48,7 +48,6 @@
     methods: {
       setDonationAmount: function(val) {
         this.amount = val;
-        console.log(this.amount);
       },
     },
   };

@@ -64,10 +64,6 @@
         }
       },
       endTimer: function(x, y, z) {
-        //y is amount of time taken to end task after timer is up
-        //z is coins
-        //console.log("complete " + x);
-        //console.log("extra " + y);
         this.complete = true;
         this.coin = z;
         this.coinPenalty(y);
@@ -75,7 +71,6 @@
         this.updateData("Completed");
       },
       cancelTimer: function() {
-        //console.log("cancel");
         this.coin = 0;
         this.cancel = true;
         this.$router.push({

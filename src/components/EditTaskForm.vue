@@ -116,248 +116,249 @@
 </template>
 
 <script>
-import Modal from "./Modal";
-import VueTimepicker from "vue2-timepicker";
-import "vue2-timepicker/dist/VueTimepicker.css";
-import fb from "../firebase";
-import { required } from "vuelidate/lib/validators";
-import ToggleButton from "./ToggleButton";
-import vSelect from "vue-select";
-import "vue-select/dist/vue-select.css";
+  import Modal from "./Modal";
+  import VueTimepicker from "vue2-timepicker";
+  import "vue2-timepicker/dist/VueTimepicker.css";
+  import fb from "../firebase";
+  import { required } from "vuelidate/lib/validators";
+  import ToggleButton from "./ToggleButton";
+  import vSelect from "vue-select";
+  import "vue-select/dist/vue-select.css";
 
-function doesNotExist(value) {
-  if (this.addNewCat) {
-    return !this.categoryList.includes(value);
-  } else {
-    return true;
+  function doesNotExist(value) {
+    if (this.addNewCat) {
+      return !this.categoryList.includes(value);
+    } else {
+      return true;
+    }
   }
-}
-function invalidDuration(value) {
-  if (value.hh + value.mm == 0) {
-    return false;
-  } else {
-    return true;
+  function invalidDuration(value) {
+    if (value.hh + value.mm == 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
-}
 
-function minimumDuration(value) {
-  if (value.hh == 0) {
-    return value.mm >= 10;
-  } else {
-    return true;
+  function minimumDuration(value) {
+    if (value.hh == 0) {
+      return value.mm >= 10;
+    } else {
+      return true;
+    }
   }
-}
 
-export default {
-  name: "App",
-  components: {
-    Modal,
-    VueTimepicker,
-    ToggleButton,
-    vSelect,
-  },
-  props: ["idname"],
+  export default {
+    name: "App",
+    components: {
+      Modal,
+      VueTimepicker,
+      ToggleButton,
+      vSelect,
+    },
+    props: ["idname"],
 
-  data() {
-    return {
-      isModalVisible: false,
-      updatedtask: {
-        category: "",
-        title: "",
-        duration: {
-          hh: "",
-          mm: "",
+    data() {
+      return {
+        isModalVisible: false,
+        updatedtask: {
+          category: "",
+          title: "",
+          duration: {
+            hh: "",
+            mm: "",
+          },
+          breakTime: 0,
+          actualTime: 0,
+          coinsEarned: 0,
         },
-        breakTime: 0,
-        actualTime: 0,
-        coinsEarned: 0,
-      },
-      newcategory: "",
-      disabledselect: false,
-      disabledinput: false,
-      user: fb.auth().currentUser.uid,
-      categoryList: [],
-      currentTask: [],
-      addNewCat: false,
-    };
-  },
-  methods: {
-    fetchCategoryList: function () {
-      fb.firestore()
-        .collection("users")
-        .doc(this.user)
-        .get()
-        .then((doc) => {
-          this.categoryList = doc.data().categoryList;
-        });
+        newcategory: "",
+        disabledselect: false,
+        disabledinput: false,
+        user: fb.auth().currentUser.uid,
+        categoryList: [],
+        currentTask: [],
+        addNewCat: false,
+      };
     },
-    fetchToBeEdited: function () {
-      fb.firestore()
-        .collection("tasks")
-        .doc(this.user)
-        .collection("tasksList")
-        .doc(this.idname)
-        .get()
-        .then((doc) => {
-          this.currentTask = doc.data();
-          this.updatedtask.title = this.currentTask.title;
-          this.updatedtask.category = this.currentTask.category;
-          this.updatedtask.duration.hh = this.currentTask.duration.hh;
-          this.updatedtask.duration.mm = this.currentTask.duration.mm;
-        });
-    },
-    showModal() {
-      this.isModalVisible = true;
-    },
-    closeModal() {
-      this.resetForm();
-      this.isModalVisible = false;
-    },
-    updateTask() {
-      this.$v.$touch();
-      //managing newcategories
-      if (!this.$v.$invalid) {
-        if (this.addNewCat) {
-          this.categoryList.push(this.updatedtask.category);
-
-          fb.firestore().collection("users").doc(this.user).update({
-            categoryList: this.categoryList,
+    methods: {
+      fetchCategoryList: function() {
+        fb.firestore()
+          .collection("users")
+          .doc(this.user)
+          .get()
+          .then((doc) => {
+            this.categoryList = doc.data().categoryList;
           });
-        } else;
-
-        //updating task to tasksList
+      },
+      fetchToBeEdited: function() {
         fb.firestore()
           .collection("tasks")
           .doc(this.user)
           .collection("tasksList")
           .doc(this.idname)
-          .update(this.updatedtask)
-          .then(() => {
-            location.reload();
+          .get()
+          .then((doc) => {
+            this.currentTask = doc.data();
+            this.updatedtask.title = this.currentTask.title;
+            this.updatedtask.category = this.currentTask.category;
+            this.updatedtask.duration.hh = this.currentTask.duration.hh;
+            this.updatedtask.duration.mm = this.currentTask.duration.mm;
           });
+      },
+      showModal() {
+        this.isModalVisible = true;
+      },
+      closeModal() {
+        this.resetForm();
+        this.isModalVisible = false;
+      },
+      updateTask() {
+        this.$v.$touch();
+        //managing newcategories
+        if (!this.$v.$invalid) {
+          if (this.addNewCat) {
+            this.categoryList.push(this.updatedtask.category);
 
-        //close modal and reset values
-        this.closeModal();
-        console.log("this method works");
-      } else {
-        event.preventDefault();
-      }
-    },
-    addNewCategory: function (value) {
-      console.log(value);
-      this.addNewCat = value;
-    },
-    resetForm() {
-      this.updatedtask.title = this.currentTask.title;
-      this.updatedtask.category = this.currentTask.category;
-      this.updatedtask.duration.hh = this.currentTask.duration.hh;
-      this.updatedtask.duration.mm = this.currentTask.duration.mm;
-      this.$v.$reset();
-    },
-  },
-  validations: {
-    updatedtask: {
-      title: {
-        required,
+            fb.firestore()
+              .collection("users")
+              .doc(this.user)
+              .update({
+                categoryList: this.categoryList,
+              });
+          } else;
+
+          //updating task to tasksList
+          fb.firestore()
+            .collection("tasks")
+            .doc(this.user)
+            .collection("tasksList")
+            .doc(this.idname)
+            .update(this.updatedtask)
+            .then(() => {
+              location.reload();
+            });
+
+          //close modal and reset values
+          this.closeModal();
+        } else {
+          event.preventDefault();
+        }
       },
-      category: {
-        required,
-        doesNotExist,
+      addNewCategory: function(value) {
+        this.addNewCat = value;
       },
-      duration: {
-        invalidDuration,
-        minimumDuration,
-        hh: {
+      resetForm() {
+        this.updatedtask.title = this.currentTask.title;
+        this.updatedtask.category = this.currentTask.category;
+        this.updatedtask.duration.hh = this.currentTask.duration.hh;
+        this.updatedtask.duration.mm = this.currentTask.duration.mm;
+        this.$v.$reset();
+      },
+    },
+    validations: {
+      updatedtask: {
+        title: {
           required,
         },
-        mm: {
+        category: {
           required,
+          doesNotExist,
+        },
+        duration: {
+          invalidDuration,
+          minimumDuration,
+          hh: {
+            required,
+          },
+          mm: {
+            required,
+          },
         },
       },
     },
-  },
 
-  created() {
-    this.fetchCategoryList();
-    this.fetchToBeEdited();
-  },
-};
+    created() {
+      this.fetchCategoryList();
+      this.fetchToBeEdited();
+    },
+  };
 </script>
 
 <style scoped>
-* {
-  font-family: "Source Sans Pro";
-  font-size: 12px;
-  text-align: left;
-}
-img {
-  height: 23px;
-  width: auto;
-  margin: 8px;
-  text-align: center;
-  cursor: pointer;
-}
-button {
-  font-family: Lora;
-  font-size: 12px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
-  border: none;
-  cursor: pointer;
-  width: 100px;
-  padding: 5px 12px 5px 12px;
-  margin: 8px;
-}
-button:hover {
-  background-color: #ffffff;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-}
-button:active,
-button:focus {
-  background-color: #fff;
-  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
-  transform: translateY(2px);
-  outline: none;
-}
-label {
-  font-family: Lora;
-  font-size: 12px;
-  padding-right: 10px;
-}
-.row {
-  display: flex;
-  padding: 3px;
-  align-items: center;
-}
-.required {
-  font-family: lora;
-  font-size: 10px;
-  padding: 10px;
-  color: rgb(255, 96, 96);
-}
-input,
-select {
-  height: 30px;
-  padding-left: 8px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  flex-grow: 1;
-  color: rgb(110, 110, 110);
-}
-.v-select {
-  /* border: none; */
-  height: 30px;
-  margin-top: 3px;
-}
-::placeholder {
-  color: rgb(110, 110, 110);
-}
-.time-picker {
-  margin: 5px;
-}
-.error {
-  color: red;
-}
+  * {
+    font-family: "Source Sans Pro";
+    font-size: 12px;
+    text-align: left;
+  }
+  img {
+    height: 23px;
+    width: auto;
+    margin: 8px;
+    text-align: center;
+    cursor: pointer;
+  }
+  button {
+    font-family: Lora;
+    font-size: 12px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    padding: 5px 12px 5px 12px;
+    margin: 8px;
+  }
+  button:hover {
+    background-color: #ffffff;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  button:active,
+  button:focus {
+    background-color: #fff;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    transform: translateY(2px);
+    outline: none;
+  }
+  label {
+    font-family: Lora;
+    font-size: 12px;
+    padding-right: 10px;
+  }
+  .row {
+    display: flex;
+    padding: 3px;
+    align-items: center;
+  }
+  .required {
+    font-family: lora;
+    font-size: 10px;
+    padding: 10px;
+    color: rgb(255, 96, 96);
+  }
+  input,
+  select {
+    height: 30px;
+    padding-left: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    flex-grow: 1;
+    color: rgb(110, 110, 110);
+  }
+  .v-select {
+    /* border: none; */
+    height: 30px;
+    margin-top: 3px;
+  }
+  ::placeholder {
+    color: rgb(110, 110, 110);
+  }
+  .time-picker {
+    margin: 5px;
+  }
+  .error {
+    color: red;
+  }
 </style>

@@ -174,7 +174,6 @@
     },
     methods: {
       fetchCategoryList: function() {
-        console.log(this.user);
         fb.firestore()
           .collection("users")
           .doc(this.user)
@@ -210,7 +209,6 @@
         if (!this.$v.$invalid) {
           if (this.addNewCat) {
             this.categoryList.push(this.newdeadline.category);
-            console.log(this.categoryList);
 
             fb.firestore()
               .collection("users")
@@ -219,8 +217,6 @@
                 categoryList: this.categoryList,
               });
           } else;
-
-          console.log(this.newdeadline);
 
           //adding task to tasksList
           fb.firestore()

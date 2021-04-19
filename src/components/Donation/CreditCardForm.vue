@@ -132,14 +132,6 @@
       donate() {
         this.$v.$reset();
         this.$v.$touch();
-        console.log(this.$v);
-        console.log(this.$v.$invalid);
-        console.log("cardnum" + this.$v.cardNumber.required);
-        console.log("month" + this.$v.expireMonth.required);
-        console.log("year" + this.$v.expireYear.required);
-        console.log("name" + this.$v.name.required);
-        console.log("cvv" + this.$v.cvv.required);
-        console.log("amount" + this.$v.amount.invalidAmount);
         if (
           !this.$v.cardNumber.required ||
           !this.$v.name.required ||
@@ -150,7 +142,6 @@
         ) {
           event.preventDefault();
         } else {
-          console.log("test");
           this.$root.$refs.ThankYouModal.showModal();
         }
       },

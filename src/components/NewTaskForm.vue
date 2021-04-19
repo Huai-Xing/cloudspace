@@ -189,7 +189,6 @@
     },
     methods: {
       fetchCategoryList: function() {
-        console.log(this.user);
         fb.firestore()
           .collection("users")
           .doc(this.user)
@@ -197,7 +196,6 @@
           .then((doc) => {
             this.categoryList = doc.data().categoryList;
           });
-        console.log(this.categoryList);
       },
       showModal() {
         this.isModalVisible = true;
@@ -227,13 +225,9 @@
       },
       handler() {
         event.preventDefault();
-        console.log("rightclick");
       },
       sendTask() {
         this.$v.$touch();
-        console.log(this.$v.$invalid);
-        console.log(this.$v.newtask.category.doesNotExist);
-        console.log(this.addNewCat == true);
 
         this.newtask.date = new Date(Date.parse(this.$route.params.date));
         if (!this.$v.$invalid) {
@@ -241,7 +235,6 @@
           if (this.addNewCat) {
             // if (!this.categoryList.includes(this.newcategory)) {
             this.categoryList.push(this.newtask.category);
-            console.log(this.categoryList);
 
             fb.firestore()
               .collection("users")
@@ -250,8 +243,6 @@
                 categoryList: this.categoryList,
               });
           } else;
-          console.log("test");
-          console.log(this.newtask);
 
           //adding task to tasksList
           fb.firestore()
@@ -268,7 +259,6 @@
         }
       },
       addNewCategory: function(value) {
-        console.log(value);
         this.addNewCat = value;
       },
     },

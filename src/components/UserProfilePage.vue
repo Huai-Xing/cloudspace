@@ -25,7 +25,6 @@
     methods: {
       getImageIdx: function(id, reload) {
         this.imageIdx = id;
-        console.log(id);
         if (reload) {
           location.reload();
         }

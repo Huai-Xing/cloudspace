@@ -229,7 +229,6 @@
       var calCoin = await coinCal(this.totalTime);
       this.coinsToEarn = calCoin[0];
       this.checkCoinReduce(calCoin[1], calCoin[2]);
-      //console.log("COINS: " + this.coinsToEarn);
       // to start the timer immediately when the component gets mounted
       this.startTimer();
     },
@@ -262,8 +261,6 @@
         document.getElementById("cancel").setAttribute("disabled", true);
         this.timeToStop = setInterval(() => (this.timeStop += 1), 1000);
         this.audio.play();
-
-        console.log("method called");
       },
 
       // Fn that increase the value of timePassed by 1unit per sec and recompute the timeLeft value

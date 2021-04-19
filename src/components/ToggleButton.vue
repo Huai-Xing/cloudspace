@@ -71,7 +71,6 @@
         },
         set(newValue) {
           this.currentState = newValue;
-          console.log("ToggleButton");
           this.$emit("change", newValue);
         },
       },
@@ -80,9 +79,9 @@
 </script>
 
 <style scoped>
-.toggle__label {
-  font-size: 10px;
-}
+  .toggle__label {
+    font-size: 10px;
+  }
   .toggle__button {
     vertical-align: middle;
     user-select: none;

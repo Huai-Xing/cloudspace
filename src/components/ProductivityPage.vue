@@ -139,7 +139,6 @@
           });
       },
       drillDown: function(x, bool) {
-        //console.log(x);
         if (bool) {
           this.dateQuery = new Date(x);
         } else {
@@ -202,7 +201,6 @@
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              //console.log(doc.id, " => ", doc.data().date);
               taskList.push(doc.data());
             });
           })

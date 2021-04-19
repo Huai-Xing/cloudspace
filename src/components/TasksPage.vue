@@ -279,7 +279,6 @@
       },
       //Checking which tasks to display
       checkTaskDate: function(task) {
-        console.log(task[1].date.toDate());
         var date = this.date.get("date");
         var month = this.date.get("month");
         var year = this.date.get("year");
@@ -312,8 +311,6 @@
           0,
           0
         );
-        // console.log(start);
-        // console.log(end);
 
         if (this.date >= start && this.date <= end) {
           if (deadline[1].status != "Incomplete") {
@@ -393,7 +390,6 @@
           .then((doc) => {
             let totalseconds =
               doc.data().duration.hh * 3600 + doc.data().duration.mm * 60;
-            console.log(totalseconds);
             let title = doc.data().category + " - " + doc.data().title;
             this.$router.push({
               name: "Timer",
@@ -405,19 +401,6 @@
             });
           });
       },
-      // showInfo: function(event) {
-      //   let doc_id = event.target.getAttribute("idname");
-      //   fb.firestore()
-      //     .collection("tasks")
-      //     .doc(this.user)
-      //     .collection("tasksList")
-      //     .doc(doc_id)
-      //     .get()
-      //     .then((doc) => {
-      //       this.moreInfoPacket = doc.data();
-      //       console.log(this.moreInfoPacket);
-      //     });
-      // },
 
       populateToday: function() {
         this.tasksToday = [];
@@ -433,10 +416,6 @@
       },
 
       onEnd: function(evt) {
-        // console.log(evt);
-        // this.oldIndex = evt.oldIndex;
-        // this.newIndex = evt.newIndex;
-
         const taskRef = fb
           .firestore()
           .collection("tasks")
