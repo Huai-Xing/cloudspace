@@ -99,7 +99,7 @@
                 <!-- <div v-if="checkTaskDate(task)"> -->
 
                 <div class="task-container">
-                  <span class="taskText"> {{ task[1].category }} {{ task[1].index }} </span>
+                  <span class="taskText"> {{ task[1].category }} </span>
                   <span class="taskText"> {{ task[1].title }} </span>
                   <span class="taskText">
                     {{ task[1].duration.hh }}hr {{ task[1].duration.mm }}min
