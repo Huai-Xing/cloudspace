@@ -185,14 +185,14 @@
 
 <script>
   import fb from "../firebase";
-  import EditTaskForm from "./EditTaskForm.vue";
+  import EditTaskForm from "./Tasks/EditTaskForm.vue";
   import MainNavigation from "./MainNavigation.vue";
-  import NewTaskForm from "./NewTaskForm.vue";
+  import NewTaskForm from "./Tasks/NewTaskForm.vue";
   import dayjs from "dayjs";
-  import NewDeadlineForm from "./NewDeadlineForm.vue";
-  import EditDeadlineForm from "./EditDeadlineForm.vue";
-  import DeleteTaskWarning from "./DeleteTaskWarning.vue";
-  import DeleteDeadlineWarning from "./DeleteDeadlineWarning.vue";
+  import NewDeadlineForm from "./Tasks/NewDeadlineForm.vue";
+  import EditDeadlineForm from "./Tasks/EditDeadlineForm.vue";
+  import DeleteTaskWarning from "./Tasks/DeleteTaskWarning.vue";
+  import DeleteDeadlineWarning from "./Tasks/DeleteDeadlineWarning.vue";
   import DeadlinesBox from "./Tasks/DeadlinesBox.vue";
   import CoinBox from "./CoinBox.vue";
 

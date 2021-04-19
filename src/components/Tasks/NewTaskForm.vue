@@ -1,107 +1,103 @@
 <template>
   <div id="app">
-    <img
-      src="../assets/task/edit-col.svg"
-      @click="showModal"
-      v-tooltip.bottom="'Edit task'"
-    />
+    <img src="../../assets/task/add1.png" @click="showModal" class="plusBtn" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
-        You are currently editing: {{ currentTask.category }}-
-        {{ currentTask.title }}
+        Add a New Task
       </template>
 
       <template v-slot:body>
-        <form id="edit-task-form">
+        <form id="new-task-form">
           <div class="row">
-            <label for="title">Title</label>
+            <label for="tasktitle">Title</label>
             <input
-              v-model="$v.updatedtask.title.$model"
+              v-model="$v.newtask.title.$model"
               type="text"
-              id="title"
-              placeholder="Enter a new title"
+              id="tasktitle"
+              placeholder="Give your task a name"
             />
           </div>
-          <div v-if="$v.updatedtask.title.$dirty">
-            <div v-if="!$v.updatedtask.title.required" class="error">
+          <div v-if="$v.newtask.title.$dirty">
+            <div v-if="!$v.newtask.title.required" class="error">
               Title is required
             </div>
           </div>
-
           <br />
+          <div>
+            <div v-if="!addNewCat">
+              <label for="new-task-category">Category</label>
+              <v-select
+                v-model="newtask.category"
+                id="new-task-category"
+                :options="categoryList"
+              >
+              </v-select>
+            </div>
 
-          <div v-if="!addNewCat">
-            <label for="edit-task-category">Category</label>
-            <v-select
-              v-model="updatedtask.category"
-              :disabled="disabledselect"
-              id="edit-task-category"
-              :options="categoryList"
-            >
-            </v-select>
+            <div v-if="addNewCat" class="row">
+              <label for="nt-newcategory">Category</label>
+              <input
+                id="nt-newcategory"
+                type="text"
+                v-model="newtask.category"
+                placeholder="Enter a new category"
+              />
+            </div>
           </div>
-          <div v-if="addNewCat">
-            <label for="et-newcategory">Category</label>
-            <input
-              id="et-newcategory"
-              type="text"
-              v-model="updatedtask.category"
-              placeholder="Enter a new category"
-            />
-          </div>
-
-          <div v-if="$v.updatedtask.category.$dirty && !addNewCat">
-            <div v-if="!$v.updatedtask.category.required" class="error">
+          <div v-if="$v.newtask.category.$dirty && !addNewCat">
+            <div v-if="!$v.newtask.category.required" class="error">
               Category is required
             </div>
           </div>
-          <div v-if="$v.updatedtask.category.$dirty && addNewCat">
-            <div v-if="!$v.updatedtask.category.required" class="error">
+          <div v-if="$v.newtask.category.$dirty && addNewCat">
+            <div v-if="!$v.newtask.category.required" class="error">
               Category is required
             </div>
-            <div v-if="!$v.updatedtask.category.doesNotExist" class="error">
+            <div v-if="!$v.newtask.category.doesNotExist" class="error">
               This category already exists!
             </div>
           </div>
-
           <toggle-button
-            id="switch2"
+            id="switch"
             v-on:change="addNewCategory"
           ></toggle-button>
+
           <br />
-          <label id="duration"> Duration </label>
+          <label for="duration">
+            Duration
+          </label>
           <span id="duration">
             <vue-timepicker
               manual-input
               close-on-complete
-              v-model="$v.updatedtask.duration.hh.$model"
+              v-model="$v.newtask.duration.hh.$model"
               format="HH"
             ></vue-timepicker>
             hr
             <vue-timepicker
               manual-input
               close-on-complete
-              v-model="$v.updatedtask.duration.mm.$model"
+              v-model="$v.newtask.duration.mm.$model"
               format="mm"
             ></vue-timepicker>
             min
           </span>
-          <div v-if="$v.updatedtask.duration.$dirty">
-            <div v-if="!$v.updatedtask.duration.invalidDuration" class="error">
+          <div v-if="$v.newtask.duration.$dirty">
+            <div v-if="!$v.newtask.duration.invalidDuration" class="error">
               Please enter a valid duration
             </div>
-            <div v-if="!$v.updatedtask.duration.minimumDuration" class="error">
+            <div v-if="!$v.newtask.duration.minimumDuration" class="error">
               Tasks must be at least 10 minutes long
             </div>
           </div>
-          <div v-if="$v.updatedtask.duration.hh.$dirty">
-            <div v-if="!$v.updatedtask.duration.hh.required" class="error">
+          <div v-if="$v.newtask.duration.hh.$dirty">
+            <div v-if="!$v.newtask.duration.hh.required" class="error">
               Please enter number of hours
             </div>
           </div>
-          <div v-if="$v.updatedtask.duration.mm.$dirty">
-            <div v-if="!$v.updatedtask.duration.mm.required" class="error">
+          <div v-if="$v.newtask.duration.mm.$dirty">
+            <div v-if="!$v.newtask.duration.mm.required" class="error">
               Please enter number of minutes
             </div>
           </div>
@@ -109,19 +105,21 @@
       </template>
 
       <template v-slot:footer>
-        <button @click.prevent="updateTask">Update</button>
+        <button @click.prevent="sendTask">
+          Submit
+        </button>
       </template>
     </Modal>
   </div>
 </template>
 
 <script>
-  import Modal from "./Modal";
+  import Modal from "../Modal";
   import VueTimepicker from "vue2-timepicker";
   import "vue2-timepicker/dist/VueTimepicker.css";
-  import fb from "../firebase";
+  import fb from "../../firebase";
   import { required } from "vuelidate/lib/validators";
-  import ToggleButton from "./ToggleButton";
+  import ToggleButton from "../ToggleButton";
   import vSelect from "vue-select";
   import "vue-select/dist/vue-select.css";
 
@@ -132,6 +130,7 @@
       return true;
     }
   }
+
   function invalidDuration(value) {
     if (value.hh + value.mm == 0) {
       return false;
@@ -156,14 +155,21 @@
       ToggleButton,
       vSelect,
     },
-    props: ["idname"],
-
+    props: {
+      taskDate: Object,
+      taskCount: Number,
+    },
+    showModal() {
+      this.resetForm();
+      this.isModalVisible = true;
+    },
     data() {
       return {
         isModalVisible: false,
-        updatedtask: {
+        newtask: {
           category: "",
           title: "",
+          status: "Incomplete",
           duration: {
             hh: "",
             mm: "",
@@ -171,13 +177,13 @@
           breakTime: 0,
           actualTime: 0,
           coinsEarned: 0,
+          date: this.taskDate.toDate(),
+          index: this.taskCount,
         },
-        newcategory: "",
-        disabledselect: false,
-        disabledinput: false,
+
         user: fb.auth().currentUser.uid,
         categoryList: [],
-        currentTask: [],
+        //toggle showing add new category
         addNewCat: false,
       };
     },
@@ -191,21 +197,6 @@
             this.categoryList = doc.data().categoryList;
           });
       },
-      fetchToBeEdited: function() {
-        fb.firestore()
-          .collection("tasks")
-          .doc(this.user)
-          .collection("tasksList")
-          .doc(this.idname)
-          .get()
-          .then((doc) => {
-            this.currentTask = doc.data();
-            this.updatedtask.title = this.currentTask.title;
-            this.updatedtask.category = this.currentTask.category;
-            this.updatedtask.duration.hh = this.currentTask.duration.hh;
-            this.updatedtask.duration.mm = this.currentTask.duration.mm;
-          });
-      },
       showModal() {
         this.isModalVisible = true;
       },
@@ -213,12 +204,37 @@
         this.resetForm();
         this.isModalVisible = false;
       },
-      updateTask() {
+      resetForm() {
+        (this.newtask = {
+          category: "",
+          title: "",
+          status: "Incomplete",
+          duration: {
+            hh: "",
+            mm: "",
+          },
+          breakTime: 0,
+          actualTime: 0,
+          coinsEarned: 0,
+          date: this.taskDate.toDate(),
+        }),
+          (this.addNewCat = false);
+        document.getElementById("new-task-form").reset();
+        //resetting validation
+        this.$v.$reset();
+      },
+      handler() {
+        event.preventDefault();
+      },
+      sendTask() {
         this.$v.$touch();
-        //managing newcategories
+
+        this.newtask.date = new Date(Date.parse(this.$route.params.date));
         if (!this.$v.$invalid) {
+          //managing newcategories
           if (this.addNewCat) {
-            this.categoryList.push(this.updatedtask.category);
+            // if (!this.categoryList.includes(this.newcategory)) {
+            this.categoryList.push(this.newtask.category);
 
             fb.firestore()
               .collection("users")
@@ -228,16 +244,13 @@
               });
           } else;
 
-          //updating task to tasksList
+          //adding task to tasksList
           fb.firestore()
             .collection("tasks")
             .doc(this.user)
             .collection("tasksList")
-            .doc(this.idname)
-            .update(this.updatedtask)
-            .then(() => {
-              location.reload();
-            });
+            .add(this.newtask)
+            .then(() => location.reload());
 
           //close modal and reset values
           this.closeModal();
@@ -248,16 +261,9 @@
       addNewCategory: function(value) {
         this.addNewCat = value;
       },
-      resetForm() {
-        this.updatedtask.title = this.currentTask.title;
-        this.updatedtask.category = this.currentTask.category;
-        this.updatedtask.duration.hh = this.currentTask.duration.hh;
-        this.updatedtask.duration.mm = this.currentTask.duration.mm;
-        this.$v.$reset();
-      },
     },
     validations: {
-      updatedtask: {
+      newtask: {
         title: {
           required,
         },
@@ -280,7 +286,6 @@
 
     created() {
       this.fetchCategoryList();
-      this.fetchToBeEdited();
     },
   };
 </script>
@@ -289,14 +294,22 @@
   * {
     font-family: "Source Sans Pro";
     font-size: 12px;
-    text-align: left;
   }
-  img {
-    height: 23px;
-    width: auto;
-    margin: 8px;
-    text-align: center;
+  .plusBtn {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: none;
     cursor: pointer;
+    height: 22px;
+    width: 22px;
+    padding: 5px;
+  }
+  .plusBtn:hover,
+  .plusBtn:active {
+    box-shadow: inset 0px 0px 2px #c1c1c1;
+    transform: translateY(4px);
+    outline: none;
   }
   button {
     font-family: Lora;
@@ -358,6 +371,21 @@
   .time-picker {
     margin: 5px;
   }
+
+  /* img {
+    width: 38px;
+    height: 38px;
+  }
+  button {
+    font-family: Lora;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    padding: 5px 12px 5px 12px;
+  } */
   .error {
     color: red;
   }
