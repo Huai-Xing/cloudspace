@@ -195,7 +195,7 @@
   }
 
   input {
-    font-family: Roboto;
+    font-family: Source Sans Pro;
     width: 250px;
     padding-top: 7px;
     padding-bottom: 7px;
@@ -212,7 +212,7 @@
   ::placeholder {
     color: #cccccc;
     opacity: 1;
-    font-family: Roboto;
+    font-family: Source Sans Pro;
     font-style: italic;
   }
 

@@ -91,7 +91,7 @@
   }
   /* img height : 110 */
   .info {
-    font-family: Roboto;
+    font-family: Source Sans Pro;
     font-size: 10px;
     padding: 14px 20px 0px 20px;
     line-height: 16px;
@@ -101,7 +101,7 @@
   /* info height : 100 + 10 */
   .backText {
     font-size: 12px;
-    font-family: Roboto;
+    font-family: Source Sans Pro;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     cursor: pointer;
