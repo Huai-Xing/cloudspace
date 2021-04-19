@@ -72,7 +72,7 @@
       </div>
       <div v-if="$v.$dirty" class="error">
         <div
-          v-if="
+          v-show="
             !$v.cardNumber.required ||
               !$v.name.required ||
               !$v.expireMonth.required ||
@@ -178,12 +178,13 @@
   }
   .card-form {
     max-width: 430px;
-    margin: auto 150px auto auto;
+    /* margin: auto 150px auto auto; */
     width: 100%;
+    display: inline-flex;
   }
   .card-form__inner {
     background: #fff;
-    box-shadow: -10px 0px 60px -10px rgba(90, 116, 148, 0.4);
+    box-shadow: -10px 0px 20px -10px rgba(90, 116, 148, 0.2);
     border-radius: 0px 20px 20px 0px;
     padding: 1% 10% 7% 3%;
   }
@@ -256,6 +257,9 @@
   }
   .error {
     color: red;
+  }
+  .error-space {
+    height: 40px;
   }
   .donate-btn {
     width: 100%;

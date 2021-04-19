@@ -14,7 +14,7 @@
           v-bind:class="{ active: isActive == 'Profile' }"
           exact
         >
-          <img :src="getImageURL(imageIdx)" class="profile_btn" />
+          <img :src="getImageURL(imageid)" class="profile_btn" />
         </router-link>
       </li>
     </ul>
@@ -104,7 +104,7 @@
         isActive: "",
         date: dayjs(),
         user: fb.auth().currentUser.uid,
-        imageid: 0,
+        imageid: this.imageIdx,
       };
     },
     /*
@@ -157,6 +157,16 @@
     },
     created() {
       this.isActive = this.$route.name;
+      if (this.imageIdx === undefined) {
+        console.log("test");
+        fb.firestore()
+          .collection("users")
+          .doc(this.user)
+          .get()
+          .then((doc) => {
+            this.imageid = doc.data().user.imageIdx;
+          });
+      }
     },
   };
 </script>
