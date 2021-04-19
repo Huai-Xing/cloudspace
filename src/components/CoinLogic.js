@@ -19,7 +19,11 @@ function countAdvance(x, taskList) {
     //console.log(averageTR);
     if (taskList.length < 10) {
         if (taskList.length >= 5) {
-            return [basicCoins,averageTR,1];
+            if (averageTR < 0.8 || averageTR > 1.2) {
+                return [basicCoins,averageTR,1];
+            } else {
+                return [basicCoins,averageTR,0];
+            }
         } else {
             return [basicCoins,averageTR,0];
         }
