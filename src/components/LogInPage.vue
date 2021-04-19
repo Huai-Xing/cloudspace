@@ -28,7 +28,7 @@
 
           <label for="password">Password:</label><br />
           <input
-            type="text"
+            type="password"
             id="password"
             name="password"
             placeholder="Enter your password"
@@ -36,8 +36,8 @@
             v-model="user.password"
           /><br />
 
-          <input type="checkbox" id="checkbox" />
-          <label for="checkbox" id="cblabel">Keep me logged in</label><br />
+          <!-- <input type="checkbox" id="checkbox" /> -->
+          <!-- <label for="checkbox" id="cblabel">Keep me logged in</label><br /> -->
 
           <button type="submit" value="Submit" id="submit">Let's go!</button>
           <br />

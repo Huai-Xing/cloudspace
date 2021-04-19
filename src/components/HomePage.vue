@@ -167,19 +167,6 @@ export default {
         .collection("tasks")
         .doc(uid)
         .collection("deadlinesList")
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            //console.log(doc.id, " => ", doc.data());
-            if (this.checkDate(doc.data().datedue)) {
-              this.deadline.push(doc.data());
-            }
-          });
-        });
-      fb.firestore()
-        .collection("tasks")
-        .doc(uid)
-        .collection("deadlinesList")
         .orderBy("datedue") // sort by date
         .where("datedue", ">", today.toISOString().substring(0, 10)) // query dates after today
         .get()
@@ -325,7 +312,7 @@ li > p {
 }
 .taskStatus {
   border-radius: 0px 20px 20px 0px;
-  border-left: 6px solid white;
+  border-left: 4px solid white;
   background-color: #81b76240;
   padding: 14px;
   margin-bottom: 8px;
