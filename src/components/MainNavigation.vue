@@ -125,6 +125,9 @@
       },
       getImageURL: function(avatar) {
         var val = avatar + 1;
+        if (!val) {
+          val = 1;
+        }
         return require("../assets/avatar/Avatar_" + val + ".png");
       },
     },

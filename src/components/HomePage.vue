@@ -23,8 +23,8 @@
                 </p>
                 <div class="itemList">
                   <li
-                    v-for="data in task"
-                    v-bind:key="data.title"
+                    v-for="(data, index) in task"
+                    v-bind:key="data.title + index"
                     v-on:click="goToTaskPage('today')"
                   >
                     <p class="taskContent">
@@ -61,8 +61,8 @@
                 </p>
                 <div class="itemList">
                   <li
-                    v-for="data in deadline"
-                    v-bind:key="data"
+                    v-for="(data, index) in deadline"
+                    v-bind:key="data + index"
                     v-on:click="goToTaskPage(data.datedue)"
                   >
                     <p class="deadlineStatus">
