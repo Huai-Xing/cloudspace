@@ -33,7 +33,7 @@ export default {
       } else {
         this.SelectedDate = dayjs();
       }
-      if (this.SelectedDate.get("month") == dayjs().get("month")) {
+      if (this.SelectedDate.get("month") == dayjs().get("month") && this.SelectedDate.get("year") == dayjs().get("year")) {
         this.isToday = false;
       } else {
         this.isToday = true;
