@@ -232,7 +232,7 @@
     box-shadow: none;
     border: 1px solid #ced6e0;
     transition: all 0.3s ease-in-out;
-    font-size: 18px;
+    font-size: 14px;
     padding: 3px 7px;
     background: none;
     color: #1a3b5d;
