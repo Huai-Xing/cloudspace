@@ -6,8 +6,8 @@
       <CalHeader v-on:changeMonth="reGenerate"></CalHeader>
       <ul>
         <CalCell
-          v-for="date in dates"
-          v-bind:key="date"
+          v-for="(date, index) in dates"
+          v-bind:key="date + index"
           :date="date"
           :selectedDate="selectedDate"
         ></CalCell>
@@ -27,8 +27,6 @@
       return {
         dates: [],
         selectedDate: dayjs(),
-        //data: [],
-        //coins: 329,
         imageIdx: this.$route.params.image,
       };
     },
@@ -48,23 +46,6 @@
         }
         this.dates = days;
       },
-      /*
-    fetchData: function () {
-      database
-        .collection("task")
-        .where("UID", "==", uid)
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            this.data.push({
-              date: doc.data().DateCreated,
-              category: doc.data().Category,
-              TaskName: doc.data().TaskName,
-            })
-          });
-        });
-    },
-    */
     },
     components: {
       CalHeader: CalHeader,
