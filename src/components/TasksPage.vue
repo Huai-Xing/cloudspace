@@ -704,13 +704,13 @@
   .man {
     height: 200px;
     width: auto;
-    opacity: 85%;
+    opacity: 0.85;
     margin-left: 30px;
   }
   .signpost {
     height: 260px;
     margin-top: -40px;
     margin-left: 50px;
-    opacity: 80%;
+    opacity: 0.8;
   }
 </style>
