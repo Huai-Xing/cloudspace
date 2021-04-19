@@ -15,6 +15,7 @@
               v-bind:key="i"
             ></span>
 
+<!-- add v-if tree not undefined -->
             <tree-slide
               v-for="(tree, index) in data"
               v-bind:key="tree.name"
