@@ -1,7 +1,7 @@
 <template>
   <div style="overflow: hidden">
     <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+    <appNav v-bind:imageIdx="imageIdx"></appNav>
 
     <div class="plantTreePage">
       <p class="coinText">You have {{ coins }} coins!</p>
@@ -74,6 +74,7 @@ export default {
       visibleImg: 0,
       direction: "",
       data: [],
+      imageIdx: this.$route.params.image,
     };
   },
   computed: {
@@ -134,9 +135,7 @@ export default {
         .get()
         .then((snap) => {
           snap.forEach((doc) => {
-            var newData = doc.data();
-            newData.id = doc.id;
-            this.data.push(newData);
+            this.data.push(doc.data());
           });
         });
     },
@@ -144,7 +143,7 @@ export default {
       return this.coins >= price;
     },
   },
-  created() {
+  mounted() {
     this.fetchCoins();
     this.fetchData();
   },

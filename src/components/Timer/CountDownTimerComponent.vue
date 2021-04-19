@@ -1,5 +1,11 @@
 <template>
   <div>
+    <audio controls v-if="false">
+      <source
+        src="../../assets/timer/Animal Crossing New Horizons Soundtrack - Welcome Horizons (Full Version).mp3"
+        id="audio"
+      />
+    </audio>
     <h2 id="timer-title">{{ title }}</h2>
 
     <div class="timer-container">
@@ -54,7 +60,9 @@
           </span>
         </span>
       </p>
-      <p id="coins-reduce" v-show="coinsReduced != ''">{{coinsReduced}}</p>
+      <p id="coins-reduce" v-show="coinsReduced">
+        Coins are reduced. See info for more details.
+      </p>
       <!-- Timer completes -->
       <button id="done" class="timerControlledBtns" @click="doneTimer()">
         <span class="tooltiptext">Complete task</span>
@@ -93,6 +101,7 @@
 
 <script>
   import coinCal from ".././CoinLogic.js";
+  import alarm from "../../assets/timer/audio.mp3";
   const FULL_DASH_ARRAY = 283;
   const WARNING_THRESHOLD = 0.25;
   const ALERT_THRESHOLD = 0.1;
@@ -130,7 +139,8 @@
         totalTime: 0,
         timeToStop: null,
         timeStop: 0,
-        coinsReduced: "",
+        coinsReduced: false,
+        audio: new Audio(alarm),
       };
     },
 
@@ -212,7 +222,8 @@
 
     async created() {
       this.title = this.taskTitle;
-      this.totalTime = parseInt(this.currentTimer) + parseInt(this.timerTimePassed);
+      this.totalTime =
+        parseInt(this.currentTimer) + parseInt(this.timerTimePassed);
       this.timePassed = parseInt(this.timerTimePassed);
       this.coinsToEarn = parseInt(this.coin);
       var calCoin = await coinCal(this.totalTime);
@@ -246,6 +257,9 @@
         document.getElementById("pause").setAttribute("disabled", true);
         document.getElementById("cancel").setAttribute("disabled", true);
         this.timeToStop = setInterval(() => (this.timeStop += 1), 1000);
+        this.audio.play();
+
+        console.log("method called");
       },
 
       // Fn that increase the value of timePassed by 1unit per sec and recompute the timeLeft value
@@ -256,6 +270,7 @@
 
       doneTimer: function() {
         this.$emit("end", this.timePassed, this.timeStop, this.coinsToEarn);
+        this.audio.pause();
       },
 
       pauseTimer: function() {
@@ -367,7 +382,7 @@
     color: red;
     width: 310px;
   }
-  
+
   .buttons {
     display: block;
     margin-left: auto;

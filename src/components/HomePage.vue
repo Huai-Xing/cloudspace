@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+    <appNav v-bind:imageIdx="imageIdx"></appNav>
     <div class="head">
       <div class="dashboard">
         <span class="leftDashboard">
@@ -111,6 +111,7 @@ export default {
         "Dec",
       ],
       today: new Date(),
+      imageIdx: this.$route.params.image,
     };
   },
   //Register Locally
@@ -126,6 +127,7 @@ export default {
       return this.deadline.length == 0;
     },
   },
+
   methods: {
     fetchData: async function () {
       var currentUser = fb.auth().currentUser;
@@ -137,6 +139,7 @@ export default {
         .get()
         .then((doc) => {
           this.name = "Hello, " + doc.data().user.name + "!";
+          this.imageIdx = doc.data().user.imageIdx;
         });
     },
     fetchAll: function () {
@@ -158,6 +161,19 @@ export default {
           querySnapshot.forEach((doc) => {
             //console.log(doc.id, " => ", doc.data());
             this.task.push(doc.data());
+          });
+        });
+      fb.firestore()
+        .collection("tasks")
+        .doc(uid)
+        .collection("deadlinesList")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            //console.log(doc.id, " => ", doc.data());
+            if (this.checkDate(doc.data().datedue)) {
+              this.deadline.push(doc.data());
+            }
           });
         });
       fb.firestore()

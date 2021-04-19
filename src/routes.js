@@ -12,6 +12,7 @@ import ProductivityPage from "./components/ProductivityPage.vue";
 import TasksPage from "./components/TasksPage.vue";
 import TaskTimer from "./components/TaskTimer.vue";
 import PlantATreePage from "./components/PlantATreePage.vue";
+import DonationPage from "./components/DonationPage.vue";
 
 //firebase
 import fb from "./firebase";
@@ -172,6 +173,22 @@ export default [
           next("/signin/home");
         } else {
           next();
+        }
+      });
+    },
+  },
+  {
+    path: "/signin/donate",
+    name: "Donate",
+    component: DonationPage,
+    props: true,
+    meta: { requiresAuth: true },
+    beforeEnter: (to, from, next) => {
+      fb.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          next();
+        } else {
+          next("/signin");
         }
       });
     },

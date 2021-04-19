@@ -1,7 +1,7 @@
 <template>
   <div id="full-content">
     <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+    <appNav v-bind:imageIdx="imageIdx"></appNav>
     <!-- ProductivityPage contents -->
     <div class="dashboard-content">
       <div class="left">
@@ -37,7 +37,9 @@
         <hr class="line" />
         <div class="content-item-tree">
           <p class="tree-bottom-title">Planted Trees</p>
-          <span id="number-tree">Total number of trees planted: {{ treeList.length }}</span>
+          <span id="number-tree"
+            >Total number of trees planted: {{ treeList.length }}</span
+          >
           <div class="tree-field">
             <p id="tree-default" v-show="treeList.length == 0">
               No trees are planted yet...<br />Buy one now with coins or donate
@@ -112,6 +114,7 @@ export default {
       datacollectionLine: null,
       datacollectionBar: null,
       datacollectionRadar: null,
+      imageIdx: this.$route.params.image,
     };
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+    <appNav v-bind:imageIdx="imageIdx"></appNav>
 
     <coin-box :coins="coins"></coin-box>
 
@@ -82,10 +82,10 @@
           <span class="taskLabel"> Status </span>
         </div>
 
-        <div v-if="tasksToday.length===0 && dataLoaded" class="noTasksToday"> 
-          <img class="man" src="../assets/task/task-man.png">
-          <p> You have no tasks for the day! </p>
-          <img class="signpost" src="../assets/task/task-sign.png">
+        <div v-if="tasksToday.length === 0 && dataLoaded" class="noTasksToday">
+          <img class="man" src="../assets/task/task-man.png" />
+          <p>You have no tasks for the day!</p>
+          <img class="signpost" src="../assets/task/task-sign.png" />
         </div>
 
         <div class="tasksList" v-if="tasksToday.length > 0">
@@ -212,6 +212,7 @@ export default {
       updatedCheckedDeadlines: [],
       showupdatedCheckedDeadlines: false,
       toggleDeadlineText: "Show completed deadlines",
+      imageIdx: this.$route.params.image,
     };
   },
   //Register Locally
@@ -404,6 +405,19 @@ export default {
           });
         });
     },
+    // showInfo: function(event) {
+    //   let doc_id = event.target.getAttribute("idname");
+    //   fb.firestore()
+    //     .collection("tasks")
+    //     .doc(this.user)
+    //     .collection("tasksList")
+    //     .doc(doc_id)
+    //     .get()
+    //     .then((doc) => {
+    //       this.moreInfoPacket = doc.data();
+    //       console.log(this.moreInfoPacket);
+    //     });
+    // },
 
     populateToday: function () {
       this.tasksToday = [];
@@ -413,9 +427,9 @@ export default {
           this.tasksToday.push(item);
         }
       }
-      this.tasksToday.sort(function(a,b) { 
-        return parseInt(a[1].index) - parseInt(b[1].index)
-      })
+      this.tasksToday.sort(function (a, b) {
+        return parseInt(a[1].index) - parseInt(b[1].index);
+      });
     },
 
     onEnd: function (evt) {
@@ -423,13 +437,19 @@ export default {
       // this.oldIndex = evt.oldIndex;
       // this.newIndex = evt.newIndex;
 
-      const taskRef = fb.firestore().collection("tasks").doc(this.user).collection("tasksList");
+      const taskRef = fb
+        .firestore()
+        .collection("tasks")
+        .doc(this.user)
+        .collection("tasksList");
 
       // update changed task
-      taskRef.doc(this.tasksToday[evt.oldIndex][0]).update({"index": evt.newIndex})
-  
+      taskRef
+        .doc(this.tasksToday[evt.oldIndex][0])
+        .update({ index: evt.newIndex });
+
       // update affected tasks
-      var affectedTasks = [] //array of doc id 
+      var affectedTasks = []; //array of doc id
       var inc = 0;
       var i;
 
@@ -439,20 +459,24 @@ export default {
           affectedTasks.push(this.tasksToday[i][0]);
         }
         inc = 1;
-      // if task shifts down
+        // if task shifts down
       } else if (evt.oldIndex < evt.newIndex) {
-        for (i = evt.oldIndex+1; i <= evt.newIndex; i++) {
+        for (i = evt.oldIndex + 1; i <= evt.newIndex; i++) {
           affectedTasks.push(this.tasksToday[i][0]);
         }
         inc = -1;
       }
 
-      taskRef.where(fb.firestore.FieldPath.documentId(), 'in', affectedTasks)
+      taskRef
+        .where(fb.firestore.FieldPath.documentId(), "in", affectedTasks)
         .get()
-        .then(snap => {
-          snap.forEach(task => taskRef.doc(task.id).update({"index": fb.firestore.FieldValue.increment(inc)}));
-        })
-      
+        .then((snap) => {
+          snap.forEach((task) =>
+            taskRef
+              .doc(task.id)
+              .update({ index: fb.firestore.FieldValue.increment(inc) })
+          );
+        });
     },
   },
   created() {
@@ -657,15 +681,15 @@ img {
   width: 6px;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #fff;
-}
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #fff;
+  }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
