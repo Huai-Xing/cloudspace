@@ -498,6 +498,9 @@
 </script>
 
 <style scoped>
+  * {
+    font-family: "Source Sans Pro";
+  }
   .task {
     margin-left: 230px;
   }

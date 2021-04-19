@@ -1,10 +1,10 @@
 /* jshint esversion: 6 */
 
-import { Radar, mixins } from 'vue-chartjs';
+import { Radar, mixins } from "vue-chartjs";
 const { reactiveProp } = mixins;
-import Chart from 'chart.js';
+import Chart from "chart.js";
 
-Chart.defaults.global.defaultFontFamily = 'roboto';
+Chart.defaults.global.defaultFontFamily = "Source Sans Pro";
 
 export default {
   extends: Radar,
@@ -12,10 +12,10 @@ export default {
   props: {
     options: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  mounted () {
-    this.renderChart(this.chartData, this.options)
+  mounted() {
+    this.renderChart(this.chartData, this.options);
   },
-}
+};

@@ -276,8 +276,8 @@
     vertical-align: middle;
   } */
   * {
-    font-family: Roboto;
-    font-size: 10px;
+    font-family: "Source Sans Pro";
+    font-size: 12px;
   }
   .plusBtn {
     background-color: white;
@@ -289,7 +289,8 @@
     width: 22px;
     padding: 5px;
   }
-  .plusBtn:hover, .plusBtn:active {
+  .plusBtn:hover,
+  .plusBtn:active {
     box-shadow: inset 0px 0px 2px #c1c1c1;
     transform: translateY(4px);
     outline: none;

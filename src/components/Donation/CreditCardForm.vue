@@ -60,7 +60,7 @@
           <div class="card-input">
             <label for="cardCvv" class="card-input__label">CVV</label>
             <input
-              type="text"
+              type="number"
               class="card-input__input"
               id="cardCvv"
               v-model="$v.cvv.$model"
@@ -276,5 +276,15 @@
   }
   .donate-btn:hover {
     background: #318f83;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 </style>

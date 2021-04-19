@@ -61,7 +61,7 @@
         </span>
       </p>
       <p id="coins-reduce" v-show="coinsReduced">
-        Coins are reduced. See info for more details.
+        {{ coinsReduced }}
       </p>
       <!-- Timer completes -->
       <button id="done" class="timerControlledBtns" @click="doneTimer()">
@@ -238,17 +238,21 @@
       checkCoinReduce: function(averageTR, penalise) {
         if (penalise == 2) {
           if (averageTR > 1) {
-            this.coinsReduced = "Warning: Coins are reduced as you have been frequently underallocating time for tasks. See info for more details.";
+            this.coinsReduced =
+              "Warning: Coins are reduced as you have been frequently underallocating time for tasks. See info for more details.";
           } else {
-            this.coinsReduced = "Warning: Coins are reduced as you have been frequently overallocating time for tasks. See info for more details.";
+            this.coinsReduced =
+              "Warning: Coins are reduced as you have been frequently overallocating time for tasks. See info for more details.";
           }
         } else if (penalise == 0) {
           this.coinsReduced == "";
         } else {
           if (averageTR < 1) {
-            this.coinsReduced = "Warning: You have been frequently overallocating time for tasks, please adjust time allocation for future tasks to prevent incurring coins penalty.";
+            this.coinsReduced =
+              "Warning: You have been frequently overallocating time for tasks, please adjust time allocation for future tasks to prevent incurring coins penalty.";
           } else {
-            this.coinsReduced = "Warning: You have been frequently underallocating time for tasks, please adjust time allocation for future tasks to prevent incurring coins penalty.";
+            this.coinsReduced =
+              "Warning: You have been frequently underallocating time for tasks, please adjust time allocation for future tasks to prevent incurring coins penalty.";
           }
         }
       },

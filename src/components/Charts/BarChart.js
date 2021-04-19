@@ -1,15 +1,25 @@
 /* jshint esversion: 6 */
 
-import { Bar, mixins } from 'vue-chartjs';
+import { Bar, mixins } from "vue-chartjs";
 const { reactiveProp } = mixins;
-import Chart from 'chart.js';
+import Chart from "chart.js";
 
-Chart.defaults.global.defaultFontFamily = 'roboto';
-Chart.elements.Rectangle.prototype.draw = function () {
-
+Chart.defaults.global.defaultFontFamily = "Source Sans Pro";
+Chart.elements.Rectangle.prototype.draw = function() {
   var ctx = this._chart.ctx;
   var vm = this._view;
-  var left, right, top, bottom, signX, signY, borderSkipped, radius, width, height, x, y;
+  var left,
+    right,
+    top,
+    bottom,
+    signX,
+    signY,
+    borderSkipped,
+    radius,
+    width,
+    height,
+    x,
+    y;
   var borderWidth = vm.borderWidth;
   var cornerRadius = 4;
 
@@ -19,16 +29,18 @@ Chart.elements.Rectangle.prototype.draw = function () {
   bottom = vm.base;
   signX = 1;
   signY = bottom > top ? 1 : -1;
-  borderSkipped = vm.borderSkipped || 'bottom';
+  borderSkipped = vm.borderSkipped || "bottom";
 
   if (borderWidth) {
     var barSize = Math.min(Math.abs(left - right), Math.abs(top - bottom));
     borderWidth = borderWidth > barSize ? barSize : borderWidth;
     var halfStroke = borderWidth / 2;
-    var borderLeft = left + (borderSkipped !== 'left' ? halfStroke * signX : 0);
-    var borderRight = right + (borderSkipped !== 'right' ? -halfStroke * signX : 0);
-    var borderTop = top + (borderSkipped !== 'top' ? halfStroke * signY : 0);
-    var borderBottom = bottom + (borderSkipped !== 'bottom' ? -halfStroke * signY : 0);
+    var borderLeft = left + (borderSkipped !== "left" ? halfStroke * signX : 0);
+    var borderRight =
+      right + (borderSkipped !== "right" ? -halfStroke * signX : 0);
+    var borderTop = top + (borderSkipped !== "top" ? halfStroke * signY : 0);
+    var borderBottom =
+      bottom + (borderSkipped !== "bottom" ? -halfStroke * signY : 0);
     if (borderLeft !== borderRight) {
       top = borderTop;
       bottom = borderBottom;
@@ -48,10 +60,10 @@ Chart.elements.Rectangle.prototype.draw = function () {
     [left, bottom],
     [left, top],
     [right, top],
-    [right, bottom]
+    [right, bottom],
   ];
 
-  var borders = ['bottom', 'left', 'top', 'right'];
+  var borders = ["bottom", "left", "top", "right"];
   var startCorner = borders.indexOf(borderSkipped, 0);
   if (startCorner === -1) {
     startCorner = 0;
@@ -70,7 +82,7 @@ Chart.elements.Rectangle.prototype.draw = function () {
     corner = cornerAt(i);
     nextCornerId = i + 1;
     if (nextCornerId == 4) {
-      nextCornerId = 0
+      nextCornerId = 0;
     }
 
     width = corners[2][0] - corners[1][0];
@@ -83,7 +95,8 @@ Chart.elements.Rectangle.prototype.draw = function () {
     radius = cornerRadius;
     if (radius > height / limit) {
       radius = height / limit;
-    } if (radius > width / limit) {
+    }
+    if (radius > width / limit) {
       radius = width / limit;
     }
 
@@ -110,10 +123,10 @@ export default {
   props: {
     options: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   mounted() {
-    this.renderChart(this.chartData, this.options)
+    this.renderChart(this.chartData, this.options);
   },
-}
+};

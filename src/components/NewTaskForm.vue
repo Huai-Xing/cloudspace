@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="../assets/task/add1.png" @click="showModal" class="plusBtn"/>
+    <img src="../assets/task/add1.png" @click="showModal" class="plusBtn" />
 
     <Modal v-show="isModalVisible" @close="closeModal">
       <template v-slot:header>
@@ -235,6 +235,7 @@
         console.log(this.$v.newtask.category.doesNotExist);
         console.log(this.addNewCat == true);
 
+        this.newtask.date = new Date(Date.parse(this.$route.params.date));
         if (!this.$v.$invalid) {
           //managing newcategories
           if (this.addNewCat) {
@@ -301,8 +302,8 @@
 
 <style scoped>
   * {
-    font-family: Roboto;
-    font-size: 10px;
+    font-family: "Source Sans Pro";
+    font-size: 12px;
   }
   .plusBtn {
     background-color: white;
@@ -314,7 +315,8 @@
     width: 22px;
     padding: 5px;
   }
-  .plusBtn:hover, .plusBtn:active {
+  .plusBtn:hover,
+  .plusBtn:active {
     box-shadow: inset 0px 0px 2px #c1c1c1;
     transform: translateY(4px);
     outline: none;
