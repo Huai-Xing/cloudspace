@@ -198,7 +198,7 @@
   }
   /* .tooltiptext {
   visibility: hidden;
-  font-family: roboto;
+  font-family: Source Sans Pro;
   text-transform: uppercase;
   font-size: 9px;
   letter-spacing: 0.5px;
