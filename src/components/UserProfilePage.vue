@@ -14,7 +14,7 @@
   export default {
     data() {
       return {
-        imageIdx: 0,
+        imageIdx: this.$route.params.image,
       };
     },
     components: {
@@ -23,9 +23,12 @@
       appNav: MainNavigation,
     },
     methods: {
-      getImageIdx: function(id) {
+      getImageIdx: function(id, reload) {
         this.imageIdx = id;
         console.log(id);
+        if (reload) {
+          location.reload();
+        }
       },
     },
   };
