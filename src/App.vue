@@ -28,7 +28,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Lora|Source+Sans+Pro|Montserrat");
-/* * {
-  font-family: "Source Sans Pro", "Lora", "Montserrat";
-} */
+* {
+  font-family: "Source Sans Pro";
+}
 </style>
