@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="timer-content">
       <countdown-timer
         v-if="showTimer"
@@ -29,10 +28,6 @@
   import fb from "../firebase.js";
 
   export default {
-    // props: {
-    //   timeForTask: Number,
-    //   taskId: String,
-    // },
     //Register Locally
     components: {
       "countdown-timer": CountDownTimerComponent,
@@ -44,14 +39,16 @@
         showTimer: true,
         showBreak: false,
         currentBreak: 0,
-        currentTimer: 10,
+        currentTimer: 0,
         timerTimePassed: 0,
         breakTimePassed: 0,
         coin: 0,
-        breakTimeAllowed: 300,
+        breakTimeAllowed: 0,
         taskTitle: this.$route.params.taskTitle,
         timeForTask: this.$route.params.timeForTask,
         taskId: this.$route.params.taskId,
+        cancel: false,
+        complete: false,
       };
     },
     methods: {
@@ -67,18 +64,15 @@
         }
       },
       endTimer: function(x, y, z) {
-        //y is amount of time taken to end task after timer is up
-        //z is coins
-        console.log("complete " + x);
-        console.log("extra " + y);
+        this.complete = true;
         this.coin = z;
         this.coinPenalty(y);
         this.timerTimePassed = x + y;
         this.updateData("Completed");
       },
       cancelTimer: function() {
-        console.log("cancel");
         this.coin = 0;
+        this.cancel = true;
         this.$router.push({
           name: "Tasks",
         });
@@ -130,12 +124,33 @@
       convertToSecond: function(x) {
         return x.hh * 3600 + x.mm * 60;
       },
+      preventNav(event) {
+        event.preventDefault();
+        event.returnValue = null;
+      },
     },
 
     created() {
-      this.currentTimer = this.timeForTask;
-      this.coin = Math.floor(this.timeForTask / 600);
-      this.breakTimeAllowed = (this.timeForTask / 1200) * 300;
+      this.currentTimer = parseInt(this.timeForTask);
+      this.coin = Math.floor(parseInt(this.timeForTask) / 600);
+      this.breakTimeAllowed = (parseInt(this.timeForTask) / 1200) * 300;
+    },
+    beforeMount() {
+      window.addEventListener("beforeunload", this.preventNav);
+      this.$once("hook:beforeDestroy", () => {
+        window.removeEventListener("beforeunload", this.preventNav);
+      });
+    },
+
+    beforeRouteLeave(to, from, next) {
+      if (!this.cancel && !this.complete) {
+        window.alert(
+          "You cannot leave this page unless you abort or complete the mission."
+        );
+        next(false);
+      } else {
+        next();
+      }
     },
   };
 </script>

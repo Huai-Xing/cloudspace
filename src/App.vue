@@ -27,5 +27,5 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Lora|Roboto");
+@import url("https://fonts.googleapis.com/css?family=Lora|Source+Sans+Pro|Montserrat");
 </style>

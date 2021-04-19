@@ -22,7 +22,7 @@
           </p>
           <p class="treeModalText" v-show="bought">
             Thank you! <br />
-            A confirmation has been sent to your email.
+            NParks will sent you a confirmation when the tree is planted!
           </p>
         </div>
 
@@ -30,7 +30,9 @@
       </template>
 
       <template v-slot:footer>
-        <button v-show="!bought && afford" @click="purchase" class="cfmBtn">Buy</button>
+        <button v-show="!bought && afford" @click="purchase" class="cfmBtn">
+          Buy
+        </button>
       </template>
     </Modal>
   </div>
@@ -42,7 +44,7 @@ import firebase from "../../firebase";
 
 export default {
   name: "App",
-  props: ["treeName", "treePrice", "afford"],
+  props: ["treeId", "treeName", "treePrice", "afford"],
   components: {
     Modal,
   },
@@ -61,12 +63,37 @@ export default {
     },
     purchase() {
       this.bought = true;
+      var treeList = [];
       var uid = firebase.auth().currentUser.uid;
-      firebase.firestore().collection("users").doc(uid).update({
-        "user.coins": firebase.firestore.FieldValue.increment(0 - this.treePrice),
-        "user.trees": firebase.firestore.FieldValue.increment(1),
-      }).then(() => location.reload());
-    }
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((doc) => {
+          treeList = doc.data().treeList;
+        })
+        .then(() => {
+          if (treeList == null) {
+            treeList = [];
+          }
+          treeList.push(this.treeId);
+          firebase.firestore().collection("users").doc(uid).update({
+            treeList: treeList,
+          });
+        });
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .update({
+          "user.coins": firebase.firestore.FieldValue.increment(
+            0 - this.treePrice
+          ),
+          "user.trees": firebase.firestore.FieldValue.increment(1),
+        })
+        .then(() => location.reload());
+    },
   },
 };
 </script>
@@ -90,6 +117,7 @@ export default {
   transition: all 0.3s ease 0s;
   cursor: pointer;
   outline: none;
+  margin-bottom: 20px;
 }
 .buyBtn:hover {
   color: #fff;

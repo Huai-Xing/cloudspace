@@ -104,6 +104,9 @@
           .doc(uid)
           .update({
             user: this.user,
+          })
+          .then(() => {
+            this.$emit("changePic", this.user.imageIdx, true);
           });
       },
       fetchData: async function() {
@@ -120,6 +123,7 @@
             this.user.email = doc.data().user.email;
             this.user.coins = doc.data().user.coins;
             this.user.imageIdx = doc.data().user.imageIdx;
+            this.$emit("changePic", this.user.imageIdx, false);
           });
       },
     },
@@ -131,6 +135,7 @@
 
 <style scoped>
   .content {
+    padding-top: 50px;
     margin-bottom: 20px;
   }
   #avatar {

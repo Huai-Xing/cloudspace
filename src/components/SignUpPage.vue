@@ -2,15 +2,11 @@
   <div>
     <ul class="top-nav-list">
       <li>
-        <router-link :to="{ path: '/signin' }">
-          Log In
-        </router-link>
+        <router-link :to="{ path: '/signin' }"> Log In </router-link>
       </li>
       <li>|</li>
       <li>
-        <router-link :to="{ path: '/signup' }">
-          Sign Up
-        </router-link>
+        <router-link :to="{ path: '/signup' }"> Sign Up </router-link>
       </li>
     </ul>
 
@@ -43,7 +39,7 @@
 
         <label for="password">Password:</label><br />
         <input
-          type="text"
+          type="password"
           id="password"
           name="password"
           placeholder="Enter your password"
@@ -51,12 +47,10 @@
           v-model="user.password"
         /><br />
 
-        <input type="checkbox" id="checkbox" />
-        <label for="checkbox" id="cblabel">Keep me logged in</label><br />
+        <!-- <input type="checkbox" id="checkbox" /> -->
+        <!-- <label for="checkbox" id="cblabel">Keep me logged in</label><br /> -->
 
-        <button type="submit" value="Submit" id="submit">
-          Let's go!
-        </button>
+        <button type="submit" value="Submit" id="submit">Let's go!</button>
       </form>
     </div>
 
@@ -77,10 +71,6 @@
           name: "",
           email: "",
           password: "",
-          DOB: "",
-          imageIdx: 0,
-          coins: 0,
-          trees: 0,
         },
       };
     },
@@ -89,7 +79,6 @@
       letsgo: function() {
         var email = this.user.email;
         var password = this.user.password;
-        var user = this.user;
         //Signing up
 
         fb.auth()
@@ -97,12 +86,18 @@
           .then((cred) => {
             alert("Successfully registered");
 
-            console.log("Registered user: " + cred.user.uid);
             fb.firestore()
               .collection("users")
               .doc(cred.user.uid)
               .set({
-                user,
+                user: {
+                  name: this.user.name,
+                  email: this.user.email,
+                  DOB: "",
+                  imageIdx: 0,
+                  coins: 0,
+                  trees: 0,
+                },
                 categoryList: [],
               });
           })
@@ -179,9 +174,9 @@
 
   #rightphoto {
     position: absolute;
-    top: 12%;
-    right: 3%;
-    width: 26%;
+    top: 14%;
+    right: 7%;
+    width: 21%;
     height: auto;
   }
 
@@ -232,7 +227,7 @@
 
   #cblabel {
     font-style: italic;
-    font-size: 10px;
+    font-size: 11px;
     vertical-align: middle;
     color: #cccccc;
   }
@@ -244,5 +239,18 @@
     font-family: Lora;
     border: none;
     background-color: #bedaae;
+    color: #fff;
+  }
+
+  #submit:hover {
+    box-shadow: 0px 2px 15px #849c7651;
+    transform: translateY(-1px);
+  }
+
+  #submit:active,
+  #submit:focus {
+    transform: translateY(2px);
+    box-shadow: none;
+    outline: none;
   }
 </style>

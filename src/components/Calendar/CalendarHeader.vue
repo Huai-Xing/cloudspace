@@ -53,11 +53,11 @@ export default {
 <style scoped>
 h2 {
   font-family: Lora;
-  font-size: 20px;
+  font-size: 24px;
   color: black;
   display: inline-block;
   text-align: center;
-  width: 180px;
+  width: 240px;
 }
 .arrow {
   border: solid black;
@@ -98,10 +98,10 @@ ul {
   grid-template-columns: repeat(7, 1fr);
 }
 li {
-  font-family: montserrat;
+  font-family: "Source Sans Pro";
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.8px;
   color: white;
   background-color: #34b2c5;
   list-style-type: None;

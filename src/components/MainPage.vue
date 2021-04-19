@@ -14,7 +14,7 @@
     <div class="content-item">
       <div id="how-cloudspace-works">
         <h2 class="content-section-header">
-          <strong> How Cloudspace Works </strong>
+          How Cloudspace Works
         </h2>
         <h3 class="content-subheader">
           Keep your life in check, in time, and in balance.
@@ -27,7 +27,7 @@
               alt="background1_main"
               src="../assets/background1_main.png"
             />
-            <h2><strong> Organise your workspace </strong></h2>
+            <h2>Organise your workspace</h2>
           </div>
 
           <div class="column">
@@ -36,7 +36,7 @@
               alt="background2_main"
               src="../assets/background2_main.png"
             />
-            <h2><strong> Personalised productivity </strong></h2>
+            <h2>Personalised productivity</h2>
             <p>Dashboards at your fingertips</p>
           </div>
 
@@ -46,7 +46,7 @@
               alt="background2_main"
               src="../assets/background3_trees.png"
             />
-            <h2><strong> Collect coins to plant a real tree! </strong></h2>
+            <h2>Collect coins to plant a real tree!</h2>
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@
     <div class="content-item">
       <div id="why-cloudspace">
         <h2 class="content-section-header">
-          <strong> Why Cloudspace? </strong>
+          Why Cloudspace?
         </h2>
         <h3 class="content-subheader">
           To help Kranji Woodlands site to recover its green lands!
@@ -69,7 +69,7 @@
               alt="deforested"
               src="../assets/deforested.png"
             />
-            <h2><strong> Did you know? </strong></h2>
+            <h2> Did you know? </h2>
             <p>
               About 4.5 hectare of land at Kranji Woodlands was cleared by
               mistake.
@@ -82,7 +82,7 @@
               alt="football_field"
               src="../assets/football-field.png"
             />
-            <h2><strong> How big is 4.5 hectare? </strong></h2>
+            <h2>How big is 4.5 hectare? </h2>
             <p>
               The ‘errorneously’ cleared forested area is about the size of 6
               football fields!
@@ -96,7 +96,7 @@
               src="../assets/NParks_logo.jpg"
             />
             <h2>
-              <strong> Cloudspace's environmental conservation efforts </strong>
+              Cloudspace's environmental conservation efforts
             </h2>
             <p>
               Partnering with NParks, join Cloudspace to grow real trees to help
@@ -171,11 +171,13 @@
   /* Styling for the contents begins here */
   .content-section-header {
     text-align: center;
-    font-size: 15px;
+    font-size: 26px;
+    font-family: Lora;
   }
 
   .content-subheader {
     text-align: center;
+    font-size: 12px;
   }
 
   /* Create three equal columns that floats next to each other */
@@ -183,7 +185,7 @@
     float: left;
     width: 33.33%;
     padding: 10px;
-    height: 400px; /* Should be removed. Only for demonstration */
+    margin-bottom: 20px;
 
     text-align: center;
   }
@@ -198,5 +200,11 @@
   .column-image {
     width: 200px;
     height: 200px;
+  }
+  h2 {
+    font-weight: bold;
+  }
+  h3 {
+    font-size: 16px;
   }
 </style>

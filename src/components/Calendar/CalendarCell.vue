@@ -6,6 +6,7 @@
         dayCurrentMonth: isNotCurrentMonth,
         dayTodayCell: isToday,
       }"
+      v-on:click="goToTaskPage"
     >
       <div class="cellItems">
         <div class="day">
@@ -13,31 +14,29 @@
             :class="{
               dayToday: isToday,
             }"
-            v-on:click="goToTaskPage"
           >
-            {{ date.get('date') }}
+            {{ date.get("date") }}
           </li>
         </div>
         <div>
-          <li class="deadlines" 
-          v-for="item in deadlinesToday"  
-          v-bind:key="item.title"
-          :class="{ itemsEmpty: isNotCurrentMonth }" 
-          v-on:click="goToTaskPage"
+          <li
+            class="deadlines"
+            v-for="item in deadlinesToday"
+            v-bind:key="item.title"
+            :class="{ itemsEmpty: isNotCurrentMonth }"
           >
             {{ item.title }}
           </li>
 
-          <li class="items" 
-          v-for="item in tasksToday"  
-          v-bind:key="item.title"
-          :class="{ itemsEmpty: isNotCurrentMonth }" 
-          v-on:click="goToTaskPage"
+          <li
+            class="items"
+            v-for="item in tasksToday"
+            v-bind:key="item.title"
+            :class="{ itemsEmpty: isNotCurrentMonth }"
           >
-            {{ item.title }}
+            {{ item.title }} <span v-show="item.status == 'Completed'"> &#10004;</span>
           </li>
         </div>
-
       </div>
     </li>
   </div>
@@ -46,7 +45,7 @@
 
 <script>
 import dayjs from "dayjs";
-import firebase from '../../firebase';
+import firebase from "../../firebase";
 
 export default {
   props: {
@@ -55,13 +54,15 @@ export default {
   },
   data() {
     return {
-      isNotCurrentMonth: this.selectedDate.get('month') != this.date.get('month'),
-      isToday: dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
+      isNotCurrentMonth:
+        this.selectedDate.get("month") != this.date.get("month"),
+      isToday:
+        dayjs().format("DD MMMM YYYY") == this.date.format("DD MMMM YYYY"),
       todayDate: dayjs(),
       data: [
-        // "BT3103 Assignment 2", 
-        // "Meeting with Group", 
-        // "Take a short break :)", 
+        // "BT3103 Assignment 2",
+        // "Meeting with Group",
+        // "Take a short break :)",
         // "Very very very very very very very very very very very long task"
       ],
       tasksToday: [],
@@ -71,20 +72,22 @@ export default {
   methods: {
     fetchData: function () {
       var uid = firebase.auth().currentUser.uid;
-      firebase.firestore()
+      firebase
+        .firestore()
         .collection("tasks")
         .doc(uid)
         .collection("deadlinesList")
         .get()
         .then((snap) =>
           snap.forEach((doc) => {
-            if (this.compareDate(doc.data().date.toDate(), this.date)) {
+            if (this.compareDate(new Date(doc.data().datedue), this.date)) {
               this.deadlinesToday.push(doc.data());
             }
           })
         );
 
-      firebase.firestore()
+      firebase
+        .firestore()
         .collection("tasks")
         .doc(uid)
         .collection("tasksList")
@@ -107,14 +110,16 @@ export default {
         return true;
       }
     },
-    goToTaskPage: function() {
-      this.$router.push({ name: "Tasks", params: { date: this.date.format() } }); // push with date
-    }
+    goToTaskPage: function () {
+      this.$router.push({
+        name: "Tasks",
+        params: { date: this.date.format() },
+      }); // push with date
+    },
   },
   created() {
     this.fetchData();
-
-  }
+  },
 };
 </script>
 
@@ -122,22 +127,24 @@ export default {
 <style scoped>
 .container {
   margin: 0;
-  height: 90px;
+  height: 104px;
 }
 .cell {
   list-style-type: None;
   display: inline-block;
+  background-color: #fff;
   border: 2px solid rgb(230, 230, 230);
-  border-top: 0px;
+  /* border-top: 0px; */
   position: relative;
-  min-height: 82px;
-  max-height: 82px;
-  min-width: 133px;
+  min-height: 94px;
+  max-height: 94px;
+  min-width: 147px;
   padding: 3px;
   overflow: auto;
+  cursor: pointer;
 }
 .dayCurrentMonth {
-  background-color: rgb(220, 220, 220);
+  background-color: #eeeeee;
 }
 /*
 .dayTodayCell {
@@ -150,31 +157,32 @@ export default {
 .day {
   font-family: montserrat;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 13px;
   color: #26818f;
   list-style-type: None;
   display: block;
-  height: 16px;
+  height: 20px;
+  width: 20px;
   /*border: 1px solid black;
   border-radius: 100%;*/
-  /* text-align: right; */
-  display: flex;
-  justify-content: flex-end;
+  text-align: center;
   position: sticky;
-  padding-top: 3px;
-  padding-right: 3px;
-  margin-bottom: 3px;
+  top: 3px;
+  left: 85%;
+  /* padding-top: 3px;
+  padding-right: 3px; */
+  margin-bottom: 5px;
   cursor: pointer;
 }
-.day:hover, .day:focus {
+.cell .day:hover, .cell .day:focus {
   color: black;
-}
+} 
 .dayToday {
   background-color: #26818f;
   color: white;
   border-radius: 100%;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -182,34 +190,35 @@ export default {
   top: -3px;
 }
 .deadlines {
-  font-family: Roboto;
-  font-size: 10px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 11px;
   color: rgb(209, 5, 5);
   height: 10px;
-  padding: 4px 9px;
+  padding: 5px 9px;
+  margin: 4px 3px 0 3px;
 }
 .items {
-  font-family: roboto;
-  font-size: 9px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 11px;
   text-align: left;
   list-style-type: None;
   display: block;
   border-radius: 4px;
   background-color: #ffe1bb;
-  padding: 4px 9px;
-  margin: 3px 3px 0px 3px;
+  padding: 5px 9px;
+  margin: 4px 3px 0 3px;
   height: 10px;
   white-space: normal;
   text-overflow: ellipsis;
   overflow: hidden;
   cursor: pointer;
 }
-.itemsEmpty{
+.itemsEmpty {
   visibility: hidden;
 }
-.items:hover {
+/* .items:hover {
   filter: brightness(90%);
-}
+} */
 .items:nth-child(odd) {
   background-color: #d1e0f3;
 }
@@ -223,4 +232,8 @@ export default {
 ::-webkit-scrollbar-thumb:hover {
   background: #888; 
 } */
+li > span {
+  position: sticky;
+  left: 100%;
+}
 </style>

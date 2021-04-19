@@ -2,15 +2,11 @@
   <div>
     <ul class="top-nav-list">
       <li>
-        <router-link :to="{ path: 'signin' }">
-          Log In
-        </router-link>
+        <router-link :to="{ path: 'signin' }"> Log In </router-link>
       </li>
       <li>|</li>
       <li>
-        <router-link :to="{ path: 'signup' }">
-          Sign Up
-        </router-link>
+        <router-link :to="{ path: 'signup' }"> Sign Up </router-link>
       </li>
     </ul>
 
@@ -19,32 +15,56 @@
     <div id="chunk">
       <p id="sign">Log In</p>
       <form @submit.prevent="letsgo">
-        <label for="email">Email:</label><br />
-        <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="user@domain.com"
-          required
-          v-model="user.email"
-        /><br />
+        <div v-show="!showReset">
+          <label for="email">Email:</label><br />
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="user@domain.com"
+            required
+            v-model="user.email"
+          /><br />
 
-        <label for="password">Password:</label><br />
-        <input
-          type="text"
-          id="password"
-          name="password"
-          placeholder="Enter your password"
-          required
-          v-model="user.password"
-        /><br />
+          <label for="password">Password:</label><br />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+            v-model="user.password"
+          /><br />
 
-        <input type="checkbox" id="checkbox" />
-        <label for="checkbox" id="cblabel">Keep me logged in</label><br />
+          <!-- <input type="checkbox" id="checkbox" /> -->
+          <!-- <label for="checkbox" id="cblabel">Keep me logged in</label><br /> -->
 
-        <button type="submit" value="Submit" id="submit">
-          Let's go!
-        </button>
+          <button type="submit" value="Submit" id="submit">Let's go!</button>
+          <br />
+          <p id="forgetpwd" v-on:click="toggleResetPwd">Forget Password</p>
+        </div>
+      </form>
+      <form @submit.prevent="resetpwd">
+        <div v-show="showReset">
+          <br />
+          <label for="email">Email:</label><br />
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="user@domain.com"
+            required
+            v-model="emailReset"
+          /><br />
+          <p id="invalidEmail" v-show="invalidEmail">
+            Please provide a valid email address
+          </p>
+          <button type="submit" value="Submit" id="reset">
+            Send email to reset password
+          </button>
+          <br />
+          <p id="forgetpwd" v-on:click="toggleResetPwd">Return to Log In</p>
+        </div>
       </form>
     </div>
 
@@ -61,19 +81,34 @@
   export default {
     data() {
       return {
+        invalidEmail: false,
+        showReset: false,
+        emailReset: "",
         user: {
           name: "",
           email: "",
           password: "",
-          DOB: "",
-          imageIdx: 0,
-          coins: 0,
-          trees: 0,
         },
       };
     },
     // mtds
     methods: {
+      toggleResetPwd: function() {
+        this.showReset = !this.showReset;
+        this.emailReset = "";
+      },
+      resetpwd: function() {
+        var email = this.emailReset;
+        fb.auth()
+          .sendPasswordResetEmail(email)
+          .then(() => {
+            this.toggleResetPwd();
+            this.invalidEmail = false;
+          })
+          .catch(() => {
+            this.invalidEmail = true;
+          });
+      },
       letsgo: function() {
         var email = this.user.email;
         var password = this.user.password;
@@ -85,7 +120,6 @@
           .signInWithEmailAndPassword(email, password)
           .then((cred) => {
             alert("Successfully logged into " + cred.user.email);
-            // console.log(cred.user.uid);
           })
           .then(() => {
             this.$router.push({
@@ -165,9 +199,9 @@
 
   #rightphoto {
     position: absolute;
-    top: 12%;
-    right: 3%;
-    width: 26%;
+    top: 14%;
+    right: 7%;
+    width: 21%;
     height: auto;
   }
 
@@ -218,7 +252,7 @@
 
   #cblabel {
     font-style: italic;
-    font-size: 10px;
+    font-size: 11px;
     vertical-align: middle;
     color: #cccccc;
   }
@@ -227,6 +261,47 @@
     width: 270px;
     padding: 6px;
     margin-top: 12px;
+    font-family: Lora;
+    border: none;
+    background-color: #bedaae;
+    color: #fff;
+  }
+
+  #submit:hover {
+    box-shadow: 0px 2px 15px #849c7651;
+    transform: translateY(-1px);
+  }
+
+  #submit:active,
+  #submit:focus {
+    transform: translateY(2px);
+    box-shadow: none;
+    outline: none;
+  }
+
+  #forgetpwd {
+    margin-top: 6px;
+    text-align: center;
+    cursor: pointer;
+    font-family: Lora;
+    font-size: 11px;
+    text-decoration: underline;
+  }
+
+  #forgetpwd:hover {
+    color: red;
+  }
+
+  #invalidEmail {
+    margin-top: 0;
+    color: red;
+    font-family: Lora;
+  }
+
+  #reset {
+    width: 270px;
+    padding: 6px;
+    margin-top: 0;
     font-family: Lora;
     border: none;
     background-color: #bedaae;

@@ -1,44 +1,85 @@
 <template>
   <div>
     <!-- Side MainNavigation after log in -->
-    <appNav></appNav>
+    <appNav v-bind:imageIdx="imageIdx"></appNav>
     <div class="head">
-      <p id="welcome">{{ name }}</p>
-      <p id="phrase">Stay productive & plant trees</p>
-      <quote></quote>
       <div class="dashboard">
-        <div id="task" class="overview">
-          <p class="overviewHead">Today's Tasks</p>
-          <div>
-            <ul>
-              <p v-show="taskEmpty">
-                There is no task scheduled today.<br />Schedule one now and let
-                cloudspace help you be productive.
-              </p>
-              <li v-for="data in task" v-bind:key="data.title">
-                <p id="taskContent">{{ data.category }}: {{ data.title }}</p>
-                <p id="taskStatus">Status: {{ data.status }}</p>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div id="deadline" class="overview">
-          <p class="overviewHead">Upcoming Deadlines for the week</p>
-          <div>
-            <ul>
-              <p v-show="deadlineEmpty">Hurray! No deadlines for this week!</p>
-              <li v-for="data in deadline" v-bind:key="data">
-                <p id="deadlineContent">
-                  {{ data.category }}: {{ data.title }}
+        <span class="leftDashboard">
+          <p id="welcome">{{ name }}</p>
+          <p id="phrase">Stay productive & plant trees</p>
+
+          <quote></quote><br />
+          <div id="task" class="overview">
+            <div class="overviewHead">
+              <p>Today's tasks</p>
+              <p id="date">{{ getDate(today.toString()) }}</p>
+            </div>
+            <hr class="line" />
+            <div>
+              <ul>
+                <p v-show="taskEmpty">
+                  There is no task scheduled today.<br />Schedule one now and
+                  let cloudspace help you be productive.
                 </p>
-                <p id="deadlineStatus">
-                  Due Date: {{ data.datedue }} @ {{ data.timedue.hh
-                  }}{{ data.timedue.mm }}
-                </p>
-              </li>
-            </ul>
+                <div class="itemList">
+                  <li
+                    v-for="data in task"
+                    v-bind:key="data.title"
+                    v-on:click="goToTaskPage('today')"
+                  >
+                    <p class="taskContent">
+                      {{ data.category }}: {{ data.title }}
+                    </p>
+                    <p
+                      class="taskStatus"
+                      :class="{ incomplete: data.status == 'Incomplete' }"
+                    >
+                      Status: {{ data.status }}
+                    </p>
+                  </li>
+                </div>
+              </ul>
+            </div>
           </div>
-        </div>
+        </span>
+
+        <span class="vl"></span>
+
+        <span class="rightDashboard">
+          <div id="deadline" class="overview">
+            <div class="overviewHead">
+              <p>Upcoming deadlines for the week</p>
+              <img
+                src="../assets/home/calendar-col.svg"
+                v-on:click="goToCalendarPage"
+              />
+            </div>
+            <div>
+              <ul>
+                <p v-show="deadlineEmpty">
+                  Hurray! No deadlines for this week!
+                </p>
+                <div class="itemList">
+                  <li
+                    v-for="data in deadline"
+                    v-bind:key="data"
+                    v-on:click="goToTaskPage(data.datedue)"
+                  >
+                    <p class="deadlineStatus">
+                      {{ getDate(data.datedue) }}, {{ data.timedue.hh
+                      }}{{ data.timedue.mm }}
+                    </p>
+                    <p class="deadlineContent">
+                      {{ data.category }}: {{ data.title }}
+                    </p>
+                  </li>
+                </div>
+              </ul>
+            </div>
+          </div>
+
+          <img class="girl" src="../assets/home/girl.png" />
+        </span>
       </div>
     </div>
   </div>
@@ -55,6 +96,22 @@
         name: "",
         deadline: [],
         task: [],
+        month: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        today: new Date(),
+        imageIdx: this.$route.params.image,
       };
     },
     //Register Locally
@@ -70,6 +127,7 @@
         return this.deadline.length == 0;
       },
     },
+
     methods: {
       fetchData: async function() {
         var currentUser = fb.auth().currentUser;
@@ -81,6 +139,7 @@
           .get()
           .then((doc) => {
             this.name = "Hello, " + doc.data().user.name + "!";
+            this.imageIdx = doc.data().user.imageIdx;
           });
       },
       fetchAll: function() {
@@ -100,7 +159,6 @@
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              //console.log(doc.id, " => ", doc.data());
               this.task.push(doc.data());
             });
           });
@@ -108,10 +166,11 @@
           .collection("tasks")
           .doc(uid)
           .collection("deadlinesList")
+          .orderBy("datedue") // sort by date
+          .where("datedue", ">", today.toISOString().substring(0, 10)) // query dates after today
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              //console.log(doc.id, " => ", doc.data());
               if (this.checkDate(doc.data().datedue)) {
                 this.deadline.push(doc.data());
               }
@@ -119,13 +178,11 @@
           });
       },
       checkDate: function(date) {
-        //console.log(date);
         const targetDate = new Date();
         targetDate.setDate(targetDate.getDate() + 7);
         const year = targetDate.getFullYear();
         const month = targetDate.getMonth() + 1;
         const day = targetDate.getDate();
-        //console.log(year +" "+ month +" "+ day);
         if (year == parseInt(date.substring(0, 4))) {
           if (month == parseInt(date.substring(5, 7))) {
             if (day > parseInt(date.substring(8, 10))) {
@@ -134,6 +191,23 @@
           }
         }
         return false;
+      },
+      goToCalendarPage: function() {
+        this.$router.push({ name: "Calendar" });
+      },
+      goToTaskPage: function(date) {
+        if (date === "today") {
+          this.$router.push({ name: "Tasks" });
+          return;
+        }
+        this.$router.push({ name: "Tasks", params: { date: date } });
+        return;
+      },
+      getDate(dateStr) {
+        var d = new Date(dateStr);
+        return (
+          d.getDate() + " " + this.month[d.getMonth()] + " " + d.getFullYear()
+        );
       },
     },
     created: async function() {
@@ -145,118 +219,193 @@
 
 <style scoped>
   * {
-    font-family: Lora;
+    font-family: "Source Sans Pro";
+  }
+  p {
+    margin: 0;
   }
   .head {
-    margin-left: 17%;
-    margin-right: 17%;
+    margin-left: 230px;
+    margin-right: 50px;
     display: block;
-    margin-bottom: 10px;
-    padding-top: 2%;
-    width: 75%;
+    /* margin-bottom: 10px; */
+    /* padding-top: 20px; */
   }
   #welcome {
+    font-family: Lora;
     font-size: 28px;
     font-style: italic;
     font-weight: 650;
   }
-  p {
-    margin: 0;
-    margin-left: 5px;
-  }
   #phrase {
-    color: rgb(110, 110, 110);
-    font-size: 12px;
-    margin-bottom: 2%;
+    font-size: 11px;
+    margin-top: 2px;
+    margin-bottom: 10px;
+    color: #aaa;
   }
   .dashboard {
     display: flex;
-    margin-top: 3.5%;
   }
-  .overview {
-    display: inline-block;
-    width: 50%;
-    height: 15vw;
+  .vl {
+    height: 550px;
+    width: 0.4px;
+    background-color: #ccc;
   }
-  .overviewHead {
-    text-decoration: underline;
-    background-color: #81b762;
-    border-radius: 20px 20px 0 0;
-    font-size: 16px;
-    color: white;
-    font-weight: 550;
-    margin: 0;
-    padding: 2%;
-    padding-left: 3%;
+  .leftDashboard {
+    float: left;
+    width: 68%;
   }
-  .overview > div {
-    position: relative;
-    height: inherit;
-    max-height: 80%;
-    overflow: auto;
-    border: 5px solid #81b762;
-    border-radius: 0 0 20px 20px;
+  .rightDashboard {
+    width: 32%;
+    margin-left: 30px;
   }
-  #task {
-    margin-right: 5%;
-  }
+  /* .overview {
+  display: inline-block;
+  width: 90%;
+  height: 15vw;
+} */
+  /* .overviewHead {
+  background-color: #81b762;
+  border-radius: 16px 16px 0 0;
+  font-size: 16px;
+  color: white;
+  font-weight: 550;
+  margin: 0;
+  padding: 3% 3% 2% 4%;
+} */
+  /* .overview > div {
+  position: relative;
+  height: inherit;
+  max-height: 80%;
+  overflow: auto;
+  border: 5px solid #81b762;
+  border-radius: 0 0 16px 16px;
+} */
   ul {
     list-style-type: None;
     margin: 0;
-    padding: 10px;
+    /* padding: 10px; */
+    padding-inline-start: 0px;
   }
   li {
     display: flex;
   }
-  #taskContent {
-    border-radius: 20px 0px 0px 20px;
-    background-color: rgba(209, 209, 209, 0.5);
-    padding: 2% 15px;
-    margin-bottom: 1%;
-    min-width: 67%;
-    height: 15px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    cursor: pointer;
-  }
   li > p {
-    font-family: roboto;
+    font-family: "Source Sans Pro";
     font-size: 11px;
     text-align: left;
   }
-  #taskStatus {
-    border-radius: 0px 20px 20px 0px;
-    border-left: 2px solid white;
-    background-color: rgba(209, 209, 209, 0.5);
-    padding: 2%;
-    margin-bottom: 1%;
-    margin-left: 0;
-    height: 15px;
-    min-width: 23%;
-    text-overflow: ellipsis;
-    cursor: pointer;
-  }
-  #deadlineContent {
+  .taskContent {
     border-radius: 20px 0px 0px 20px;
     background-color: rgba(209, 209, 209, 0.5);
-    padding: 2% 15px;
-    margin-bottom: 1%;
-    min-width: 60%;
+    padding: 14px 15px;
+    margin-bottom: 8px;
+    min-width: 69%;
     height: 15px;
     text-overflow: ellipsis;
     overflow: hidden;
     cursor: pointer;
   }
-  #deadlineStatus {
+  .taskStatus {
     border-radius: 0px 20px 20px 0px;
-    border-left: 2px solid white;
-    background-color: rgba(209, 209, 209, 0.5);
-    padding: 2%;
-    margin-bottom: 1%;
-    margin-left: 0;
+    border-left: 4px solid white;
+    background-color: #81b76240;
+    padding: 14px;
+    margin-bottom: 8px;
     height: 15px;
-    min-width: 30%;
+    /* min-width: 23%; */
+    flex-grow: 1;
     text-overflow: ellipsis;
     cursor: pointer;
+  }
+  .incomplete {
+    background-color: #ea472c28;
+  }
+  .deadlineStatus {
+    border-radius: 20px 0px 0px 20px;
+    background-color: rgba(209, 209, 209, 0.5);
+    padding: 8px;
+    margin-bottom: 5px;
+    height: 15px;
+    min-width: 30%;
+    text-align: center;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  .deadlineContent {
+    border-radius: 0px 20px 20px 0px;
+    background-color: rgba(209, 209, 209, 0.25);
+    border-left: 3px solid white;
+    padding: 8px 15px;
+    margin-bottom: 5px;
+    flex-grow: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  img {
+    width: 26px;
+    order: 2;
+    margin-left: auto;
+    cursor: pointer;
+  }
+  .girl {
+    position: fixed;
+    width: 280px;
+    bottom: 25px;
+    right: 40px;
+    opacity: 80%;
+    cursor: default;
+  }
+  .overview {
+    margin-top: 10px;
+    width: 94%;
+  }
+  .overviewHead {
+    font-weight: bold;
+    font-size: 17px;
+    letter-spacing: 0.6px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+  .overviewHead > p {
+    font-family: "Source Sans Pro";
+  }
+  #date {
+    font-family: "Source Sans Pro";
+    margin-left: auto;
+    order: 2;
+  }
+  .line {
+    height: 0.4px;
+    background-color: #ccc;
+    border: none;
+    width: 105%;
+    margin-left: -10px;
+  }
+  .itemList {
+    height: 250px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  /* width */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #fff;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 </style>

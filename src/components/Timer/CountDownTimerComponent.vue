@@ -1,5 +1,11 @@
 <template>
   <div>
+    <audio controls v-if="false">
+      <source
+        src="../../assets/timer/Animal Crossing New Horizons Soundtrack - Welcome Horizons (Full Version).mp3"
+        id="audio"
+      />
+    </audio>
     <h2 id="timer-title">{{ title }}</h2>
 
     <div class="timer-container">
@@ -54,6 +60,9 @@
           </span>
         </span>
       </p>
+      <p id="coins-reduce" v-show="coinsReduced">
+        {{ coinsReduced }}
+      </p>
       <!-- Timer completes -->
       <button id="done" class="timerControlledBtns" @click="doneTimer()">
         <span class="tooltiptext">Complete task</span>
@@ -92,6 +101,7 @@
 
 <script>
   import coinCal from ".././CoinLogic.js";
+  import alarm from "../../assets/timer/audio.mp3";
   const FULL_DASH_ARRAY = 283;
   const WARNING_THRESHOLD = 0.25;
   const ALERT_THRESHOLD = 0.1;
@@ -126,9 +136,11 @@
         timerInterval: null,
         title: "Task",
         coinsToEarn: 0,
-        totalTime: 3600,
+        totalTime: 0,
         timeToStop: null,
         timeStop: 0,
+        coinsReduced: false,
+        audio: new Audio(alarm),
       };
     },
 
@@ -210,21 +222,45 @@
 
     async created() {
       this.title = this.taskTitle;
-      this.totalTime = this.currentTimer + this.timerTimePassed;
-      this.timePassed = this.timerTimePassed;
-      this.coinsToEarn = this.coin;
-      this.coinsToEarn = await coinCal(this.totalTime);
-      //console.log("COINS: " + this.coinsToEarn);
+      this.totalTime =
+        parseInt(this.currentTimer) + parseInt(this.timerTimePassed);
+      this.timePassed = parseInt(this.timerTimePassed);
+      this.coinsToEarn = parseInt(this.coin);
+      var calCoin = await coinCal(this.totalTime);
+      this.coinsToEarn = calCoin[0];
+      this.checkCoinReduce(calCoin[1], calCoin[2]);
       // to start the timer immediately when the component gets mounted
       this.startTimer();
     },
 
     methods: {
+      checkCoinReduce: function(averageTR, penalise) {
+        if (penalise == 2) {
+          if (averageTR > 1) {
+            this.coinsReduced =
+              "Warning: Coins are reduced as you have been frequently underallocating time for tasks. See info for more details.";
+          } else {
+            this.coinsReduced =
+              "Warning: Coins are reduced as you have been frequently overallocating time for tasks. See info for more details.";
+          }
+        } else if (penalise == 0) {
+          this.coinsReduced == "";
+        } else {
+          if (averageTR < 1) {
+            this.coinsReduced =
+              "Warning: You have been frequently overallocating time for tasks, please adjust time allocation for future tasks to prevent incurring coins penalty.";
+          } else {
+            this.coinsReduced =
+              "Warning: You have been frequently underallocating time for tasks, please adjust time allocation for future tasks to prevent incurring coins penalty.";
+          }
+        }
+      },
       onTimesUp: function() {
         clearInterval(this.timerInterval);
         document.getElementById("pause").setAttribute("disabled", true);
         document.getElementById("cancel").setAttribute("disabled", true);
         this.timeToStop = setInterval(() => (this.timeStop += 1), 1000);
+        this.audio.play();
       },
 
       // Fn that increase the value of timePassed by 1unit per sec and recompute the timeLeft value
@@ -235,6 +271,7 @@
 
       doneTimer: function() {
         this.$emit("end", this.timePassed, this.timeStop, this.coinsToEarn);
+        this.audio.pause();
       },
 
       pauseTimer: function() {
@@ -335,6 +372,17 @@
     position: relative;
     display: inline-block;
   }
+  #coins-to-earn {
+    margin-bottom: 0;
+  }
+  #coins-reduce {
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 9px;
+    color: red;
+    width: 310px;
+  }
 
   .buttons {
     display: block;
@@ -348,6 +396,7 @@
     width: 40px;
     height: 40px;
     margin: 8px;
+    margin-top: 25px;
   }
   img {
     position: relative;
@@ -361,6 +410,8 @@
     font-size: 10px;
   }
   #timer-title {
+    margin-left: auto;
+    margin-right: auto;
     display: block;
     text-align: center;
     width: 400px;
