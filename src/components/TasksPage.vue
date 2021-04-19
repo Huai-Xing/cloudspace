@@ -279,7 +279,7 @@ export default {
     },
     //Checking which tasks to display
     checkTaskDate: function (task) {
-      console.log(task[1].date.toDate());
+      // console.log(task[1].date.toDate());
       var date = this.date.get("date");
       var month = this.date.get("month");
       var year = this.date.get("year");
