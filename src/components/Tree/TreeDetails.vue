@@ -108,7 +108,7 @@
   }
   .backText:hover,
   .backText:active {
-    opacity: 40%;
+    opacity: 0.4;
   }
   .treeBackground {
     display: flex;
