@@ -47,6 +47,7 @@
         taskTitle: this.$route.params.taskTitle,
         timeForTask: this.$route.params.timeForTask,
         taskId: this.$route.params.taskId,
+        taskDate: this.$route.params.taskDate,
         cancel: false,
         complete: false,
       };
@@ -75,6 +76,7 @@
         this.cancel = true;
         this.$router.push({
           name: "Tasks",
+          params: { date: this.taskDate },
         });
       },
       coinPenalty: function(x) {
