@@ -309,6 +309,7 @@
     width: 100px;
     padding: 5px 12px 5px 12px;
     margin: 8px;
+    text-align: center;
   }
   button:hover {
     background-color: #ffffff;
