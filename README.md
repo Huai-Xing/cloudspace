@@ -17,28 +17,28 @@ Users of Cloudspace will have access to all features of the platform.
 4. As a user, I want to contribute to the environment through completing my tasks.
 
 ## Main features
-1. Home page
+#### Home page
 <img src="https://i.imgur.com/5vvA2xT.png" width="320">
 - Inspirational quote
 - Tasks and deadlines for the week
 
-2. Calendar page
+#### Calendar page
 <img src="https://i.imgur.com/91DOdLV.png" width="320">
 - Overview of tasks and deadlines for the week
 
-3. Productivity page
+#### Productivity page
 <img src="https://i.imgur.com/cOKaKmZ.png" width="320">
 - Productivity dashboard of data from previous tasks
 
-5. Tasks page
+#### Tasks page
 <img src="https://i.imgur.com/Rl2EtsX.png" width="320">
 - Tasks and deadlines for the day
 
-4. Plant a Tree page
+#### Plant a Tree page
 <img src="https://i.imgur.com/weszWfc.png" width="320">
 - Selection of trees commonly found in Singapore
 
-5. Donation page
+#### Donation page
 <img src="https://i.imgur.com/6bnOXpG.png" width="320">
 - Pitch for contributions to the environment
 
