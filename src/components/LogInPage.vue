@@ -174,7 +174,7 @@
   }
   ul {
     position: absolute;
-    right: 10%;
+    right: 1%;
     top: 2%;
     list-style-type: None;
     margin: 0;

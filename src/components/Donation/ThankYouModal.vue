@@ -9,7 +9,7 @@
         <p class="treeModalText">
           You have donated ${{ amount }}
           <br />
-          A receipt has been sent to your email
+          NParks will send a receipt to your email
         </p>
       </template>
 
