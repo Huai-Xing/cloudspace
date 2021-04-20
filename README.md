@@ -18,39 +18,39 @@ Users of Cloudspace will have access to all features of the platform.
 
 ## Main features
 ### 1. Home page
-Daily quote, tasks and deadlines for the week
+Daily quote, tasks and deadlines for the week <br /><br />
 <img src="https://i.imgur.com/5vvA2xT.png" width="380">
 
 ### 2. Calendar page
-Overview of tasks and deadlines for the week
+Overview of tasks and deadlines for the week <br /><br />
 <img src="https://i.imgur.com/91DOdLV.png" width="380">
 
 ### 3. Productivity page
-Productivity dashboard of data from previous tasks
+Productivity dashboard of data from previous tasks <br /><br />
 <img src="https://i.imgur.com/cOKaKmZ.png" width="380">
 
 ### 4. Tasks page
-Tasks and deadlines for the day
+Tasks and deadlines for the day <br /><br />
 <img src="https://i.imgur.com/Rl2EtsX.png" width="380">
 
 ### 5. Plant a Tree page
-Selection of trees commonly found in Singapore
+Selection of trees commonly found in Singapore <br /><br />
 <img src="https://i.imgur.com/weszWfc.png" width="380">
 
 ### 6. Donation page
-Pitch for contributions to the environment
+Pitch for contributions to the environment <br /><br />
 <img src="https://i.imgur.com/6bnOXpG.png" width="380">
 
 ## Demostration video
-Click [here] (https://youtu.be/zhYXfL1IKh4) to view a walkthrough of our application!
+Click [here](https://youtu.be/zhYXfL1IKh4) to view a walkthrough of our application!
 
 ## Technologies Used
 The project was made using the following technologies:
-- [Node.js] (https://nodejs.org/)
-- [Vue.js] (https://vuejs.org/)
-- [Vue CLI] (https://cli.vuejs.org/)
+- [Node.js](https://nodejs.org/)
+- [Vue.js](https://vuejs.org/)
+- [Vue CLI](https://cli.vuejs.org/)
 - HTML, CSS
-- [Firebase] (https://firebase.google.com)
+- [Firebase](https://firebase.google.com)
 
 ## Build Setup
 ```
