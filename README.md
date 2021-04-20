@@ -17,30 +17,29 @@ Users of Cloudspace will have access to all features of the platform.
 4. As a user, I want to contribute to the environment through completing my tasks.
 
 ## Main features
-#### Home page
-<img src="https://i.imgur.com/5vvA2xT.png" width="320">
-- Inspirational quote
-- Tasks and deadlines for the week
+### 1. Home page
+Daily quote, tasks and deadlines for the week
+<img src="https://i.imgur.com/5vvA2xT.png" width="380">
 
-#### Calendar page
-<img src="https://i.imgur.com/91DOdLV.png" width="320">
-- Overview of tasks and deadlines for the week
+### 2. Calendar page
+Overview of tasks and deadlines for the week
+<img src="https://i.imgur.com/91DOdLV.png" width="380">
 
-#### Productivity page
-<img src="https://i.imgur.com/cOKaKmZ.png" width="320">
-- Productivity dashboard of data from previous tasks
+### 3. Productivity page
+Productivity dashboard of data from previous tasks
+<img src="https://i.imgur.com/cOKaKmZ.png" width="380">
 
-#### Tasks page
-<img src="https://i.imgur.com/Rl2EtsX.png" width="320">
-- Tasks and deadlines for the day
+### 4. Tasks page
+Tasks and deadlines for the day
+<img src="https://i.imgur.com/Rl2EtsX.png" width="380">
 
-#### Plant a Tree page
-<img src="https://i.imgur.com/weszWfc.png" width="320">
-- Selection of trees commonly found in Singapore
+### 5. Plant a Tree page
+Selection of trees commonly found in Singapore
+<img src="https://i.imgur.com/weszWfc.png" width="380">
 
-#### Donation page
-<img src="https://i.imgur.com/6bnOXpG.png" width="320">
-- Pitch for contributions to the environment
+### 6. Donation page
+Pitch for contributions to the environment
+<img src="https://i.imgur.com/6bnOXpG.png" width="380">
 
 ## Demostration video
 Click [here] (https://youtu.be/zhYXfL1IKh4) to view a walkthrough of our application!
