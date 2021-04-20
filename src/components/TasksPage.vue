@@ -397,6 +397,7 @@
                 taskId: doc_id,
                 timeForTask: totalseconds,
                 taskTitle: title,
+                taskDate: doc.data().date.toDate(),
               },
             });
           });
