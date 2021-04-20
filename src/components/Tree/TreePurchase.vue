@@ -22,7 +22,7 @@
           </p>
           <p class="treeModalText" v-show="bought">
             Thank you! <br />
-            NParks will sent you a confirmation when the tree is planted!
+            NParks will send you a confirmation when the tree is planted!
           </p>
         </div>
 
