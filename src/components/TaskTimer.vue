@@ -120,6 +120,7 @@
           .then(() => {
             this.$router.push({
               name: "Tasks",
+              params: { date: this.taskDate },
             });
           });
       },
