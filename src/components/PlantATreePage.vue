@@ -188,7 +188,7 @@
     margin-bottom: 3px;
   }
   .treeText:hover {
-    opacity: 0.8;
+    opacity: 0.5;
   }
   .seeMore {
     color: #8a827bce;
