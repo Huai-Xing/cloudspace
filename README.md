@@ -41,7 +41,7 @@ Selection of trees commonly found in Singapore <br /><br />
 Pitch for contributions to the environment <br /><br />
 <img src="https://i.imgur.com/6bnOXpG.png" width="380">
 
-## Demostration video
+## Demonstration video
 Click [here](https://youtu.be/zhYXfL1IKh4) to view a walkthrough of our application!
 
 ## Technologies Used
